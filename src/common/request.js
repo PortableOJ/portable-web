@@ -16,6 +16,7 @@ function dealResponse(response) {
             duration: 'auto',
             type: 'error'
         })
+        return null
     }
 }
 
@@ -32,6 +33,9 @@ function axiosSend(data, callback) {
             duration: 'auto',
             type: 'error'
         })
+        if (callback !== null && callback !== undefined) {
+            callback(null)
+        }
     })
 }
 

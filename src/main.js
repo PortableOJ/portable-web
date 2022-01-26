@@ -8,15 +8,20 @@ import router from './router'
 
 import Request from "@/common/request";
 
-import User from "@/common/user";
+import CommonManager from "@/manager/commonManager";
+
+import UserManager from "@/manager/userManager";
 
 Vue.use(Mevcl)
 Vue.config.productionTip = false
 
-Vue.prototype.$request = Request
 Request.init(Vue.prototype.$toast)
 
-Vue.prototype.$user = User
+Vue.prototype.$enum = CommonManager
+CommonManager.init()
+
+Vue.prototype.$user = UserManager
+UserManager.init()
 
 new Vue({
     router,
