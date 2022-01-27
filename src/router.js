@@ -15,7 +15,11 @@ const routes = [
         path: '/user/:handle',
         name: 'user',
         component: () => import('@/pages/User')
-    },
+    }, {
+        path: '/problemSet',
+        name: 'problemSet',
+        component: () => import('@/pages/ProblemSet')
+    }
 ]
 
 const router = new VueRouter({

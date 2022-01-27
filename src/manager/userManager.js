@@ -1,4 +1,6 @@
-import Request from "@/common/request";
+import Request from '@/common/request';
+
+let baseUrl = '/api/user'
 
 let userData = {
     id: null,
@@ -11,12 +13,12 @@ let userData = {
 let organizationType = {}
 
 let permissionTypeList = {
-    CHANGE_ORGANIZATION: "CHANGE_ORGANIZATION",
-    GRANT: "GRANT",
-    VIEW_HIDDEN_PROBLEM: "VIEW_HIDDEN_PROBLEM",
-    CREATE_AND_EDIT_PROBLEM: "CREATE_AND_EDIT_PROBLEM",
-    EDIT_NOT_OWNER_PROBLEM: "EDIT_NOT_OWNER_PROBLEM",
-    VIEW_PUBLIC_SOLUTION: "VIEW_PUBLIC_SOLUTION",
+    CHANGE_ORGANIZATION: 'CHANGE_ORGANIZATION',
+    GRANT: 'GRANT',
+    VIEW_HIDDEN_PROBLEM: 'VIEW_HIDDEN_PROBLEM',
+    CREATE_AND_EDIT_PROBLEM: 'CREATE_AND_EDIT_PROBLEM',
+    EDIT_NOT_OWNER_PROBLEM: 'EDIT_NOT_OWNER_PROBLEM',
+    VIEW_PUBLIC_SOLUTION: 'VIEW_PUBLIC_SOLUTION',
 }
 
 function init() {
@@ -32,7 +34,7 @@ function isNormal() {
 }
 
 function signIn(handle, password, callback) {
-    Request.post("/api/user/login", {
+    Request.post(baseUrl + '/login', {
         handle: handle,
         password: password
     }, res => {
@@ -44,7 +46,7 @@ function signIn(handle, password, callback) {
 }
 
 function signUp(handle, password, callback) {
-    Request.post("/api/user/register", {
+    Request.post(baseUrl + '/register', {
         handle: handle,
         password: password
     }, res => {
@@ -79,21 +81,21 @@ function hasPermission(permission) {
 }
 
 function addPermission(targetId, newPermission, callback) {
-    Request.post("/api/user/addPermission", {
+    Request.post(baseUrl + '/addPermission', {
         targetId: targetId,
         permissionType: newPermission
     }, callback)
 }
 
 function removePermission(targetId, removePermission, callback) {
-    Request.post("/api/user/removePermission", {
+    Request.post(baseUrl + '/removePermission', {
         targetId: targetId,
         permissionType: removePermission
     }, callback)
 }
 
 function changeOrganization(targetId, newOrganization, callback) {
-    Request.post("/api/user/changeOrganization", {
+    Request.post(baseUrl + '/changeOrganization', {
         targetId: targetId,
         newOrganization: newOrganization
     }, callback)

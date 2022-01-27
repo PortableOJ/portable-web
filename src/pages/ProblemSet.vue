@@ -1,0 +1,114 @@
+<template>
+    <div class="lm-rc-layout">
+        <div class="lm-rc-layout-left">
+            <Table :head="tableHead" :data="tableData">
+                <template v-slot:body-title="scope">
+                    <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
+                </template>
+                <template v-slot:body-icon="scope">
+                    <i class="iconfont icon-flow" v-if="scope.data.problemListStatusType === 'ON_JUDGE'"></i>
+                    <i class="iconfont icon-success" v-if="scope.data.problemListStatusType === 'PASS'"></i>
+                    <i class="iconfont icon-error" v-if="scope.data.problemListStatusType === 'NOT_PASS'"></i>
+                </template>
+                <template v-slot:body-radio="scope">
+                    {{ scope.data.acceptCount }} / {{ scope.data.submissionCount }}
+                    (
+                    <span v-if="scope.data.submissionCount !== 0">
+                        {{ scope.data.acceptCount / scope.data.submissionCount * 100 }} %
+                    </span>
+                    <span v-else> 从未提交 </span>
+                    )
+                </template>
+            </Table>
+            <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
+        </div>
+        <div>
+            <UserCard></UserCard>
+        </div>
+    </div>
+</template>
+
+<script>
+import UserCard from "@/card/UserCard";
+
+export default {
+    name: "ProblemSet",
+    components: {
+        UserCard
+    },
+    data() {
+        return {
+            tableHead: [
+                {
+                    label: '',
+                    value: 'icon',
+                    width: '20'
+                }, {
+                    label: '编号',
+                    value: 'id',
+                    width: '50',
+                }, {
+                    label: '标题',
+                    value: 'title',
+                    width: '300',
+                }, {
+                    label: '当前状态',
+                    value: 'status',
+                    width: '100',
+                }, {
+                    label: '访问权限',
+                    value: 'accessType',
+                    width: '100',
+                }, {
+                    label: '通过/提交率',
+                    value: 'radio',
+                    width: '100',
+                }
+            ],
+            tableData: [
+                {
+                    acceptCount: 0,
+                    accessType: "HIDDEN",
+                    id: 0,
+                    owner: 0,
+                    problemListStatusType: "NEVER_SUBMIT",
+                    status: "CHECKING",
+                    submissionCount: 0,
+                    title: "string"
+                }
+            ],
+            pageNum: 1,
+            pageSize: 30,
+            totalNum: 0,
+            totalPage: 1,
+        }
+    },
+    created() {
+        this.pageNum = this.$route.query.pageNum
+        this.pageSize = this.$route.query.pageSize
+        this.initData()
+    },
+    methods: {
+        initData() {
+            this.$problem.getProblemList(this.pageNum, this.pageSize, res => {
+                this.pageNum = res.pageNum
+                this.pageSize = res.pageSize
+                this.totalNum = res.totalNum
+                this.totalPage = res.totalPage
+                this.tableData = res.data
+            })
+        },
+        openProblem(problemId) {
+            console.log(problemId)
+        },
+        changePageNum() {
+            console.log(this.pageNum)
+            this.initData()
+        }
+    },
+}
+</script>
+
+<style scoped>
+
+</style>

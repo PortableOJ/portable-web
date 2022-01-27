@@ -1,11 +1,13 @@
 <template>
     <div class="card">
         <div v-if="isLogin" style="text-align: left">
+            Hi
             <h1 @click="openMine" style="cursor: pointer">{{ userData.handle }}</h1>
+            欢迎来到 Portable OJ
         </div>
         <div v-else>
             <InputText class="card-input" placeholder="用户名" v-model="handle"></InputText>
-            <InputText class="card-input" placeholder="密码" v-model="password"></InputText>
+            <InputText class="card-input" type="password" placeholder="密码" v-model="password"></InputText>
             <div class="button-box">
                 <InputButton @click="login" :loading="onLogin" :disabled="onRegister">登录</InputButton>
                 <InputButton @click="register" :loading="onRegister" :disabled="onLogin">注册</InputButton>
@@ -39,6 +41,7 @@ export default {
     },
     created() {
         this.isLogin = this.$user.isLogin()
+        this.init()
     },
     methods: {
         init() {
@@ -60,6 +63,7 @@ export default {
             this.$message({
                 text: '请再次输入密码来进行注册',
                 type: 'info',
+                inputType: 'password',
                 ok: '确定',
                 cancel: '取消注册',
                 input: true,
@@ -94,6 +98,7 @@ export default {
 <style scoped>
 .card-input {
     width: 250px;
+    margin-top: 15px;
 }
 
 .button-box {

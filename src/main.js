@@ -11,6 +11,7 @@ import Request from "@/common/request";
 import CommonManager from "@/manager/commonManager";
 
 import UserManager from "@/manager/userManager";
+import ProblemManager from "@/manager/problemManager";
 
 Vue.use(Mevcl)
 Vue.config.productionTip = false
@@ -21,7 +22,10 @@ Vue.prototype.$enum = CommonManager
 CommonManager.init()
 
 Vue.prototype.$user = UserManager
+Vue.prototype.$problem = ProblemManager
+
 UserManager.init()
+ProblemManager.init()
 
 new Vue({
     router,
