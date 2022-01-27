@@ -1,23 +1,36 @@
 <template>
-    <div id="app">
-        <NavMenu :options="selectOption" v-model="select"></NavMenu>
+    <div id="app" class="main-layout">
+        <NavMenu @change="toSelect" :options="selectOption" v-model="select"></NavMenu>
         <router-view></router-view>
+        <Footer></Footer>
     </div>
 </template>
 
 <script>
+import Footer from "@/components/Footer";
 export default {
     name: 'App',
-    components: {},
+    components: {Footer},
     data() {
         return {
             selectOption: [
                 {
                     label: '主页',
                     value: 'home',
+                }, {
+                    label: '题库',
+                    value: 'problemSet'
                 }
             ],
             select: this.$route.name
+        }
+    },
+    methods: {
+        toSelect(value) {
+            if (value === this.$route.name) {
+                return
+            }
+            this.$router.push({name: value})
         }
     },
     watch: {
@@ -38,9 +51,18 @@ export default {
     /*margin-top: 60px;*/
 }
 
+.main-layout {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
 .lm-rc-layout {
     display: grid;
     grid-template-columns: 1fr 300px;
+}
+
+.lm-rc-layout-left {
+    margin-right: 8px;
 }
 
 .card {
