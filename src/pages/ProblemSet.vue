@@ -2,13 +2,19 @@
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
             <Table :head="tableHead" :data="tableData">
-                <template v-slot:body-title="scope">
-                    <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
-                </template>
                 <template v-slot:body-icon="scope">
                     <i class="iconfont icon-flow" v-if="scope.data.problemListStatusType === 'ON_JUDGE'"></i>
                     <i class="iconfont icon-success" v-if="scope.data.problemListStatusType === 'PASS'"></i>
                     <i class="iconfont icon-error" v-if="scope.data.problemListStatusType === 'NOT_PASS'"></i>
+                </template>
+                <template v-slot:body-title="scope">
+                    <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
+                </template>
+                <template v-slot:body-status="scope">
+                    {{ problemStatusType[scope.data.status].text }}
+                </template>
+                <template v-slot:body-accessType="scope">
+                    {{ problemAccessType[scope.data.accessType].text }}
                 </template>
                 <template v-slot:body-radio="scope">
                     {{ scope.data.acceptCount }} / {{ scope.data.submissionCount }}
@@ -81,16 +87,26 @@ export default {
             pageSize: 30,
             totalNum: 0,
             totalPage: 1,
+
+            problemAccessType: {},
+            problemStatusType: {}
         }
     },
     created() {
         this.pageNum = this.$route.query.pageNum
         this.pageSize = this.$route.query.pageSize
+        this.$enum.getEnum('ProblemAccessType', res => this.problemAccessType = res)
+        this.$enum.getEnum('ProblemStatusType', res => this.problemStatusType = res)
         this.initData()
     },
     methods: {
         initData() {
             this.$problem.getProblemList(this.pageNum, this.pageSize, res => {
+                if (res == null) {
+                    this.totalNum = 1
+                    this.totalPage = 1
+                    this.tableData = []
+                }
                 this.pageNum = res.pageNum
                 this.pageSize = res.pageSize
                 this.totalNum = res.totalNum
@@ -99,7 +115,7 @@ export default {
             })
         },
         openProblem(problemId) {
-            console.log(problemId)
+            this.$router.push({name: 'problem', params: {problemId: problemId}})
         },
         changePageNum() {
             console.log(this.pageNum)

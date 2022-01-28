@@ -4,21 +4,69 @@ let enumData = {}
 
 let version = null
 
+/**
+ * 设置缓存
+ *
+ * @param key key
+ * @param value value
+ * @param expires 缓存时间，不允许无限缓存，单位：分钟
+ */
+function setCache(key, value, expires) {
+    if (!window.localStorage) {
+        return
+    }
+    let data = {
+        version: version,
+        data: value,
+        expires: expires * 60000 + new Date().getTime()
+    }
+    localStorage.setItem(key, JSON.stringify(data))
+}
+
+function getCache(key) {
+    if (!window.localStorage) {
+        return null
+    }
+    let data = window.localStorage.getItem(key)
+    if (!data) {
+        return null
+    }
+    data = JSON.parse(data)
+    if (data.expires >= new Date().getTime() && data.version === version) {
+        return data.data
+    }
+    return null
+}
+
 function init() {
-    // TODO: 读取缓存
-    // Request.get("/api/common/version", null, res => {
-    //     version = res;
-    // })
+    if (version === null) {
+        version = getCache('version')
+    }
+    if (version === null) {
+        Request.get("/api/common/version", null, res => {
+            setCache('version', res, 10)
+            version = res;
+        })
+    } else {
+        setCache('version', version, 10)
+    }
 }
 
 function getEnum(name, callback) {
-    if (!(enumData[name] === null || enumData[name] === undefined)) {
+    if (enumData[name]) {
         callback(enumData[name])
+        return
+    }
+    let tmp = getCache(`ENUM_${name}`)
+    if (tmp != null) {
+        enumData[name] = tmp
+        setCache(`ENUM_${name}`, tmp, 1200)
+        callback(tmp)
         return
     }
     Request.get("/api/common/enum", {name: name}, res => {
         enumData[name] = res
-        // TODO: 缓存
+        setCache(`ENUM_${name}`, res, 1200)
         callback(res)
     })
 }
@@ -27,6 +75,9 @@ export default {
     version,
 
     init,
+
+    setCache,
+    getCache,
 
     getEnum
 }
