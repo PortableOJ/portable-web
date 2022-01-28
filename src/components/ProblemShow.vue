@@ -11,14 +11,14 @@
                              placeholder="将会使用的语言">
                 </InputSelect>
             </div>
-            <div class="text-area">
-                时间限制：{{ getTimeLimit() }}s <br>
-                空间限制：{{ getMemoryLimit() }}MB <br>
-                当前状态：{{ problemStatusType[problemData.statusType].text }} <br>
-                访问权限：{{ problemAccessType[problemData.accessType].text }} <br>
-                通过/提交：{{ problemData.acceptCount }} / {{ problemData.submissionCount }} <br>
-                题面类型：{{ problemType[problemData.type].text }}
-                判题系统：{{ judgeCodeType[problemData.judgeCodeType].text }}
+            <div class="text-area problem-attribute">
+                <div>时间限制：{{ getTimeLimit() }}s </div>
+                <div>空间限制：{{ getMemoryLimit() }}MB </div>
+                <div>当前状态：{{ problemStatusType[problemData.statusType].text }} </div>
+                <div>访问权限：{{ problemAccessType[problemData.accessType].text }} </div>
+                <div>通过/提交：{{ problemData.acceptCount }} / {{ problemData.submissionCount }} </div>
+                <div>题面类型：{{ problemType[problemData.type].text }} </div>
+                <div>判题系统：{{ judgeCodeType[problemData.judgeCodeType].text }} </div>
             </div>
             <h3>
                 题面描述
@@ -131,8 +131,11 @@ export default {
             this.languageType = res
             this.$problem.getProblemData(this.problemId, res => {
                 this.problemData = res
-                for (let i in this.problemData.supportLanguage) {
-                    let cur = this.problemData.supportLanguage[i]
+                if (!res) {
+                    return
+                }
+                for (let i in res.supportLanguage) {
+                    let cur = res.supportLanguage[i]
                     this.languageSupport.push({
                         label: this.languageType[cur].text,
                         value: cur
@@ -165,5 +168,16 @@ export default {
 <style scoped>
 .text-area {
     margin-left: 30px
+}
+
+.problem-attribute {
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.problem-attribute > div {
+    border-radius: 5px;
+    border: 1px dotted var(--brand-color);
 }
 </style>
