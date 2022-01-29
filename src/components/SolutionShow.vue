@@ -1,21 +1,31 @@
 <template>
-    <div>
-        <div style="display: grid; place-items: center">
-            <!--suppress JSValidateTypes -->
-            <Table :head="tableHead" :data="solutionData">
-                <template v-slot:body-submitTime="scope">
-                    {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
-                </template>
-                <template v-slot:body-status="scope">
-                    {{ solutionStatusType[scope.data.status].text }}
-                </template>
-            </Table>
-        </div>
+    <div style="display: grid; place-items: center">
+        <!--suppress JSValidateTypes -->
+        <Table :head="tableHead" :data="solutionData">
+            <template v-slot:body-submitTime="scope">
+                {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
+            </template>
+            <template v-slot:body-userHandle="scope">
+                <Link @click="toUser(scope.data.userHandle)">{{ scope.data.userHandle }}</Link>
+            </template>
+            <template v-slot:body-problemTitle="scope">
+                <Link @click="toProblem(scope.data.problemId)">{{ scope.data.problemTitle }}</Link>
+            </template>
+            <template v-slot:body-status="scope">
+                {{ solutionStatusType[scope.data.status].text }}
+            </template>
+        </Table>
         <div style="text-align: left">
-            <h3>代码</h3>
-            <InputTextarea :code-mode="true" :read-only="true" v-model="code"></InputTextarea>
-            <h3>编译信息</h3>
-            <InputTextarea :code-mode="true" :read-only="true" v-model="compileMsg"></InputTextarea>
+            <div v-if="code !== ''">
+                <h3>代码</h3>
+                <MarkdownBlockCode :value="code"></MarkdownBlockCode>
+            </div>
+            <div v-if="compileMsg !== ''">
+                <h3>编译信息</h3>
+
+
+                <InputTextarea :code-mode="true" :read-only="true" v-model="compileMsg"></InputTextarea>
+            </div>
         </div>
     </div>
 </template>
@@ -40,11 +50,11 @@ export default {
                     width: '80',
                 }, {
                     label: '用户',
-                    value: 'userId',
+                    value: 'userHandle',
                     width: '50',
                 }, {
                     label: '问题',
-                    value: 'problemId',
+                    value: 'problemTitle',
                     width: '50',
                 }, {
                     label: '语言',
@@ -68,7 +78,9 @@ export default {
                 id: 0,
                 submitTime: "1970-01-01T00:00:00.000+00:00",
                 userId: 0,
+                userHandle: '',
                 problemId: 0,
+                problemTitle: '',
                 contestId: null,
                 languageType: "CPP11",
                 status: "ACCEPT",
@@ -95,6 +107,14 @@ export default {
                 this.compileMsg = res.compileMsg
             })
         }
+    },
+    methods: {
+        toUser(handle) {
+            this.$router.push({name: 'user', params: {handle: handle}})
+        },
+        toProblem(id) {
+            this.$router.push({name: 'problem', params: {problemId: id}})
+        },
     }
 }
 </script>

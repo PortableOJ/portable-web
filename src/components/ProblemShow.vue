@@ -73,24 +73,25 @@ export default {
             curLanguage: '',
             problemData: {
                 acceptCount: 0,
-                accessType: "HIDDEN",
+                accessType: "PUBLIC",
                 contestId: 0,
                 defaultMemoryLimit: 0,
                 defaultTimeLimit: 0,
-                description: "string",
+                description: "",
                 example: [
                     {
-                        in: "string",
-                        out: "string"
+                        in: "",
+                        out: ""
                     }
                 ],
-                gmtModifyTime: "2022-01-28T13:26:56.329Z",
+                gmtModifyTime: "",
                 id: 0,
-                input: "string",
-                judgeCode: "string",
+                input: "",
+                judgeCode: "",
                 judgeCodeType: "ALL_SAME",
-                output: "string",
+                output: "",
                 owner: 0,
+                ownerHandle: "",
                 shareTest: true,
                 specialMemoryLimit: {
                     additionalProp1: 0,
@@ -102,12 +103,12 @@ export default {
                     additionalProp2: 0,
                     additionalProp3: 0
                 },
-                statusType: "CHECKING",
+                statusType: "NORMAL",
                 submissionCount: 0,
                 supportLanguage: [
                     "C11"
                 ],
-                title: "string",
+                title: "",
                 type: "STANDARD",
                 version: 0
             },
