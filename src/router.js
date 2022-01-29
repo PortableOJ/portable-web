@@ -24,6 +24,14 @@ const routes = [
         name: 'problem',
         component: () => import('@/pages/Problem')
     }, {
+        path: '/status',
+        name: 'status',
+        component: () => import('@/pages/StatusPage')
+    }, {
+        path: '/status/:solutionId',
+        name: 'solution',
+        component: () => import('@/pages/SolutionPage')
+    }, {
         path: '*',
         name: 'notFound',
         component: () => import('@/pages/NotFound')

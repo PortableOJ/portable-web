@@ -12,13 +12,12 @@
                 </InputSelect>
             </div>
             <div class="text-area problem-attribute">
-                <div>时间限制：{{ getTimeLimit() }}s </div>
-                <div>空间限制：{{ getMemoryLimit() }}MB </div>
-                <div>当前状态：{{ problemStatusType[problemData.statusType].text }} </div>
-                <div>访问权限：{{ problemAccessType[problemData.accessType].text }} </div>
-                <div>通过/提交：{{ problemData.acceptCount }} / {{ problemData.submissionCount }} </div>
-                <div>题面类型：{{ problemType[problemData.type].text }} </div>
-                <div>判题系统：{{ judgeCodeType[problemData.judgeCodeType].text }} </div>
+                <div>时间限制: {{ getTimeLimit() }}s</div>
+                <div>内存限制: {{ getMemoryLimit() }}MB</div>
+                <div>当前状态: {{ problemStatusType[problemData.statusType].text }}</div>
+                <div>访问权限: {{ problemAccessType[problemData.accessType].text }}</div>
+                <div>通过/提交: {{ problemData.acceptCount }} / {{ problemData.submissionCount }}</div>
+                <div>题面类型: {{ problemType[problemData.type].text }}</div>
             </div>
             <h3>
                 题面描述
@@ -44,6 +43,12 @@
                 </InputTextarea>
                 <InputTextarea title="输出" :code-mode="true" :read-only="true" v-model="example.out">
                 </InputTextarea>
+            </div>
+            <h3>
+                判题系统
+            </h3>
+            <div class="text-area">
+                {{ judgeCodeType[problemData.judgeCodeType].text }}
             </div>
             <h3>
                 提交你的答案
@@ -122,12 +127,12 @@ export default {
         }
     },
     created() {
-        this.$enum.getEnum('ProblemAccessType', res => this.problemAccessType = res)
-        this.$enum.getEnum('ProblemStatusType', res => this.problemStatusType = res)
-        this.$enum.getEnum('JudgeCodeType', res => this.judgeCodeType = res)
-        this.$enum.getEnum('ProblemType', res => this.problemType = res)
+        this.$common.getEnum('ProblemAccessType', res => this.problemAccessType = res)
+        this.$common.getEnum('ProblemStatusType', res => this.problemStatusType = res)
+        this.$common.getEnum('JudgeCodeType', res => this.judgeCodeType = res)
+        this.$common.getEnum('ProblemType', res => this.problemType = res)
         // 可以并行但没必要.jpg
-        this.$enum.getEnum('LanguageType', res => {
+        this.$common.getEnum('LanguageType', res => {
             this.languageType = res
             this.$problem.getProblemData(this.problemId, res => {
                 this.problemData = res
@@ -173,7 +178,7 @@ export default {
 .problem-attribute {
     display: grid;
     grid-gap: 3px;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(6 , 1fr);
 }
 
 .problem-attribute > div {

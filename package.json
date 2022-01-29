@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.25.0",
     "core-js": "^3.6.5",
-    "mevcl": "^0.3.1",
+    "mevcl": "^0.3.2",
     "vue": "^2.6.11",
     "vue-router": "^3.5.3"
   },

@@ -1,6 +1,7 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
+            <!--suppress JSValidateTypes -->
             <Table :head="tableHead" :data="tableData">
                 <template v-slot:body-icon="scope">
                     <i class="iconfont icon-flow" v-if="scope.data.problemListStatusType === 'ON_JUDGE'"></i>
@@ -52,19 +53,19 @@ export default {
                 }, {
                     label: '编号',
                     value: 'id',
-                    width: '50',
+                    width: '30',
                 }, {
                     label: '标题',
                     value: 'title',
-                    width: '300',
+                    width: '250',
                 }, {
                     label: '当前状态',
                     value: 'status',
-                    width: '100',
+                    width: '50',
                 }, {
                     label: '访问权限',
                     value: 'accessType',
-                    width: '100',
+                    width: '50',
                 }, {
                     label: '通过/提交率',
                     value: 'radio',
@@ -95,8 +96,8 @@ export default {
     created() {
         this.pageNum = this.$route.query.pageNum
         this.pageSize = this.$route.query.pageSize
-        this.$enum.getEnum('ProblemAccessType', res => this.problemAccessType = res)
-        this.$enum.getEnum('ProblemStatusType', res => this.problemStatusType = res)
+        this.$common.getEnum('ProblemAccessType', res => this.problemAccessType = res)
+        this.$common.getEnum('ProblemStatusType', res => this.problemStatusType = res)
         this.initData()
     },
     methods: {
@@ -106,12 +107,13 @@ export default {
                     this.totalNum = 1
                     this.totalPage = 1
                     this.tableData = []
+                } else {
+                    this.pageNum = res.pageNum
+                    this.pageSize = res.pageSize
+                    this.totalNum = res.totalNum
+                    this.totalPage = res.totalPage
+                    this.tableData = res.data
                 }
-                this.pageNum = res.pageNum
-                this.pageSize = res.pageSize
-                this.totalNum = res.totalNum
-                this.totalPage = res.totalPage
-                this.tableData = res.data
             })
         },
         openProblem(problemId) {

@@ -23,5 +23,5 @@ export default {
     init,
 
     getProblemList,
-    getProblemData
+    getProblemData,
 }

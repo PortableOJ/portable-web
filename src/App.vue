@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="main-layout">
-        <NavMenu @change="toSelect" :options="selectOption" v-model="select"></NavMenu>
+        <NavMenu @change="toSelect" :options="selectOption" v-model="select" :not-found="v => hiddenOption[v]"></NavMenu>
         <router-view></router-view>
         <Footer></Footer>
     </div>
@@ -19,9 +19,17 @@ export default {
                     value: 'home',
                 }, {
                     label: '题库',
-                    value: 'problemSet'
-                }
+                    value: 'problemSet',
+                }, {
+                    label: '判题',
+                    value: 'status',
+                },
             ],
+            hiddenOption: {
+                user: '用户',
+                problem: '题目',
+                solution: '提交',
+            },
             select: this.$route.name
         }
     },
