@@ -2,7 +2,11 @@
     <div class="card">
         <div v-if="isLogin" style="text-align: left">
             Hi
-            <h1 @click="openMine" style="cursor: pointer">{{ userData.handle }}</h1>
+            <div>
+                <Link @click="openMine">
+                    <h1>{{ userData.handle }}</h1>
+                </Link>
+            </div>
             欢迎来到 Portable OJ
         </div>
         <div v-else>
@@ -40,8 +44,10 @@ export default {
         }
     },
     created() {
-        this.isLogin = this.$user.isLogin()
-        this.init()
+        this.$user.check(() => {
+            this.isLogin = this.$user.isLogin()
+            this.init()
+        })
     },
     methods: {
         init() {

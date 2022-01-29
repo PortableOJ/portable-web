@@ -22,7 +22,6 @@ let permissionTypeList = {
 }
 
 function init() {
-    // TODO: 等待 check 接口
 }
 
 function isLogin() {
@@ -31,6 +30,15 @@ function isLogin() {
 
 function isNormal() {
     return isLogin() && userData.type === 'NORMAL'
+}
+
+function check(callback) {
+    Request.get(baseUrl + '/check', null, res => {
+        if (res != null) {
+            userData = res
+        }
+        callback()
+    })
 }
 
 function signIn(handle, password, callback) {
@@ -107,6 +115,7 @@ export default {
     init,
     isLogin,
     isNormal,
+    check,
     signUp,
     signIn,
     signOut,

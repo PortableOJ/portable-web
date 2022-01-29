@@ -22,9 +22,7 @@
             </div>
             <div v-if="compileMsg !== ''">
                 <h3>编译信息</h3>
-
-
-                <InputTextarea :code-mode="true" :read-only="true" v-model="compileMsg"></InputTextarea>
+                <MarkdownBlockCode :value="compileMsg"></MarkdownBlockCode>
             </div>
         </div>
     </div>
