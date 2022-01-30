@@ -44,16 +44,14 @@ export default {
         }
     },
     created() {
-        this.$user.check(() => {
-            this.isLogin = this.$user.isLogin()
-            this.init()
-        })
+        this.isLogin = this.$user.isLogin()
+        this.init()
     },
     methods: {
         init() {
             this.isLogin = this.$user.isLogin()
             if (this.isLogin) {
-                this.userData = this.$user.getUserData()
+                this.userData = this.$user.getCurUserData()
             }
             this.onLogin = false
             this.onRegister = false

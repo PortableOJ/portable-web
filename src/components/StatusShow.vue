@@ -108,7 +108,7 @@ export default {
             this.$router.push({name: 'solution', params: {solutionId: id}})
         },
         disableSolution(userId) {
-            return this.$user.getUserData().id !== userId
+            return this.$user.getCurUserData().id !== userId
         }
     }
 }

@@ -1,4 +1,5 @@
 import Request from '@/common/request';
+import CommonManager from "@/manager/commonManager";
 
 let baseUrl = '/api/user'
 
@@ -10,7 +11,7 @@ let userData = {
     permissionTypeSet: [],
 }
 
-let organizationType = {}
+let organizationType = null
 
 let permissionTypeList = {
     CHANGE_ORGANIZATION: 'CHANGE_ORGANIZATION',
@@ -22,6 +23,8 @@ let permissionTypeList = {
 }
 
 function init() {
+    check(() => {})
+    CommonManager.getEnum("OrganizationType", res => organizationType = res)
 }
 
 function isLogin() {
@@ -33,6 +36,10 @@ function isNormal() {
 }
 
 function check(callback) {
+    if (isLogin()) {
+        callback()
+        return
+    }
     Request.get(baseUrl + '/check', null, res => {
         if (res != null) {
             userData = res
@@ -70,7 +77,17 @@ function signOut() {
     // TODO 等待 logout 接口
 }
 
-function getUserData() {
+function getUserInfo(handle, callback) {
+    if (handle === userData.handle) {
+        callback(userData)
+        return
+    }
+    Request.get(baseUrl + '/getUserInfo', {handle: handle}, res => {
+        callback(res)
+    })
+}
+
+function getCurUserData() {
     return userData
 }
 
@@ -78,7 +95,7 @@ function isDominate(target) {
     if (!isNormal() || organizationType == null) {
         return false
     }
-    return (organizationType[userData.organizationType].code & organizationType[target].code) === organizationType[target].code
+    return userData.organizationType !== target && (organizationType[userData.organizationType].code & organizationType[target].code) === organizationType[target].code
 }
 
 function hasPermission(permission) {
@@ -119,7 +136,8 @@ export default {
     signUp,
     signIn,
     signOut,
-    getUserData,
+    getUserInfo,
+    getCurUserData,
     isDominate,
     hasPermission,
 
