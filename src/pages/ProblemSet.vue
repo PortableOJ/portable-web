@@ -120,7 +120,6 @@ export default {
             this.$router.push({name: 'problem', params: {problemId: problemId}})
         },
         changePageNum() {
-            console.log(this.pageNum)
             this.initData()
         }
     },

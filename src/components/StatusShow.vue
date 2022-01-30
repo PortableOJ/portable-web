@@ -14,6 +14,7 @@
                 {{ solutionStatusType[scope.data.status].text }}
             </template>
         </Table>
+        <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
     </div>
 </template>
 
@@ -85,30 +86,36 @@ export default {
     },
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
-        if (this.contentId) {
-            // do nothing
-        } else {
-            this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, res => {
-                if (res == null) {
-                    this.totalNum = 1
-                    this.totalPage = 1
-                    this.tableData = []
-                } else {
-                    this.pageNum = res.pageNum
-                    this.pageSize = res.pageSize
-                    this.totalNum = res.totalNum
-                    this.totalPage = res.totalPage
-                    this.tableData = res.data
-                }
-            })
-        }
+        this.initData()
     },
     methods: {
+        initData() {
+            if (this.contentId) {
+                // do nothing
+            } else {
+                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, res => {
+                    if (res == null) {
+                        this.totalNum = 1
+                        this.totalPage = 1
+                        this.tableData = []
+                    } else {
+                        this.pageNum = res.pageNum
+                        this.pageSize = res.pageSize
+                        this.totalNum = res.totalNum
+                        this.totalPage = res.totalPage
+                        this.tableData = res.data
+                    }
+                })
+            }
+        },
         openSolution(id) {
             this.$router.push({name: 'solution', params: {solutionId: id}})
         },
         disableSolution(userId) {
             return this.$user.getCurUserData().id !== userId
+        },
+        changePageNum() {
+            this.initData()
         }
     }
 }
