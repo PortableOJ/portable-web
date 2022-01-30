@@ -15,7 +15,16 @@ function getProblemData(id, callback) {
     }, res => callback(res))
 }
 
+function submit(id, code, languageType, callback) {
+    Request.post(baseUrl + '/submit', {
+        problemId: id,
+        code: code,
+        languageType: languageType
+    }, res => callback(res))
+}
+
 export default {
     getProblemList,
     getProblemData,
+    submit,
 }

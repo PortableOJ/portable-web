@@ -7,14 +7,15 @@
                     题目配置
                 </h3>
                 <InputSelect :data="languageSupport"
-                             :value="curLanguage"
-                             placeholder="将会使用的语言">
+                             v-model="curLanguage"
+                             placeholder="将会使用的语言"
+                             @change="initLimit">
                 </InputSelect>
             </div>
             <div class="text-area problem-attribute" style="text-align: center">
                 <!--                <div></div>-->
-                <Tag type="success">时间限制: {{ getTimeLimit() }}s</Tag>
-                <Tag type="success">内存限制: {{ getMemoryLimit() }}MB</Tag>
+                <Tag type="success">时间限制: {{ timeLimit }}s</Tag>
+                <Tag type="success">内存限制: {{ memoryLimit }}MB</Tag>
                 <Tag :type="problemData.statusType === 'NORMAL' ? 'success' : 'error'">当前状态:
                     {{ problemStatusType[problemData.statusType].text }}
                 </Tag>
@@ -123,6 +124,8 @@ export default {
         return {
             curLanguage: '',
             languageSupport: [],
+            timeLimit: 0,
+            memoryLimit: 0,
 
             description: '',
             input: '',
@@ -155,8 +158,13 @@ export default {
             this.input = this.$markdown(this.problemData.input)
             this.output = this.$markdown(this.problemData.output)
         })
+        this.initLimit()
     },
     methods: {
+        initLimit() {
+            this.timeLimit = this.getTimeLimit()
+            this.memoryLimit = this.getMemoryLimit()
+        },
         getTimeLimit() {
             let t = this.problemData.specialTimeLimit[this.curLanguage]
             if (t) return t
@@ -168,7 +176,22 @@ export default {
             return this.problemData.defaultMemoryLimit
         },
         submit() {
-            // TODO
+            if (this.languageSupport.findIndex(value => value.value === this.curLanguage) === -1) {
+                this.$toast({
+                    title: '错误',
+                    text: '请选择需要提交的语言',
+                    duration: 'auto',
+                    type: 'error'
+                })
+                return
+            }
+            if (this.problemData.contestId) {
+                // do nothing
+            } else {
+                this.$problem.submit(this.problemData.id, this.submitCode, this.curLanguage, res => {
+                    this.$router.push({name: 'solution', params: {solutionId: res}})
+                })
+            }
         }
     }
 }

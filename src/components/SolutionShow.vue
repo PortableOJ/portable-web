@@ -1,7 +1,7 @@
 <template>
     <div style="display: grid; place-items: center">
         <!--suppress JSValidateTypes -->
-        <Table :head="tableHead" :data="solutionData">
+        <Table style="width: 100%" :head="tableHead" :data="solutionData">
             <template v-slot:body-submitTime="scope">
                 {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
             </template>
@@ -15,7 +15,7 @@
                 {{ solutionStatusType[scope.data.status].text }}
             </template>
         </Table>
-        <div style="text-align: left">
+        <div style="text-align: left; width: 80%">
             <div v-if="code !== ''">
                 <h3>代码</h3>
                 <MarkdownBlockCode :value="code"></MarkdownBlockCode>

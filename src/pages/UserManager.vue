@@ -90,7 +90,6 @@ export default {
                         this.permissionState[i] = this.userData.permissionTypeSet.findIndex(t => t === i) >= 0
                     }
                 }
-                console.log(this.permissionList)
             })
         })
     },
