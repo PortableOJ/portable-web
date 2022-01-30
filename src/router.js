@@ -16,6 +16,10 @@ const routes = [
         name: 'user',
         component: () => import('@/pages/User')
     }, {
+        path: '/user/manager/:handle',
+        name: 'userManager',
+        component: () => import('@/pages/UserManager')
+    }, {
         path: '/problemSet',
         name: 'problemSet',
         component: () => import('@/pages/ProblemSet')

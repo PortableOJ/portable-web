@@ -23,12 +23,13 @@ export default {
                 }, {
                     label: '判题',
                     value: 'status',
-                },
+                }
             ],
             hiddenOption: {
                 user: '用户',
                 problem: '题目',
                 solution: '提交',
+                userManager: '管理'
             },
             select: this.$route.name
         }

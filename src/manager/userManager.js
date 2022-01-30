@@ -105,25 +105,25 @@ function hasPermission(permission) {
     return userData.permissionTypeSet.find(e => e === permission) != null
 }
 
-function addPermission(targetId, newPermission, callback) {
+function addPermission(targetId, newPermission) {
     Request.post(baseUrl + '/addPermission', {
         targetId: targetId,
         permissionType: newPermission
-    }, callback)
+    }, null)
 }
 
-function removePermission(targetId, removePermission, callback) {
+function removePermission(targetId, removePermission) {
     Request.post(baseUrl + '/removePermission', {
         targetId: targetId,
         permissionType: removePermission
-    }, callback)
+    }, null)
 }
 
-function changeOrganization(targetId, newOrganization, callback) {
+function changeOrganization(targetId, newOrganization) {
     Request.post(baseUrl + '/changeOrganization', {
         targetId: targetId,
         newOrganization: newOrganization
-    }, callback)
+    }, null)
 }
 
 export default {

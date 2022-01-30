@@ -17,7 +17,7 @@
                     </Tag>
                 </div>
                 <div class="user-info-operator">
-                    <Link v-if="isDominate">修改组织</Link>
+                    <Link @click="userManager" v-if="isDominate">修改组织</Link>
                 </div>
                 <div class="user-info-title">拥有的权限</div>
                 <div class="user-info-value">
@@ -29,7 +29,7 @@
                     </template>
                 </div>
                 <div class="user-info-operator">
-                    <Link v-if="isDominate">调整权限</Link>
+                    <Link @click="userManager" v-if="isDominate">调整权限</Link>
                 </div>
                 <div class="user-info-title">通过/提交率</div>
                 <div class="user-info-value">
@@ -70,14 +70,7 @@ export default {
                 organizationType: "ADMIN",
                 submission: 0,
                 accept: 0,
-                permissionTypeSet: [
-                    "CHANGE_ORGANIZATION",
-                    "VIEW_HIDDEN_PROBLEM",
-                    "EDIT_NOT_OWNER_PROBLEM",
-                    "VIEW_PUBLIC_SOLUTION",
-                    "GRANT",
-                    "CREATE_AND_EDIT_PROBLEM"
-                ],
+                permissionTypeSet: [],
                 email: null
             },
             isDominate: false,
@@ -93,10 +86,13 @@ export default {
         this.$common.getEnum('PermissionType', res => this.permissionType = res)
         this.$user.getUserInfo(this.handle, res => {
             this.userData = res
-            console.log(this.userData.organizationType)
-            console.log(this.$user.getCurUserData().organizationType)
             this.isDominate = this.userData.type === 'NORMAL' && this.$user.isDominate(this.userData.organizationType)
         })
+    },
+    methods: {
+        userManager() {
+            this.$router.push({name: 'userManager', params: {handle: this.userData.handle}})
+        }
     }
 }
 </script>
@@ -106,10 +102,10 @@ export default {
     display: grid;
     grid-gap: 5px;
     grid-template-columns: repeat(12, 1fr);
+    place-items: center;
 }
 
 .user-info > div {
-    /*border-top: 1px solid var(--brand-color);*/
     padding-top: 4px;
 }
 
@@ -123,11 +119,5 @@ export default {
 
 .user-info-operator {
     grid-column: 12 / span 1;
-}
-
-.permission-display {
-    display: grid;
-    grid-gap: 3px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 </style>
