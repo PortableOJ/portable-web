@@ -12,7 +12,9 @@
                 <Link @click="toProblem(scope.data.problemId)">{{ scope.data.problemTitle }}</Link>
             </template>
             <template v-slot:body-status="scope">
-                {{ solutionStatusType[scope.data.status].text }}
+                <template v-if="solutionStatusType[scope.data.status]">
+                    {{ solutionStatusType[scope.data.status].text }}
+                </template>
             </template>
         </Table>
         <div style="text-align: left; width: 80%">
@@ -100,9 +102,15 @@ export default {
             // do nothing
         } else {
             this.$solution.getSolution(this.solutionId, res => {
-                this.solutionData = [res]
-                this.code = res.code
-                this.compileMsg = res.compileMsg
+                if (!res) {
+                    this.solutionData = []
+                    this.code = ''
+                    this.compileMsg = ''
+                } else {
+                    this.solutionData = [res]
+                    this.code = res.code
+                    this.compileMsg = res.compileMsg
+                }
             })
         }
     },

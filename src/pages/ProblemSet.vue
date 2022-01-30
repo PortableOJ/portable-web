@@ -12,10 +12,14 @@
                     <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
                 </template>
                 <template v-slot:body-status="scope">
-                    {{ problemStatusType[scope.data.status].text }}
+                    <template v-if="problemStatusType[scope.data.status]">
+                        {{ problemStatusType[scope.data.status].text }}
+                    </template>
                 </template>
                 <template v-slot:body-accessType="scope">
-                    {{ problemAccessType[scope.data.accessType].text }}
+                    <template v-if="problemAccessType[scope.data.accessType]">
+                        {{ problemAccessType[scope.data.accessType].text }}
+                    </template>
                 </template>
                 <template v-slot:body-radio="scope">
                     {{ scope.data.acceptCount }} / {{ scope.data.submissionCount }}

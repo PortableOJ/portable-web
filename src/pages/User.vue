@@ -7,12 +7,12 @@
             <div class="user-info" style="width: 90%">
                 <div class="user-info-title">账号类型</div>
                 <div class="user-info-value">
-                    <Tag type="success" v-if="!!accountType[userData.type]">{{ accountType[userData.type].text }}</Tag>
+                    <Tag type="success" v-if="accountType[userData.type]">{{ accountType[userData.type].text }}</Tag>
                 </div>
                 <div class="user-info-operator"></div>
                 <div class="user-info-title">所属组织</div>
                 <div class="user-info-value">
-                    <Tag v-if="!!organizationType[userData.organizationType]" type="success">
+                    <Tag v-if="organizationType[userData.organizationType]" type="success">
                         {{ organizationType[userData.organizationType].text }}
                     </Tag>
                 </div>
@@ -23,7 +23,7 @@
                 <div class="user-info-value">
                     <template v-for="permission in userData.permissionTypeSet">
                         <Tag style="margin-top: 5px" type="success" :key="permission"
-                             v-if="!!permissionType[permission]">
+                             v-if="permissionType[permission]">
                             {{ permissionType[permission].text }}
                         </Tag>
                     </template>

@@ -17,14 +17,22 @@
                 <Tag type="success">时间限制: {{ timeLimit }}s</Tag>
                 <Tag type="success">内存限制: {{ memoryLimit }}MB</Tag>
                 <Tag :type="problemData.statusType === 'NORMAL' ? 'success' : 'error'">当前状态:
-                    {{ problemStatusType[problemData.statusType].text }}
+                    <template v-if="problemStatusType[problemData.statusType]">
+                        {{ problemStatusType[problemData.statusType].text }}
+                    </template>
                 </Tag>
                 <Tag :type="problemData.accessType === 'PUBLIC' ? 'success'
                 : problemData.accessType === 'HIDDEN' ? 'warning' : 'error'">访问权限:
-                    {{ problemAccessType[problemData.accessType].text }}
+                    <template v-if="problemAccessType[problemData.accessType]">
+                        {{ problemAccessType[problemData.accessType].text }}
+                    </template>
                 </Tag>
                 <Tag type="success">通过/提交: {{ problemData.acceptCount }} / {{ problemData.submissionCount }}</Tag>
-                <Tag type="success">题面类型: {{ problemType[problemData.type].text }}</Tag>
+                <Tag type="success">题面类型:
+                    <template v-if="problemType[problemData.type]">
+                        {{ problemType[problemData.type].text }}
+                    </template>
+                </Tag>
             </div>
             <h3>
                 题面描述
