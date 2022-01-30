@@ -20,15 +20,10 @@ Vue.config.productionTip = false
 Request.init(Vue.prototype.$toast)
 
 Vue.prototype.$common = CommonManager
-CommonManager.init()
 
 Vue.prototype.$user = UserManager
 Vue.prototype.$problem = ProblemManager
 Vue.prototype.$solution = SolutionManager
-
-UserManager.init()
-ProblemManager.init()
-SolutionManager.init()
 
 Date.prototype.format = function (fmt) {
     let o = {
@@ -51,7 +46,11 @@ Date.prototype.format = function (fmt) {
     return fmt;
 }
 
-new Vue({
-    router,
-    render: h => h(App),
-}).$mount('#app')
+CommonManager.init(() => {
+    UserManager.init(() => {
+        new Vue({
+            router,
+            render: h => h(App),
+        }).$mount('#app')
+    })
+})

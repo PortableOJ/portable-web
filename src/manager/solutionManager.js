@@ -2,10 +2,6 @@ import Request from "@/common/request";
 
 let baseUrl = '/api/solution'
 
-function init() {
-    // do nothing
-}
-
 function getPublicSolutionList(pageNum, pageSize, callback) {
     Request.get(baseUrl + '/getPublicStatus', {
         pageNum: pageNum,
@@ -20,8 +16,6 @@ function getSolution(id, callback) {
 }
 
 export default {
-    init,
-
     getPublicSolutionList,
     getSolution,
 }

@@ -38,7 +38,7 @@ function getCache(key) {
     return null
 }
 
-function init() {
+function init(callback) {
     if (version === null) {
         version = getCache('version')
     }
@@ -46,9 +46,11 @@ function init() {
         Request.get("/api/common/version", null, res => {
             setCache('version', res, 10)
             version = res;
+            callback()
         })
     } else {
         setCache('version', version, 10)
+        callback()
     }
 }
 

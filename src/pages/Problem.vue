@@ -5,7 +5,7 @@
         </div>
         <div>
             <UserCard></UserCard>
-            <div class="card">
+            <div v-if="problemData !== null" class="card">
                 出题人
                 <Link @click="openOwner"><h1>{{ problemData.ownerHandle }}</h1></Link>
             </div>

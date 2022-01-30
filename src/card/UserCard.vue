@@ -44,8 +44,10 @@ export default {
         }
     },
     created() {
-        this.isLogin = this.$user.isLogin()
-        this.init()
+        this.$user.check(() => {
+            this.isLogin = this.$user.isLogin()
+            this.init()
+        })
     },
     methods: {
         init() {

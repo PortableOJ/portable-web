@@ -13,6 +13,8 @@ let userData = {
 
 let organizationType = null
 
+let onLogin = false
+
 let permissionTypeList = {
     CHANGE_ORGANIZATION: 'CHANGE_ORGANIZATION',
     GRANT: 'GRANT',
@@ -22,9 +24,19 @@ let permissionTypeList = {
     VIEW_PUBLIC_SOLUTION: 'VIEW_PUBLIC_SOLUTION',
 }
 
-function init() {
-    check(() => {})
-    CommonManager.getEnum("OrganizationType", res => organizationType = res)
+function init(callback) {
+    let cnt = 0
+    let tar = 3
+    check(() => {
+        cnt++
+        if (cnt === tar) callback()
+    })
+    CommonManager.getEnum("OrganizationType", res => {
+        organizationType = res
+        cnt++
+        if (cnt === tar) callback()
+    })
+    cnt++
 }
 
 function isLogin() {
@@ -36,14 +48,20 @@ function isNormal() {
 }
 
 function check(callback) {
+    if (onLogin) {
+        window.setTimeout(check, 100, callback)
+        return
+    }
     if (isLogin()) {
         callback()
         return
     }
+    onLogin = true
     Request.get(baseUrl + '/check', null, res => {
         if (res != null) {
             userData = res
         }
+        onLogin = false
         callback()
     })
 }

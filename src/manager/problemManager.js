@@ -2,10 +2,6 @@ import Request from "@/common/request";
 
 let baseUrl = '/api/problem'
 
-function init() {
-    // do nothing
-}
-
 function getProblemList(pageNum, pageSize, callback) {
     Request.get(baseUrl + '/getList', {
         pageNum: pageNum,
@@ -20,8 +16,6 @@ function getProblemData(id, callback) {
 }
 
 export default {
-    init,
-
     getProblemList,
     getProblemData,
 }

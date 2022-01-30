@@ -84,14 +84,23 @@ export default {
         this.$common.getEnum('AccountType', res => this.accountType = res)
         this.$common.getEnum('OrganizationType', res => this.organizationType = res)
         this.$common.getEnum('PermissionType', res => this.permissionType = res)
-        this.$user.getUserInfo(this.handle, res => {
-            this.userData = res
-            this.isDominate = this.userData.type === 'NORMAL' && this.$user.isDominate(this.userData.organizationType)
-        })
+        this.init()
     },
     methods: {
+        init() {
+            this.$user.getUserInfo(this.handle, res => {
+                this.userData = res
+                this.isDominate = this.userData.type === 'NORMAL' && this.$user.isDominate(this.userData.organizationType)
+            })
+        },
         userManager() {
             this.$router.push({name: 'userManager', params: {handle: this.userData.handle}})
+        },
+    },
+    watch: {
+        $route() {
+            this.handle = this.$route.params.handle
+            this.init()
         }
     }
 }
