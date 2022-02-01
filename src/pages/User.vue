@@ -35,7 +35,7 @@
                 <div class="user-info-value">
                     {{ userData.accept }} / {{ userData.submission }} (
                     <template v-if="userData.submission !== 0">
-                        {{ userData.accept / userData.submission * 100 }} %
+                        {{ (userData.accept / userData.submission * 100).toFixed(2) }} %
                     </template>
                     <template v-else>-</template>
                     )

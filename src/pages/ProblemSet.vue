@@ -25,7 +25,7 @@
                     {{ scope.data.acceptCount }} / {{ scope.data.submissionCount }}
                     (
                     <span v-if="scope.data.submissionCount !== 0">
-                        {{ scope.data.acceptCount / scope.data.submissionCount * 100 }} %
+                        {{ (scope.data.acceptCount / scope.data.submissionCount * 100).toFixed(2) }} %
                     </span>
                     <span v-else> 从未提交 </span>
                     )

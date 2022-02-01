@@ -29,7 +29,8 @@ export default {
                 user: '用户',
                 problem: '题目',
                 solution: '提交',
-                userManager: '管理'
+                userManager: '管理',
+                problemTest: '数据',
             },
             select: this.$route.name
         }

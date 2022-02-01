@@ -36,6 +36,10 @@ const routes = [
         name: 'solution',
         component: () => import('@/pages/SolutionPage')
     }, {
+        path: '/problemSet/problem/:problemId/test',
+        name: 'problemTest',
+        component: () => import('@/pages/ProblemTestPage')
+    }, {
         path: '*',
         name: 'notFound',
         component: () => import('@/pages/NotFound')

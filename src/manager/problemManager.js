@@ -15,6 +15,40 @@ function getProblemData(id, callback) {
     }, res => callback(res))
 }
 
+function getTestList(id, callback) {
+    Request.get(baseUrl + '/getTestList', {
+        id: id
+    }, res => callback(res))
+}
+
+function getTestInputShow(id, name, callback) {
+    Request.get(baseUrl + '/getTestInputShow', {
+        id: id,
+        name: name
+    }, res => callback(res))
+}
+
+function getTestInput(id, name) {
+    Request.download(baseUrl + '/getTestInput', {
+        id: id,
+        name: name
+    })
+}
+
+function getTestOutputShow(id, name, callback) {
+    Request.get(baseUrl + '/getTestOutputShow', {
+        id: id,
+        name: name
+    }, res => callback(res))
+}
+
+function getTestOutput(id, name) {
+    Request.download(baseUrl + '/getTestOutput', {
+        id: id,
+        name: name
+    })
+}
+
 function submit(id, code, languageType, callback) {
     Request.post(baseUrl + '/submit', {
         problemId: id,
@@ -26,5 +60,12 @@ function submit(id, code, languageType, callback) {
 export default {
     getProblemList,
     getProblemData,
+
+    getTestList,
+    getTestInputShow,
+    getTestInput,
+    getTestOutputShow,
+    getTestOutput,
+
     submit,
 }
