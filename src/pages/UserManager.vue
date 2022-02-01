@@ -8,15 +8,16 @@
                 <div class="user-info-title">所属组织</div>
                 <div class="user-info-value">
                     <InputSelect @change="changeOrganization" v-model="userData.organizationType"
-                                 :data="organizationList"></InputSelect>
+                                 :data="organizationList" :disabled="!isDominate || !CHANGE_ORGANIZATION">
+                    </InputSelect>
                 </div>
             </div>
             <div class="user-info">
                 <div>拥有的权限</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr))">
-                    <InputCheckbox style="display: inline-block"
-                                   v-for="permission in permissionList"
+                <div>
+                    <InputCheckbox v-for="permission in permissionList"
                                    :key="permission.value"
+                                   :read-only="!isDominate || !GRANT"
                                    :value="permissionState[permission.value]"
                                    @change="changePermission(permission.value)">
                         {{ permission.label }}
@@ -51,6 +52,10 @@ export default {
                 permissionTypeSet: [],
                 email: null
             },
+            isDominate: false,
+
+            CHANGE_ORGANIZATION: false,
+            GRANT: false,
 
             accountType: {},
             organizationType: {},
@@ -81,6 +86,7 @@ export default {
             this.$common.getEnum('PermissionType', res => {
                 this.permissionType = res
                 this.permissionList = []
+                this.isDominate = this.userData.type === 'NORMAL' && this.$user.isDominate(this.userData.organizationType)
                 for (let i in res) {
                     if (this.$user.hasPermission(i)) {
                         this.permissionList.push({
@@ -92,6 +98,8 @@ export default {
                 }
             })
         })
+        this.CHANGE_ORGANIZATION = this.$user.hasPermission(this.$user.permissionTypeList.CHANGE_ORGANIZATION)
+        this.GRANT = this.$user.hasPermission(this.$user.permissionTypeList.GRANT)
     },
     methods: {
         changeOrganization(target) {

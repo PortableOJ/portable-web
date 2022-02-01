@@ -112,7 +112,7 @@ export default {
             this.$router.push({name: 'solution', params: {solutionId: id}})
         },
         disableSolution(userId) {
-            return this.$user.getCurUserData().id !== userId
+            return this.$user.getCurUserData().id !== userId && this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
         },
         changePageNum() {
             this.initData()

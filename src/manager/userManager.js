@@ -90,9 +90,13 @@ function signUp(handle, password, callback) {
 
 function signOut() {
     userData = {
-        id: null
+        id: null,
+        handle: null,
+        type: null,
+        organizationType: null,
+        permissionTypeSet: [],
     }
-    // TODO 等待 logout 接口
+    Request.post(baseUrl + '/logout', null, () => {})
 }
 
 function getUserInfo(handle, callback) {

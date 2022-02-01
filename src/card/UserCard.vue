@@ -8,6 +8,7 @@
                 </Link>
             </div>
             欢迎来到 Portable OJ
+            <InputButton @click="logout">登出</InputButton>
         </div>
         <div v-else>
             <InputText class="card-input" placeholder="用户名" v-model="handle"></InputText>
@@ -93,6 +94,10 @@ export default {
                     this.onRegister = false
                 },
             })
+        },
+        logout() {
+            this.$user.signOut()
+            this.isLogin = false
         },
         openMine() {
             this.$router.push({name: 'user', params: {handle: this.userData.handle}})

@@ -17,7 +17,7 @@
                     </Tag>
                 </div>
                 <div class="user-info-operator">
-                    <Link @click="userManager" v-if="isDominate">修改组织</Link>
+                    <Link @click="userManager" v-if="isDominate && CHANGE_ORGANIZATION">修改组织</Link>
                 </div>
                 <div class="user-info-title">拥有的权限</div>
                 <div class="user-info-value">
@@ -29,7 +29,7 @@
                     </template>
                 </div>
                 <div class="user-info-operator">
-                    <Link @click="userManager" v-if="isDominate">调整权限</Link>
+                    <Link @click="userManager" v-if="isDominate && GRANT">调整权限</Link>
                 </div>
                 <div class="user-info-title">通过/提交率</div>
                 <div class="user-info-value">
@@ -75,6 +75,9 @@ export default {
             },
             isDominate: false,
 
+            CHANGE_ORGANIZATION: false,
+            GRANT: false,
+
             accountType: {},
             organizationType: {},
             permissionType: {},
@@ -84,6 +87,10 @@ export default {
         this.$common.getEnum('AccountType', res => this.accountType = res)
         this.$common.getEnum('OrganizationType', res => this.organizationType = res)
         this.$common.getEnum('PermissionType', res => this.permissionType = res)
+
+        this.CHANGE_ORGANIZATION = this.$user.hasPermission(this.$user.permissionTypeList.CHANGE_ORGANIZATION)
+        this.GRANT = this.$user.hasPermission(this.$user.permissionTypeList.GRANT)
+
         this.init()
     },
     methods: {
