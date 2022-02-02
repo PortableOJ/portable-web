@@ -207,7 +207,7 @@ export default {
 
 <style scoped>
 .text-area {
-    margin-left: 30px
+    margin-left: 30px;
 }
 
 .problem-attribute {

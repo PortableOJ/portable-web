@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="main-layout">
-        <NavMenu @change="toSelect" :options="selectOption" v-model="select" :not-found="v => hiddenOption[v]"></NavMenu>
+        <NavMenu @change="toSelect" :options="selectOption" v-model="select" :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
         <router-view></router-view>
         <Footer></Footer>
     </div>
@@ -31,6 +31,7 @@ export default {
                 solution: '提交',
                 userManager: '管理',
                 problemTest: '数据',
+                problemManager: '管理',
             },
             select: this.$route.name
         }

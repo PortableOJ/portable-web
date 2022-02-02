@@ -54,7 +54,7 @@ export default {
             this.$router.push({name: 'problemTest', params: {problemId: this.problemId.toString()}})
         },
         editProblem() {
-
+            this.$router.push({name: 'problemManager', params: {problemId: this.problemId.toString()}})
         }
     }
 }
