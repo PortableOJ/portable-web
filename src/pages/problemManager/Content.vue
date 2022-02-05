@@ -60,6 +60,10 @@ export default {
                     this.hashCode++
                 }
             })
+        } else {
+            this.problemData = {
+                example: []
+            }
         }
     },
     methods: {
@@ -76,7 +80,12 @@ export default {
                 })
             }
             if (this.problemId === 0) {
-                this.$problem.newProblem(this.problemData, callback)
+                this.$problem.newProblem(this.problemData, res => {
+                    this.problemId = res
+                    this.$router.push({name: 'problemManager', params: {problemId: res.toString()}})
+                    location.reload()
+                    callback()
+                })
             } else {
                 this.$problem.updateContent(this.problemData, callback)
             }

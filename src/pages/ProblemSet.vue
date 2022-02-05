@@ -35,6 +35,9 @@
         </div>
         <div>
             <UserCard></UserCard>
+            <div class="card">
+                <InputButton @click="newProblem">新建题目</InputButton>
+            </div>
         </div>
     </div>
 </template>
@@ -125,6 +128,9 @@ export default {
         },
         changePageNum() {
             this.initData()
+        },
+        newProblem() {
+            this.$router.push({name: 'problemManager', params: {problemId: "0"}})
         }
     },
 }

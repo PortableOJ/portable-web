@@ -2,7 +2,7 @@
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
             <h1>{{ problemId === 'null' ? '创建' : '编辑' }}题目</h1>
-            <NavMenu @change="toSelect" style="margin-top: 30px; background-color: var(--border-color-level-4)"
+            <NavMenu v-if="problemId !== 0" @change="toSelect" style="margin-top: 30px; background-color: var(--border-color-level-4)"
                      :value="step" :options="stepList"></NavMenu>
             <div style="height: 30px"></div>
             <router-view></router-view>
@@ -44,7 +44,7 @@ export default {
                 }
             ],
 
-            problemId: this.$route.params.problemId,
+            problemId: parseInt(this.$route.params.problemId),
         }
     },
     created() {
