@@ -65,9 +65,16 @@
             <div class="text-area">
                 {{ judgeCodeType[problemData.judgeCodeType].text }}
             </div>
-            <h3>
-                提交你的答案
-            </h3>
+            <div style="display: grid; grid-template-columns: auto 1fr">
+                <h3>
+                    提交你的答案
+                </h3>
+                <InputSelect :data="languageSupport"
+                             v-model="curLanguage"
+                             placeholder="将会使用的语言"
+                             @change="initLimit">
+                </InputSelect>
+            </div>
             <div>
                 <InputTextarea :min-height="100" :code-mode="true" v-model="submitCode"></InputTextarea>
             </div>
