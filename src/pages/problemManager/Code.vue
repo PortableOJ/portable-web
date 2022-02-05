@@ -27,9 +27,9 @@
             <template v-slot:body-languageType="scope">
                 {{ languageType[scope.data.languageType].text }}
             </template>
-            <template v-slot:body-solutionResult="scope">
+            <template v-slot:body-solutionStatusType="scope">
                 <Link v-if="scope.solutionId !== null" @click="toSolution(scope.data.solutionId)">
-                    {{ scope.data.solutionResult }}
+                    {{ solutionStatusType[scope.data.solutionStatusType].text }}
                 </Link>
             </template>
             <template v-slot:body-operator="scope">
@@ -84,7 +84,7 @@ export default {
                     value: 'languageType'
                 }, {
                     label: '执行的测试结果',
-                    value: 'solutionResult'
+                    value: 'solutionStatusType'
                 }, {
                     label: '操作',
                     value: 'operator'

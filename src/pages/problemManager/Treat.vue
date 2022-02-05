@@ -4,7 +4,10 @@
                 this.problemData && problemStatusType[this.problemData.statusType] ?
                     problemStatusType[this.problemData.statusType].text : '未知'
             }}</h3>
-        <InputButton v-if="problemId !== 0" type="warning" @click="treatAndCheck">
+        <InputButton v-if="problemId !== 0" :disabled="this.problemData.statusType === 'NORMAL'
+                            || problemStatusType[this.problemData.statusType].onTreatedOrCheck"
+                     type="warning"
+                     @click="treatAndCheck">
             执行处理校验！
         </InputButton>
     </div>
@@ -22,14 +25,17 @@ export default {
         }
     },
     created() {
-        if (this.problemId !== 0) {
-            this.$problem.getProblemData(this.problemId, res => {
-                this.problemData = res
-            })
-        }
+        this.init()
         this.$common.getEnum('ProblemStatusType', res => this.problemStatusType = res)
     },
     methods: {
+        init() {
+            if (this.problemId !== 0) {
+                this.$problem.getProblemData(this.problemId, res => {
+                    this.problemData = res
+                })
+            }
+        },
         treatAndCheck() {
             this.$problem.treatAndCheckProblem(this.problemId, () => {
                 this.$toast({
@@ -38,6 +44,7 @@ export default {
                     duration: 'auto',
                     type: 'success'
                 })
+                this.init()
             })
         }
     }
