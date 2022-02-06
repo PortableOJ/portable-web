@@ -22,7 +22,10 @@ let permissionTypeList = {
     CREATE_AND_EDIT_PROBLEM: 'CREATE_AND_EDIT_PROBLEM',
     EDIT_NOT_OWNER_PROBLEM: 'EDIT_NOT_OWNER_PROBLEM',
     VIEW_PUBLIC_SOLUTION: 'VIEW_PUBLIC_SOLUTION',
+    MANAGER_JUDGE: 'MANAGER_JUDGE',
 }
+
+let userStatusChange = {}
 
 function init(callback) {
     let cnt = 0
@@ -45,6 +48,15 @@ function isLogin() {
 
 function isNormal() {
     return isLogin() && userData.type === 'NORMAL'
+}
+
+/**
+ * 废弃
+ * @param name 名称
+ * @param callback 调用函数
+ */
+function registerUserStatusChange(name, callback) {
+    userStatusChange[name] = callback
 }
 
 function check(callback) {
@@ -73,6 +85,7 @@ function signIn(handle, password, callback) {
     }, res => {
         if (res != null) {
             userData = res
+            location.reload()
         }
         callback()
     });
@@ -84,6 +97,7 @@ function signUp(handle, password, callback) {
         password: password
     }, res => {
         userData = res
+        location.reload()
         callback()
     });
 }
@@ -96,7 +110,9 @@ function signOut() {
         organizationType: null,
         permissionTypeSet: [],
     }
-    Request.post(baseUrl + '/logout', null, () => {})
+    Request.post(baseUrl + '/logout', null, () => {
+        location.reload()
+    })
 }
 
 function getUserInfo(handle, callback) {
@@ -154,6 +170,7 @@ export default {
     init,
     isLogin,
     isNormal,
+    registerUserStatusChange,
     check,
     signUp,
     signIn,

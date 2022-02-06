@@ -23,6 +23,10 @@ export default {
                 }, {
                     label: '判题',
                     value: 'status',
+                }, {
+                    label: '服务',
+                    value: 'judge',
+                    hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
                 }
             ],
             hiddenOption: {
@@ -36,7 +40,28 @@ export default {
             select: this.$route.name
         }
     },
+    created() {
+        this.$user.registerUserStatusChange('menu', this.init)
+    },
     methods: {
+        init() {
+            this.selectOption =  [
+                {
+                    label: '主页',
+                    value: 'home',
+                }, {
+                    label: '题库',
+                    value: 'problemSet',
+                }, {
+                    label: '判题',
+                    value: 'status',
+                }, {
+                    label: '服务',
+                    value: 'judge',
+                    hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
+                }
+            ]
+        },
         toSelect(value) {
             if (value === this.$route.name) {
                 return

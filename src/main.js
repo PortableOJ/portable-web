@@ -13,6 +13,7 @@ import CommonManager from "@/manager/commonManager";
 import UserManager from "@/manager/userManager";
 import ProblemManager from "@/manager/problemManager";
 import SolutionManager from "@/manager/solutionManager";
+import JudgeManager from "@/manager/judgeManager";
 
 Vue.use(Mevcl)
 Vue.config.productionTip = false
@@ -24,6 +25,7 @@ Vue.prototype.$common = CommonManager
 Vue.prototype.$user = UserManager
 Vue.prototype.$problem = ProblemManager
 Vue.prototype.$solution = SolutionManager
+Vue.prototype.$judge = JudgeManager
 
 Date.prototype.format = function (fmt) {
     let o = {

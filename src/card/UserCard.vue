@@ -77,7 +77,6 @@ export default {
                 confirmOK: (v) => {
                     if (v === this.password) {
                         this.$user.signUp(this.handle, this.password, () => {
-                            this.onRegister = false
                             this.init()
                         })
                     } else {

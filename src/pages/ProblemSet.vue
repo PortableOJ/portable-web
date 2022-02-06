@@ -4,8 +4,11 @@
             <!--suppress JSValidateTypes -->
             <Table :head="tableHead" :data="tableData">
                 <template v-slot:body-icon="scope">
+                    <!--suppress JSUnresolvedVariable -->
                     <i class="iconfont icon-flow" v-if="scope.data.problemListStatusType === 'ON_JUDGE'"></i>
+                    <!--suppress JSUnresolvedVariable -->
                     <i class="iconfont icon-success" v-if="scope.data.problemListStatusType === 'PASS'"></i>
+                    <!--suppress JSUnresolvedVariable -->
                     <i class="iconfont icon-error" v-if="scope.data.problemListStatusType === 'NOT_PASS'"></i>
                 </template>
                 <template v-slot:body-title="scope">
@@ -35,7 +38,7 @@
         </div>
         <div>
             <UserCard></UserCard>
-            <div class="card">
+            <div v-if="canCreateProblem()" class="card">
                 <InputButton @click="newProblem">新建题目</InputButton>
             </div>
         </div>
@@ -79,18 +82,7 @@ export default {
                     width: '100',
                 }
             ],
-            tableData: [
-                {
-                    acceptCount: 0,
-                    accessType: "HIDDEN",
-                    id: 0,
-                    owner: 0,
-                    problemListStatusType: "NEVER_SUBMIT",
-                    status: "CHECKING",
-                    submissionCount: 0,
-                    title: "string"
-                }
-            ],
+            tableData: [],
             pageNum: 1,
             pageSize: 30,
             totalNum: 0,
@@ -128,6 +120,9 @@ export default {
         },
         changePageNum() {
             this.initData()
+        },
+        canCreateProblem() {
+            return this.$user.hasPermission(this.$user.permissionTypeList.CREATE_AND_EDIT_PROBLEM)
         },
         newProblem() {
             this.$router.push({name: 'problemManager', params: {problemId: "0"}})
