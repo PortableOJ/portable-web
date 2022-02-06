@@ -45,4 +45,4 @@ jobs:
         with:
           context: ${{github.workspace}}
           push: true
-          tags: 998244353/portable-server:latest
+          tags: 998244353/portable-web:latest
