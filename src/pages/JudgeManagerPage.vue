@@ -39,7 +39,7 @@ export default {
             tableHead: [
                 {
                     label: '编号',
-                    value: '',
+                    value: 'judgeCode',
                     width: '60'
                 }, {
                     label: '任务线程数/任务堆积数',
