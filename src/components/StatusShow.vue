@@ -1,14 +1,27 @@
 <template>
     <div style="display: grid; place-items: center">
         <!--suppress JSValidateTypes -->
-        <Table :head="tableHead" :data="tableData">
+        <Table v-if="solutionStatusType && languageType" :head="tableHead" :data="tableData">
             <template v-slot:body-id="scope">
                 <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userId)">
                     {{ scope.data.id }}
                 </Link>
             </template>
+            <template v-slot:body-userHandle="scope">
+                <Link @click="openUser(scope.data.userHandle)">
+                    {{ scope.data.userHandle }}
+                </Link>
+            </template>
+            <template v-slot:body-problemTitle="scope">
+                <Link @click="openProblem(scope.data.problemId)">
+                    {{ scope.data.problemTitle }}
+                </Link>
+            </template>
             <template v-slot:body-submitTime="scope">
                 {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
+            </template>
+            <template v-slot:body-languageType="scope">
+                {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-status="scope">
                 {{ solutionStatusType[scope.data.status].text }}
@@ -40,11 +53,11 @@ export default {
                     width: '80',
                 }, {
                     label: '用户',
-                    value: 'userId',
+                    value: 'userHandle',
                     width: '50',
                 }, {
                     label: '问题',
-                    value: 'problemId',
+                    value: 'problemTitle',
                     width: '50',
                 }, {
                     label: '语言',
@@ -81,11 +94,13 @@ export default {
             totalNum: 0,
             totalPage: 1,
 
-            solutionStatusType: {}
+            solutionStatusType: null,
+            languageType: null,
         }
     },
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
+        this.$common.getEnum('LanguageType', res => this.languageType = res)
         this.initData()
     },
     methods: {
@@ -110,6 +125,12 @@ export default {
         },
         openSolution(id) {
             this.$router.push({name: 'solution', params: {solutionId: id}})
+        },
+        openUser(userHandle) {
+            this.$router.push({name: 'user', params: {handle: userHandle}})
+        },
+        openProblem(problemId) {
+            this.$router.push({name: 'problem', params: {problemId: problemId}})
         },
         disableSolution(userId) {
             return this.$user.getCurUserData().id !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
