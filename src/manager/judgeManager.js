@@ -3,11 +3,11 @@ import Request from "@/common/request";
 let baseUrl = 'api/judge'
 
 function getServerCode(callback) {
-    Request.get(baseUrl + '/serverCode', null, res => callback(res))
+    Request.get(baseUrl + '/serverCode', null, callback, null)
 }
 
 function getJudgeContainerList(callback) {
-    Request.get(baseUrl + '/judgeList', null, res => callback(res))
+    Request.get(baseUrl + '/judgeList', null, callback, null)
 }
 
 function updateJudge(judgeCode, newMaxThreadCore, newMaxWorkCore, newMaxSocketCore, newMaxWorkNum, callback) {
@@ -17,19 +17,19 @@ function updateJudge(judgeCode, newMaxThreadCore, newMaxWorkCore, newMaxSocketCo
         maxWorkCore: newMaxWorkCore,
         maxSocketCore: newMaxSocketCore,
         maxWorkNum: newMaxWorkNum
-    }, () => callback())
+    }, callback, null)
 }
 
 function killJudge(solutionId, callback) {
     Request.post(baseUrl + '/killJudge', {
         id: solutionId
-    }, () => callback())
+    }, callback, null)
 }
 
 function killTest(problemId, callback) {
     Request.post(baseUrl + '/killTest', {
         id: problemId
-    }, () => callback())
+    }, callback, null)
 }
 
 export default {

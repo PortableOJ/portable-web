@@ -70,9 +70,8 @@ function check(callback) {
     }
     onLogin = true
     Request.get(baseUrl + '/check', null, res => {
-        if (res != null) {
-            userData = res
-        }
+        userData = res
+    }, () => {
         onLogin = false
         callback()
     })
@@ -83,12 +82,9 @@ function signIn(handle, password, callback) {
         handle: handle,
         password: password
     }, res => {
-        if (res != null) {
-            userData = res
-            location.reload()
-        }
-        callback()
-    });
+        userData = res
+        location.reload()
+    }, callback);
 }
 
 function signUp(handle, password, callback) {
@@ -98,8 +94,7 @@ function signUp(handle, password, callback) {
     }, res => {
         userData = res
         location.reload()
-        callback()
-    });
+    }, callback);
 }
 
 function signOut() {
@@ -143,25 +138,25 @@ function hasPermission(permission) {
     return userData.permissionTypeSet.find(e => e === permission) != null
 }
 
-function addPermission(targetId, newPermission) {
+function addPermission(targetId, newPermission, success) {
     Request.post(baseUrl + '/addPermission', {
         targetId: targetId,
         permissionType: newPermission
-    }, null)
+    }, success, null)
 }
 
-function removePermission(targetId, removePermission) {
+function removePermission(targetId, removePermission, success) {
     Request.post(baseUrl + '/removePermission', {
         targetId: targetId,
         permissionType: removePermission
-    }, null)
+    }, success, null)
 }
 
-function changeOrganization(targetId, newOrganization) {
+function changeOrganization(targetId, newOrganization, success) {
     Request.post(baseUrl + '/changeOrganization', {
         targetId: targetId,
         newOrganization: newOrganization
-    }, null)
+    }, success, null)
 }
 
 export default {

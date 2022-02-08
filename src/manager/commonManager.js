@@ -47,7 +47,7 @@ function init(callback) {
             setCache('version', res, 10)
             version = res;
             callback()
-        })
+        }, null)
     } else {
         setCache('version', version, 10)
         callback()
@@ -70,7 +70,7 @@ function getEnum(name, callback) {
         enumData[name] = res
         setCache(`ENUM_${name}`, res, 1200)
         callback(res)
-    })
+    }, null)
 }
 
 export default {
