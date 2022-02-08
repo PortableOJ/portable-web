@@ -133,7 +133,8 @@ export default {
             this.$router.push({name: 'problem', params: {problemId: problemId}})
         },
         disableSolution(userId) {
-            return this.$user.getCurUserData().id !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
+            return !this.$user.isLogin() ||
+                (this.$user.getCurUserData().id !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION))
         },
         changePageNum() {
             this.initData()
