@@ -6,9 +6,11 @@ function init(toast) {
     Toast = toast
 }
 
-function dealResponse(response) {
+function dealResponse(response, success) {
     if (response.success) {
-        return response.data
+        if (success) {
+            success(response.data)
+        }
     } else {
         Toast({
             title: `失败(${response.code})`,
@@ -16,15 +18,14 @@ function dealResponse(response) {
             duration: 'auto',
             type: 'error'
         })
-        return null
     }
 }
 
-function axiosSend(data, callback) {
+function axiosSend(data, success, callback) {
     axios(data).then(res => {
-        let response = dealResponse(res.data)
-        if (callback !== null && callback !== undefined) {
-            callback(response)
+        dealResponse(res.data, success)
+        if (callback) {
+            callback()
         }
     }).catch(e => {
         Toast({
@@ -33,8 +34,8 @@ function axiosSend(data, callback) {
             duration: 'auto',
             type: 'error'
         })
-        if (callback !== null && callback !== undefined) {
-            callback(null)
+        if (callback) {
+            callback()
         }
     })
 }
@@ -47,25 +48,25 @@ function download(url, data) {
     window.open(`${url}?${params.join('&')}`)
 }
 
-function get(url, data, callback) {
+function get(url, data, success, callback) {
     axiosSend({
         url: url,
         method: 'GET',
         params: data,
         responseType: 'json',
-    }, callback)
+    }, success, callback)
 }
 
-function post(url, data, callback) {
+function post(url, data, success, callback) {
     axiosSend({
         url: url,
         method: 'POST',
         data: data,
         responseType: 'json',
-    }, callback)
+    }, success, callback)
 }
 
-function postFile(url, data, callback) {
+function postFile(url, data, success, callback) {
     let form = new FormData()
     for (let i in data) {
         form.append(i, data[i])
@@ -75,7 +76,7 @@ function postFile(url, data, callback) {
         method: 'POST',
         data: form,
         responseType: 'json',
-    }, callback)
+    }, success, callback)
 }
 
 export default {
