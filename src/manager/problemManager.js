@@ -65,12 +65,12 @@ function updateJudge(problemData, callback) {
     Request.post(baseUrl + '/updateJudge', problemData, callback, null)
 }
 
-function addTest(problemId, name, file, callback) {
+function addTest(problemId, name, file, callback, process) {
     Request.postFile(baseUrl + '/addTest', {
         id: problemId,
         name: name,
         fileData: file
-    }, callback, null)
+    }, callback, process)
 }
 
 function removeTest(problemId, name, callback) {

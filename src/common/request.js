@@ -76,7 +76,18 @@ function postFile(url, data, success, callback) {
         method: 'POST',
         data: form,
         responseType: 'json',
-    }, success, callback)
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.lengthComputable) {
+                let complete =
+                    (((progressEvent.loaded / progressEvent.total) * 100) | 0);
+                this.percent = complete
+                if (complete >= 100) {
+                    complete = 100
+                }
+                callback(complete)
+            }
+        }
+    }, success, null)
 }
 
 export default {

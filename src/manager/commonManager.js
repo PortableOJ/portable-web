@@ -4,6 +4,8 @@ let enumData = {}
 
 let version = null
 
+let maxRequestFileSize = 200 * 1024 * 1024
+
 /**
  * 设置缓存
  *
@@ -75,6 +77,7 @@ function getEnum(name, callback) {
 
 export default {
     version,
+    maxRequestFileSize,
 
     init,
 

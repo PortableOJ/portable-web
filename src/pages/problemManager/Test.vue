@@ -19,7 +19,8 @@
                 </div>
             </template>
             <template v-slot:body-delete="scope">
-                <InputButton v-if="scope.data.notUpload" type="success" @click="upload(scope.data)">上传
+                <InputButton v-if="scope.data.notUpload" :process="scope.data.process" type="success" @click="upload(scope.data)">
+                    上传
                 </InputButton>
                 <InputButton type="error" @click="deleteTest(scope.data)">删除</InputButton>
             </template>
@@ -31,7 +32,7 @@
         </div>
         <div style="border: 1px solid var(--brand-color); border-radius: 15px; margin-top: 30px; display: grid; place-items: center">
             <h3>新增数据</h3>
-            <InputFile placeholder="选择暂存文件" :multiple="true" v-model="templateFileList"></InputFile>
+            <InputFile placeholder="选择文件加入暂存" :multiple="true" v-model="templateFileList"></InputFile>
             <InputButton @click="save">添加至暂存区域</InputButton>
         </div>
     </div>
@@ -126,11 +127,21 @@ export default {
                         notUpload: false,
                     })
                 }
-            })
+            }, proc => scope.process = proc)
         },
         save() {
             for (let i = 0; i < this.templateFileList.length; ++i) {
                 let name = this.templateFileList[i].name
+                let fileSize = this.templateFileList[i].size
+                if (fileSize > this.$common.maxRequestFileSize) {
+                    this.$toast({
+                        title: '过大的文件',
+                        text: `文件 "${name}" 过大，当前大小为: ${fileSize}b`,
+                        duration: 'auto',
+                        type: 'error'
+                    })
+                    continue
+                }
                 this.fileDict[name] = this.templateFileList[i]
                 this.tableData.push({
                     name: name,
@@ -138,7 +149,7 @@ export default {
                     notUpload: true,
                 })
             }
-            console.log(this.fileDict)
+            this.templateFileList = []
         }
     }
 }
