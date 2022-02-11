@@ -13,10 +13,12 @@
                 </Link>
             </template>
             <template v-slot:body-problemTitle="scope">
+                <!--suppress JSUnresolvedVariable -->
                 <Link @click="openProblem(scope.data.problemId)">
                     {{ scope.data.problemTitle }}
                 </Link>
             </template>
+            <!--suppress JSUnresolvedVariable -->
             <template v-slot:body-submitTime="scope">
                 {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
             </template>
@@ -38,6 +40,10 @@ export default {
         contentId: {
             type: Number,
             default: null,
+        },
+        onlyThisUserId: {
+            type: Number,
+            default: null
         }
     },
     data() {
@@ -77,22 +83,13 @@ export default {
                     width: '80'
                 }
             ],
-            tableData: [
-                {
-                    id: 0,
-                    submitTime: "2022-01-24T16:00:00.000+00:00",
-                    userId: 1,
-                    problemId: 3,
-                    languageType: "CPP11",
-                    status: "WRONG_ANSWER",
-                    timeCost: 0,
-                    memoryCost: 1408
-                }
-            ],
+            tableData: [],
             pageNum: 1,
             pageSize: 30,
             totalNum: 0,
             totalPage: 1,
+            userId: null,
+            problemId: null,
 
             solutionStatusType: null,
             languageType: null,
@@ -101,6 +98,17 @@ export default {
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
         this.$common.getEnum('LanguageType', res => this.languageType = res)
+        let queryPageNum = this.$route.query.pageNum ? parseInt(this.$route.query.pageNum.toString()) : null
+        let queryPageSize = this.$route.query.pageSize ? parseInt(this.$route.query.pageSize.toString()) : null
+        let queryUserId = this.$route.query.userId ? parseInt(this.$route.query.userId.toString()) : null
+        let queryProblemId = this.$route.query.problemId ? parseInt(this.$route.query.problemId.toString()) : null
+        this.pageNum = queryPageNum ? queryPageNum : 1
+        this.pageSize = queryPageSize ? queryPageSize : 30
+        this.userId = queryUserId ? queryUserId : null
+        this.problemId = queryProblemId ? queryProblemId : null
+        if (this.onlyThisUserId) {
+            this.userId = this.onlyThisUserId
+        }
         this.initData()
     },
     methods: {
@@ -108,18 +116,12 @@ export default {
             if (this.contentId) {
                 // do nothing
             } else {
-                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, res => {
-                    if (res == null) {
-                        this.totalNum = 1
-                        this.totalPage = 1
-                        this.tableData = []
-                    } else {
-                        this.pageNum = res.pageNum
-                        this.pageSize = res.pageSize
-                        this.totalNum = res.totalNum
-                        this.totalPage = res.totalPage
-                        this.tableData = res.data
-                    }
+                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userId, this.problemId, res => {
+                    this.pageNum = res.pageNum
+                    this.pageSize = res.pageSize
+                    this.totalNum = res.totalNum
+                    this.totalPage = res.totalPage
+                    this.tableData = res.data
                 })
             }
         },
@@ -136,7 +138,29 @@ export default {
             return this.$user.getCurUserData().id !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
         },
         changePageNum() {
+            this.changeUrl()
+        },
+        changeUrl() {
+            let query = {}
+            query.pageNum = this.pageNum.toString()
+            query.pageSize = this.pageSize.toString()
+            if (this.userId) {
+                query.userId = this.userId.toString()
+            }
+            if (this.problemId) {
+                query.problemId = this.problemId.toString()
+            }
+            this.$router.push({
+                name: 'status',
+                query: query
+            })
             this.initData()
+        }
+    },
+    watch: {
+        onlyThisUserId(v) {
+            this.userId = v
+            this.changeUrl()
         }
     }
 }

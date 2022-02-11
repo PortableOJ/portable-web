@@ -4,7 +4,7 @@ module.exports = {
         proxy: {
             '/api': {
                 // 目标 API 地址
-                target: 'http://localhost:8080',
+                target: 'http://mauve.icu',
                 ws: true,
                 changeOrigin: true,
             }
