@@ -13,6 +13,7 @@
                 </Link>
             </template>
             <template v-slot:body-problemTitle="scope">
+                <!--suppress JSUnresolvedVariable -->
                 <Link @click="openProblem(scope.data.problemId)">
                     {{ scope.data.problemTitle }}
                 </Link>
@@ -77,18 +78,7 @@ export default {
                     width: '80'
                 }
             ],
-            tableData: [
-                {
-                    id: 0,
-                    submitTime: "2022-01-24T16:00:00.000+00:00",
-                    userId: 1,
-                    problemId: 3,
-                    languageType: "CPP11",
-                    status: "WRONG_ANSWER",
-                    timeCost: 0,
-                    memoryCost: 1408
-                }
-            ],
+            tableData: [],
             pageNum: 1,
             pageSize: 30,
             totalNum: 0,
