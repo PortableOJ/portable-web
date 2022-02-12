@@ -25,7 +25,13 @@
                     </template>
                 </template>
                 <template v-slot:body-radio="scope">
-                    {{ scope.data.acceptCount }} / {{ scope.data.submissionCount }}
+                    <Link @click="openStatus(scope.data.id, true)">
+                        {{ scope.data.acceptCount }}
+                    </Link>
+                    /
+                    <Link @click="openStatus(scope.data.id, false)">
+                        {{ scope.data.submissionCount }}
+                    </Link>
                     (
                     <span v-if="scope.data.submissionCount !== 0">
                         {{ (scope.data.acceptCount / scope.data.submissionCount * 100).toFixed(2) }} %
@@ -117,6 +123,14 @@ export default {
         },
         openProblem(problemId) {
             this.$router.push({name: 'problem', params: {problemId: problemId}})
+        },
+        openStatus(problemId, onlyAccept) {
+            this.$router.push({
+                name: 'status', query: {
+                    problemId: problemId,
+                    statusType: onlyAccept ? 'ACCEPT' : null
+                }
+            })
         },
         changePageNum() {
             this.initData()

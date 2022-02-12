@@ -32,9 +32,9 @@ export default {
     created() {
         this.onLogin = this.$user.isLogin()
         let queryUserId = this.$route.query.userId ? parseInt(this.$route.query.userId.toString()) : null
-        if (this.onLogin && queryUserId === this.$user.getCurUserData().id) {
+        if (this.onLogin && queryUserId === this.$user.getCurUserId()) {
             this.onlyMe = true
-            this.curUserId = this.$user.getCurUserData().id
+            this.curUserId = this.$user.getCurUserId()
         } else {
             this.curUserId = null
         }
@@ -42,7 +42,7 @@ export default {
     methods: {
         changeOnlyMe() {
             if (this.onlyMe) {
-                this.curUserId = this.$user.isLogin() ? this.$user.getCurUserData().id : null
+                this.curUserId = this.$user.getCurUserId()
             } else {
                 this.curUserId = null
             }

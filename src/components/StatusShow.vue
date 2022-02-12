@@ -90,22 +90,20 @@ export default {
             totalPage: 1,
             userId: null,
             problemId: null,
+            statusType: null,
 
-            solutionStatusType: null,
-            languageType: null,
+            solutionStatusType: {},
+            languageType: {},
         }
     },
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
         this.$common.getEnum('LanguageType', res => this.languageType = res)
-        let queryPageNum = this.$route.query.pageNum ? parseInt(this.$route.query.pageNum.toString()) : null
-        let queryPageSize = this.$route.query.pageSize ? parseInt(this.$route.query.pageSize.toString()) : null
-        let queryUserId = this.$route.query.userId ? parseInt(this.$route.query.userId.toString()) : null
-        let queryProblemId = this.$route.query.problemId ? parseInt(this.$route.query.problemId.toString()) : null
-        this.pageNum = queryPageNum ? queryPageNum : 1
-        this.pageSize = queryPageSize ? queryPageSize : 30
-        this.userId = queryUserId ? queryUserId : null
-        this.problemId = queryProblemId ? queryProblemId : null
+        this.pageNum = this.$common.getQueryInt(this, 'pageNum', 1)
+        this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
+        this.userId = this.$common.getQueryInt(this, 'userId', null)
+        this.problemId = this.$common.getQueryInt(this, 'problemId', null)
+        this.statusType = this.$common.getQueryString(this, 'statusType', null)
         if (this.onlyThisUserId) {
             this.userId = this.onlyThisUserId
         }
@@ -116,7 +114,7 @@ export default {
             if (this.contentId) {
                 // do nothing
             } else {
-                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userId, this.problemId, res => {
+                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, res => {
                     this.pageNum = res.pageNum
                     this.pageSize = res.pageSize
                     this.totalNum = res.totalNum
@@ -135,7 +133,7 @@ export default {
             this.$router.push({name: 'problem', params: {problemId: problemId}})
         },
         disableSolution(userId) {
-            return this.$user.getCurUserData().id !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
+            return this.$user.getCurUserId() !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
         },
         changePageNum() {
             this.changeUrl()

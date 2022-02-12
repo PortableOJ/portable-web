@@ -124,6 +124,10 @@ function getCurUserData() {
     return userData
 }
 
+function getCurUserId() {
+    return userData == null ? null : userData.id
+}
+
 function isDominate(target) {
     if (!isNormal() || organizationType == null) {
         return false
@@ -172,6 +176,7 @@ export default {
     signOut,
     getUserInfo,
     getCurUserData,
+    getCurUserId,
     isDominate,
     hasPermission,
 

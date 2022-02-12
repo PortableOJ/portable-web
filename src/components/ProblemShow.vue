@@ -27,7 +27,6 @@
                         {{ problemAccessType[problemData.accessType].text }}
                     </template>
                 </Tag>
-                <Tag type="success">通过/提交: {{ problemData.acceptCount }} / {{ problemData.submissionCount }}</Tag>
                 <Tag type="success">题面类型:
                     <template v-if="problemType[problemData.type]">
                         {{ problemType[problemData.type].text }}
@@ -220,7 +219,7 @@ export default {
 .problem-attribute {
     display: grid;
     grid-gap: 3px;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 </style>
