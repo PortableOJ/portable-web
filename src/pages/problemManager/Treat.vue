@@ -4,6 +4,7 @@
                 this.problemData && problemStatusType[this.problemData.statusType] ?
                     problemStatusType[this.problemData.statusType].text : '未知'
             }}</h3>
+        <!--suppress JSUnresolvedVariable -->
         <InputButton v-if="problemId !== 0" :disabled="!this.problemData || this.problemData.statusType === 'NORMAL'
                             || problemStatusType[this.problemData.statusType].onTreatedOrCheck"
                      type="warning"
