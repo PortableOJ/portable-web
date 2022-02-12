@@ -11,7 +11,15 @@
                     出题人:
                     <Link @click="openOwner">{{ problemData.ownerHandle }}</Link>
                 </div>
-                <div>通过与提交:
+                <div style="margin-top: 5px">访问权限:
+                    <Tag :type="problemData.accessType === 'PUBLIC' ? 'success'
+                         : problemData.accessType === 'HIDDEN' ? 'warning' : 'error'">
+                        <template v-if="problemAccessType[problemData.accessType]">
+                            {{ problemAccessType[problemData.accessType].text }}
+                        </template>
+                    </Tag>
+                </div>
+                <div>通过/提交率:
                     <Link @click="openStatus(problemData.id, true)">
                         {{ problemData.acceptCount }}
                     </Link>
@@ -87,11 +95,13 @@ export default {
 
             solutionStatusType: {},
             languageType: {},
+            problemAccessType: {},
         }
     },
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
         this.$common.getEnum('LanguageType', res => this.languageType = res)
+        this.$common.getEnum('ProblemAccessType', res => this.problemAccessType = res)
         this.$problem.getProblemData(this.problemId, res => {
             this.problemData = res
             this.canEdit = this.$user.hasPermission(this.$user.permissionTypeList.CREATE_AND_EDIT_PROBLEM)
