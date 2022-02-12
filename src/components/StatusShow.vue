@@ -44,6 +44,10 @@ export default {
         onlyThisUserId: {
             type: Number,
             default: null
+        },
+        selectStatusType: {
+            type: String,
+            default: null
         }
     },
     data() {
@@ -107,7 +111,10 @@ export default {
         if (this.onlyThisUserId) {
             this.userId = this.onlyThisUserId
         }
-        this.initData()
+        if (this.selectStatusType) {
+            this.statusType = this.selectStatusType
+        }
+        this.changeUrl()
     },
     methods: {
         initData() {
@@ -148,16 +155,25 @@ export default {
             if (this.problemId) {
                 query.problemId = this.problemId.toString()
             }
-            this.$router.push({
-                name: 'status',
-                query: query
-            })
+            if (this.statusType) {
+                query.statusType = this.statusType
+            }
+            if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
+                this.$router.push({
+                    name: 'status',
+                    query: query
+                })
+            }
             this.initData()
         }
     },
     watch: {
         onlyThisUserId(v) {
             this.userId = v
+            this.changeUrl()
+        },
+        selectStatusType(v) {
+            this.statusType = v
             this.changeUrl()
         }
     }

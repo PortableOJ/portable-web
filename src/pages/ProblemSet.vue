@@ -99,14 +99,23 @@ export default {
         }
     },
     created() {
-        this.pageNum = this.$route.query.pageNum
-        this.pageSize = this.$route.query.pageSize
+        this.pageNum = this.$common.getQueryInt(this, 'pageNum', 1)
+        this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
         this.$common.getEnum('ProblemAccessType', res => this.problemAccessType = res)
         this.$common.getEnum('ProblemStatusType', res => this.problemStatusType = res)
         this.initData()
     },
     methods: {
         initData() {
+            let query = {}
+            query.pageNum = this.pageNum.toString()
+            query.pageSize = this.pageSize.toString()
+            if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
+                this.$router.push({
+                    name: 'problemSet',
+                    query: query
+                })
+            }
             this.$problem.getProblemList(this.pageNum, this.pageSize, res => {
                 if (res == null) {
                     this.totalNum = 1

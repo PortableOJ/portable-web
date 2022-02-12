@@ -121,4 +121,9 @@ export default {
     margin-bottom: 15px;
 }
 
+.card-input {
+    width: 250px !important;
+    margin-top: 15px !important;
+}
+
 </style>
