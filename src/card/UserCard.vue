@@ -106,11 +106,6 @@ export default {
 </script>
 
 <style scoped>
-.card-input {
-    width: 250px;
-    margin-top: 15px;
-}
-
 .button-box {
     display: grid;
     grid-template-columns: auto auto;

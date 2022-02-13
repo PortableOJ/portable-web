@@ -16,18 +16,13 @@
                 <!--                <div></div>-->
                 <Tag type="success">时间限制: {{ timeLimit }}s</Tag>
                 <Tag type="success">内存限制: {{ memoryLimit }}MB</Tag>
-                <Tag :type="problemData.statusType === 'NORMAL' ? 'success' : 'error'">当前状态:
+                <Tag :type="problemData.statusType === 'NORMAL' ? 'success' : 'error'">
+                    当前状态:
                     <template v-if="problemStatusType[problemData.statusType]">
                         {{ problemStatusType[problemData.statusType].text }}
                     </template>
                 </Tag>
-                <Tag :type="problemData.accessType === 'PUBLIC' ? 'success'
-                : problemData.accessType === 'HIDDEN' ? 'warning' : 'error'">访问权限:
-                    <template v-if="problemAccessType[problemData.accessType]">
-                        {{ problemAccessType[problemData.accessType].text }}
-                    </template>
-                </Tag>
-                <Tag type="success">通过/提交: {{ problemData.acceptCount }} / {{ problemData.submissionCount }}</Tag>
+
                 <Tag type="success">题面类型:
                     <template v-if="problemType[problemData.type]">
                         {{ problemType[problemData.type].text }}
@@ -147,19 +142,17 @@ export default {
             output: '',
 
             languageType: {},
-            problemAccessType: {},
-            problemStatusType: {},
             judgeCodeType: {},
             problemType: {},
+            problemStatusType: {},
 
             submitCode: '',
         }
     },
     created() {
-        this.$common.getEnum('ProblemAccessType', res => this.problemAccessType = res)
-        this.$common.getEnum('ProblemStatusType', res => this.problemStatusType = res)
         this.$common.getEnum('JudgeCodeType', res => this.judgeCodeType = res)
         this.$common.getEnum('ProblemType', res => this.problemType = res)
+        this.$common.getEnum('ProblemStatusType', res => this.problemStatusType = res)
         this.$common.getEnum('LanguageType', res => {
             this.languageType = res
             for (let i in this.problemData.supportLanguage) {
@@ -220,7 +213,7 @@ export default {
 .problem-attribute {
     display: grid;
     grid-gap: 3px;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 
 </style>

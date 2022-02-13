@@ -4,6 +4,8 @@ let enumData = {}
 
 let version = null
 
+let maxRequestFileSize = 200 * 1024 * 1024
+
 /**
  * 设置缓存
  *
@@ -73,13 +75,27 @@ function getEnum(name, callback) {
     }, null)
 }
 
+function getQueryInt(that, name, defaultValue) {
+    let tmp = that.$route.query[name] ? parseInt(that.$route.query[name].toString()) : null
+    return tmp ? tmp : defaultValue
+}
+
+function getQueryString(that, name, defaultValue) {
+    let tmp = that.$route.query[name] ? that.$route.query[name].toString() : null
+    return tmp ? tmp : defaultValue
+}
+
 export default {
     version,
+    maxRequestFileSize,
 
     init,
 
     setCache,
     getCache,
 
-    getEnum
+    getEnum,
+
+    getQueryInt,
+    getQueryString,
 }

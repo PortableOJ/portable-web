@@ -74,22 +74,7 @@ export default {
                     width: '80'
                 }
             ],
-            solutionData: [{
-                id: 0,
-                submitTime: "1970-01-01T00:00:00.000+00:00",
-                userId: 0,
-                userHandle: '',
-                problemId: 0,
-                problemTitle: '',
-                contestId: null,
-                languageType: "CPP11",
-                status: "ACCEPT",
-                solutionType: "PUBLIC",
-                timeCost: 1,
-                memoryCost: 1507,
-                code: "",
-                compileMsg: ""
-            }],
+            solutionData: [],
             code: '',
             compileMsg: '',
 

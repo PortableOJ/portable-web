@@ -182,7 +182,7 @@ export default {
             this.$problem.updateSetting(this.problemData, () => {
                 this.$toast({
                     title: '成功',
-                    text: '更新题目内容成功',
+                    text: '更新题目设置成功',
                     duration: 'auto',
                     type: 'success',
                 })

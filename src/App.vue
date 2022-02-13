@@ -116,4 +116,14 @@ export default {
     border: 1px solid var(--brand-color);
 }
 
+.card-title {
+    font-weight: bolder;
+    margin-bottom: 15px;
+}
+
+.card-input {
+    width: 250px !important;
+    margin-top: 15px !important;
+}
+
 </style>
