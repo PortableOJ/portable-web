@@ -23,6 +23,7 @@ let permissionTypeList = {
     EDIT_NOT_OWNER_PROBLEM: 'EDIT_NOT_OWNER_PROBLEM',
     VIEW_PUBLIC_SOLUTION: 'VIEW_PUBLIC_SOLUTION',
     MANAGER_JUDGE: 'MANAGER_JUDGE',
+    VIEW_SOLUTION_MESSAGE: 'VIEW_SOLUTION_MESSAGE',
 }
 
 let userStatusChange = {}
@@ -111,7 +112,7 @@ function signOut() {
 }
 
 function getUserInfo(handle, callback) {
-    if (handle === userData.handle) {
+    if (isLogin() && handle === userData.handle) {
         callback(userData)
         return
     }
