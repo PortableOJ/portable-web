@@ -41,13 +41,14 @@ export default {
     },
     created() {
         this.onLogin = this.$user.isLogin()
-        let queryUserId = this.$route.query.userId ? parseInt(this.$route.query.userId.toString()) : null
+        let queryUserId = this.$common.getQueryInt(this, 'userId', null)
         if (this.onLogin && queryUserId === this.$user.getCurUserId()) {
             this.onlyMe = true
             this.curUserId = this.$user.getCurUserId()
         } else {
             this.curUserId = null
         }
+        this.statusTypeSelect = this.$common.getQueryString(this, 'statusType', null)
 
         this.$common.getEnum('SolutionStatusType', res => {
             this.solutionStatusType = res

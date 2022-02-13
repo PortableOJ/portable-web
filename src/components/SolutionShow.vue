@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedVariable -->
 <template>
     <div style="display: grid; place-items: center">
         <!--suppress JSValidateTypes -->
@@ -10,6 +11,9 @@
             </template>
             <template v-slot:body-problemTitle="scope">
                 <Link @click="toProblem(scope.data.problemId)">{{ scope.data.problemTitle }}</Link>
+            </template>
+            <template v-slot:body-languageType="scope">
+                {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-status="scope">
                 <template v-if="solutionStatusType[scope.data.status]">
@@ -78,11 +82,13 @@ export default {
             code: '',
             compileMsg: '',
 
-            solutionStatusType: {}
+            solutionStatusType: {},
+            languageType: {},
         }
     },
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
+        this.$common.getEnum('LanguageType', res => this.languageType = res)
         if (this.contentId) {
             // do nothing
         } else {
