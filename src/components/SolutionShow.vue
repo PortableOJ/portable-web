@@ -31,6 +31,16 @@
                 <MarkdownBlockCode :value="compileMsg"></MarkdownBlockCode>
             </div>
         </div>
+        <Table style="width: 100%" :head="judgeMsgHead" :data="runningMsg">
+            <template v-slot:body-status="scope">
+                <template v-if="solutionStatusType[scope.data.status]">
+                    {{ solutionStatusType[scope.data.status].text }}
+                </template>
+            </template>
+            <template v-slot:body-msg="scope">
+                <MarkdownBlockCode style="width: 100%; display: grid" :value="scope.data.msg"></MarkdownBlockCode>
+            </template>
+        </Table>
     </div>
 </template>
 
@@ -79,8 +89,24 @@ export default {
                 }
             ],
             solutionData: [],
+            judgeMsgHead: [
+                {
+                    label: '测试名',
+                    value: 'name',
+                    width: '50',
+                }, {
+                    label: '结果',
+                    value: 'status',
+                    width: '50',
+                }, {
+                    label: '信息',
+                    value: 'msg',
+                    width: '120'
+                }
+            ],
             code: '',
             compileMsg: '',
+            runningMsg: [],
 
             solutionStatusType: {},
             languageType: {},
@@ -101,6 +127,17 @@ export default {
                     this.solutionData = [res]
                     this.code = res.code
                     this.compileMsg = res.compileMsg
+                    if (res.judgeReportMsgMap) {
+                        this.runningMsg = []
+                        for (let name in res.judgeReportMsgMap) {
+                            this.runningMsg.push({
+                                name: name,
+                                status: res.judgeReportMsgMap[name].statusType,
+                                msg: res.judgeReportMsgMap[name].msg
+                            })
+                        }
+                        console.log(this.runningMsg)
+                    }
                 }
             })
         }

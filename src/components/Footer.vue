@@ -1,13 +1,16 @@
 <template>
     <div class="footer">
         <div>
-            Copyright © <Link>2022 ZJGSU ACM Club</Link>
+            Copyright ©
+            <Link @click="open('https://github.com/PortableOJ')">Portable Online Judge Develop Team</Link>
         </div>
         <div>
-            Powered By <Link @click="open('https://github.com/ZJGSU-TTCM')">ZJGSU-TTCM</Link>
+            Powered By
+            <Link @click="open('https://github.com/PortableOJ/portable-oj')">Portable Online Judge Project</Link>
         </div>
         <div>
-            Contributor: <Link @click="open('https://github.com/Hukeqing')">Shiroha</Link>
+            Contributor:
+            <Link @click="open('https://github.com/Hukeqing')">Shiroha</Link>
         </div>
     </div>
 </template>

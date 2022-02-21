@@ -53,7 +53,7 @@ export default {
     },
     methods: {
         openHelp() {
-            window.open('https://github.com/ZJGSU-TTCM/portable-testlib', '_blank')
+            window.open('https://github.com/PortableOJ/portable-testlib', '_blank')
         },
         save() {
             this.$problem.updateJudge(this.problemData, () => {

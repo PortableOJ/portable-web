@@ -36,6 +36,7 @@ export default {
                 userManager: '管理',
                 problemTest: '数据',
                 problemManager: '管理',
+                notFound: '未知',
             },
             select: this.$route.name
         }
