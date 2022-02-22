@@ -1,7 +1,8 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
-            <h1>{{ problemId === 'null' ? '创建' : '编辑' }}题目</h1>
+            <h1>{{ problemId === 0 ? '创建' : '编辑' }}题目</h1>
+            <!--suppress JSValidateTypes -->
             <NavMenu v-if="problemId !== 0" @change="toSelect" style="margin-top: 30px; background-color: var(--border-color-level-4)"
                      :value="step" :options="stepList"></NavMenu>
             <div style="height: 30px"></div>
@@ -9,6 +10,10 @@
         </div>
         <div>
             <UserCard></UserCard>
+            <div class="card">
+                <span class="card-title">相关</span>
+                <InputButton @click="back">返回题面页面</InputButton>
+            </div>
         </div>
     </div>
 </template>
@@ -55,7 +60,10 @@ export default {
                 return
             }
             this.$router.push({name: `problemManager-${value}`, params: {problemId: this.problemId.toString()}})
-        }
+        },
+        back() {
+            this.$router.push({name: 'problem', params: {problemId: this.problemId.toString()}})
+        },
     }
 }
 </script>
