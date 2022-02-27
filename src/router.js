@@ -77,8 +77,11 @@ const routes = [
                 component: () => import('@/pages/problemManager/Treat'),
             },
         ]
+    }, {
+        path: '/contestSet',
+        name: 'contestSet',
+        component: () => import('@/pages/ContestSet')
     },
-
     // 404 页面要放在最后
     {
         path: '*',
