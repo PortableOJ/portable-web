@@ -38,16 +38,18 @@
                 <InputButton type="error" @click="removeTestCode(scope.data.name)">删除</InputButton>
             </template>
         </Table>
-        <h3>添加/查看代码</h3>
-        <div style="display: grid; grid-template-columns: auto auto auto; place-items: center">
-            <InputText placeholder="名称" v-model="name"></InputText>
-            <InputSelect :data="languageTypeList" placeholder="语言" v-model="language"></InputSelect>
-            <InputSelect :data="solutionStatusTypeList" placeholder="期望结果" v-model="result"></InputSelect>
-        </div>
-        <InputTextarea :code-mode="true" v-model="code" :key="keyNum"></InputTextarea>
-        <div style="display: grid; grid-template-columns: auto auto; place-items: center">
-            <InputButton @click="updateStd">更新标准代码</InputButton>
-            <InputButton @click="addTest">添加至覆盖测试代码</InputButton>
+        <div style="border: 1px solid var(--brand-color); border-radius: 15px;">
+            <h3>添加/查看代码</h3>
+            <div style="display: grid; grid-template-columns: auto auto auto; place-items: center">
+                <InputText placeholder="名称" v-model="name"></InputText>
+                <InputSelect :data="languageTypeList" placeholder="语言" v-model="language"></InputSelect>
+                <InputSelect :data="solutionStatusTypeList" placeholder="期望结果" v-model="result"></InputSelect>
+            </div>
+            <InputTextarea :min-height="100" :code-mode="true" v-model="code" :key="keyNum"></InputTextarea>
+            <div style="display: grid; grid-template-columns: auto auto; place-items: center">
+                <InputButton @click="updateStd">更新标准代码</InputButton>
+                <InputButton @click="addTest">添加至覆盖测试代码</InputButton>
+            </div>
         </div>
     </div>
 </template>

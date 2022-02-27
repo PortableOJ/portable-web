@@ -21,6 +21,7 @@
                 <h3>
                     样例
                 </h3>
+                <!--suppress JSUnresolvedVariable -->
                 <InputButton @click="problemData.example.push({in: '', out: '', hash: hashCode++})">新增一组</InputButton>
             </div>
             <div ref="example" v-for="(example, index) in problemData.example" :key="example.hash" class="test-data">

@@ -45,6 +45,7 @@
         <div>
             <UserCard></UserCard>
             <div v-if="canCreateProblem()" class="card">
+                <span class="card-title">管理</span>
                 <InputButton @click="newProblem">新建题目</InputButton>
             </div>
         </div>
