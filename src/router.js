@@ -96,9 +96,11 @@ const routes = [
             }, {
                 path: 'problem/:problemIndex',
                 name: 'contest-problem',
+                component: () => import('@/pages/contest/Problem'),
             }, {
                 path: 'status',
                 name: 'contest-status',
+                component: () => import('@/pages/contest/Status'),
             }, {
                 path: 'testStatus',
                 name: 'contest-testStatus',

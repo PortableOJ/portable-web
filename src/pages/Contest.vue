@@ -13,7 +13,7 @@
         <div>
             <UserCard></UserCard>
             <div class="card" v-if="contestData">
-                <span class="card-title">信息</span>
+                <span class="card-title">比赛信息</span>
                 <div>
                     比赛管理员：
                     <Link @click="openUser(contestData.ownerHandle)">{{ contestData.ownerHandle }}</Link>
@@ -78,6 +78,7 @@ export default {
                 }
             ],
             hiddenOption: {
+                problem: '题目',
                 solution: '提交',
                 testSolution: '测试',
             },
