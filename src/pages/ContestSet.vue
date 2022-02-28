@@ -3,16 +3,18 @@
         <div class="lm-rc-layout-left">
             <Table :head="tableHead" :data="tableData">
                 <template v-slot:body-id="scope">
-                    <Link @click="openContest(scope.data.id)">{{ scope.data.id }}</Link>
+                    <Link @click="openContest(scope.data)">{{ scope.data.id }}</Link>
                 </template>
                 <template v-slot:body-title="scope">
-                    <Link @click="openContest(scope.data.id)">{{ scope.data.title }}</Link>
+                    <Link @click="openContest(scope.data)">{{ scope.data.title }}</Link>
                 </template>
                 <template v-slot:body-startTime="scope">
                     {{ new Date(scope.data.startTime).format("yyyy-MM-dd hh:mm:ss") }}
                 </template>
                 <template v-slot:body-duration="scope">
-                    {{ `${(scope.data.duration / 60).toFixed(0)}:${scope.data.duration % 60}:00` }}
+                    {{
+                        `${(scope.data.duration / 60).toFixed(0).padStart(2, '0')}:${(scope.data.duration % 60).toString().padStart(2, '0')}:00`
+                    }}
                 </template>
                 <template v-slot:body-accessType="scope">
                     {{ contestAccessType[scope.data.accessType].text }}
@@ -80,8 +82,41 @@ export default {
         })
     },
     methods: {
-        openContest(id) {
-            this.$router.push({name: 'contest', params: {contestId: id}})
+        openContest(contest) {
+            this.$contest.auth(contest.id, null, res => {
+                let inContest = (res) => {
+                    if (res !== 'NO_ACCESS') {
+                        this.$router.push({name: 'contest', params: {contestId: contest.id}})
+                    } else {
+                        this.$toast({
+                            title: '失败',
+                            text: '你没有权限访问此比赛',
+                            duration: 'auto',
+                            type: 'error'
+                        })
+                    }
+                }
+                if ((res === 'VISIT' || res === 'NO_ACCESS') && contest.accessType === 'PASSWORD') {
+                    this.$message({
+                        text: '请输入密码',
+                        type: 'info',
+                        inputType: 'password',
+                        ok: '参加比赛',
+                        cancel: res === 'VISIT' ? '仅访问' : '取消参加',
+                        input: true,
+                        confirmOK: (v) => {
+                            this.$contest.auth(contest.id, v, newRes => {
+                                inContest(newRes)
+                            })
+                        },
+                        confirmCancel: () => {
+                            inContest(res)
+                        },
+                    })
+                } else {
+                    inContest(res)
+                }
+            })
         }
     }
 }

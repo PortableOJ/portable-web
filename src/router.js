@@ -81,7 +81,40 @@ const routes = [
         path: '/contestSet',
         name: 'contestSet',
         component: () => import('@/pages/ContestSet')
+    }, {
+        path: '/contest/:contestId',
+        component: () => import('@/pages/Contest'),
+        children: [
+            {
+                path: '',
+                name: 'contest',
+                redirect: '/contest/:contestId/content'
+            }, {
+                path: 'content',
+                name: 'contest-content',
+                component: () => import('@/pages/contest/Content'),
+            }, {
+                path: 'problem/:problemIndex',
+                name: 'contest-problem',
+            }, {
+                path: 'status',
+                name: 'contest-status',
+            }, {
+                path: 'testStatus',
+                name: 'contest-testStatus',
+            }, {
+                path: 'solution',
+                name: 'contest-solution',
+            }, {
+                path: 'testSolution',
+                name: 'contest-testSolution',
+            }, {
+                path: 'rank',
+                name: 'contest-rank'
+            }
+        ]
     },
+
     // 404 页面要放在最后
     {
         path: '*',

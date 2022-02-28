@@ -1,6 +1,6 @@
 import Request from "@/common/request";
 
-let baseUrl = 'api/contest'
+let baseUrl = '/api/contest'
 
 function getList(pageNum, pageSize, success) {
     Request.get(baseUrl + '/getList', {
@@ -73,21 +73,21 @@ function updateContest(contest, success) {
 }
 
 function addProblem(contestId, problemId, success) {
-    Request.post(baseUrl + '/updateContest', {
+    Request.post(baseUrl + '/addProblem', {
         contestId: contestId,
         problemId: problemId
     }, success, null)
 }
 
 function auth(contestId, password, success) {
-    Request.post(baseUrl + '/updateContest', {
+    Request.post(baseUrl + '/auth', {
         contestId: contestId,
         password: password
     }, success, null)
 }
 
 function submit(contestId, problemIndex, code, languageType, success) {
-    Request.post(baseUrl + '/updateContest', {
+    Request.post(baseUrl + '/submit', {
         contestId: contestId,
         problemId: problemIndex,
         code: code,

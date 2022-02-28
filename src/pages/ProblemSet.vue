@@ -96,7 +96,7 @@ export default {
             totalPage: 1,
 
             problemAccessType: {},
-            problemStatusType: {}
+            problemStatusType: {},
         }
     },
     created() {
