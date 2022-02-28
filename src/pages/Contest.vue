@@ -68,7 +68,7 @@ export default {
                     value: 'status',
                 }, {
                     label: '测试',
-                    value: 'testStatus',
+                    value: 'test_status',
                 }, {
                     label: '榜单',
                     value: 'rank',
@@ -80,7 +80,7 @@ export default {
             hiddenOption: {
                 problem: '题目',
                 solution: '提交',
-                testSolution: '测试',
+                test_solution: '测试',
             },
             step: this.$route.name.split('-')[1]
         }
@@ -116,6 +116,11 @@ export default {
             this.$router.push({name: 'user', params: {handle: handle}})
         }
     },
+    watch: {
+        $route(to) {
+            this.step = to.name.split('-')[1]
+        }
+    }
 }
 </script>
 

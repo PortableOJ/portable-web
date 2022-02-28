@@ -103,13 +103,16 @@ const routes = [
                 component: () => import('@/pages/contest/Status'),
             }, {
                 path: 'testStatus',
-                name: 'contest-testStatus',
+                name: 'contest-test_status',
+                component: () => import('@/pages/contest/TestStatus'),
             }, {
-                path: 'solution',
+                path: 'solution/:solutionId',
                 name: 'contest-solution',
+                component: () => import('@/pages/contest/Solution'),
             }, {
-                path: 'testSolution',
-                name: 'contest-testSolution',
+                path: 'testSolution/:solutionId',
+                name: 'contest-test_solution',
+                component: () => import('@/pages/contest/TestSolution'),
             }, {
                 path: 'rank',
                 name: 'contest-rank'

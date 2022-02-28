@@ -1,7 +1,7 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
-            <StatusShow :content-id="null" :only-this-user-id="curUserId" :select-status-type="statusTypeSelect"></StatusShow>
+            <StatusShow :contest-id="null" :only-this-user-id="curUserId" :select-status-type="statusTypeSelect"></StatusShow>
         </div>
         <div>
             <UserCard></UserCard>

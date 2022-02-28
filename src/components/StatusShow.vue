@@ -37,9 +37,13 @@
 export default {
     name: "StatusShow",
     props: {
-        contentId: {
+        contestId: {
             type: Number,
             default: null,
+        },
+        testContest: {
+            type: Boolean,
+            default: false,
         },
         onlyThisUserId: {
             type: Number,
@@ -95,6 +99,8 @@ export default {
             userId: null,
             problemId: null,
             statusType: null,
+            // 管理员和出题人的 handle 集合
+            ownerAndCoAuthor: [],
 
             solutionStatusType: {},
             languageType: {},
@@ -118,29 +124,82 @@ export default {
     },
     methods: {
         initData() {
-            if (this.contentId) {
-                // do nothing
-            } else {
-                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, res => {
-                    this.pageNum = res.pageNum
-                    this.pageSize = res.pageSize
-                    this.totalNum = res.totalNum
-                    this.totalPage = res.totalPage
-                    this.tableData = res.data
+            let getStatus = res => {
+                this.pageNum = res.pageNum
+                this.pageSize = res.pageSize
+                this.totalNum = res.totalNum
+                this.totalPage = res.totalPage
+                this.tableData = res.data
+            }
+            if (this.contestId) {
+                if (this.testContest) {
+                    this.$contest.getContestTestStatus(this.contestId, this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
+                } else {
+                    this.$contest.getContestStatus(this.contestId, this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
+                }
+                this.$contest.getContestData(this.contestId, res => {
+                    // noinspection JSUnresolvedVariable
+                    this.ownerAndCoAuthor = res.coAuthor
+                    this.ownerAndCoAuthor.push(res.ownerHandle)
                 })
+            } else {
+                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
             }
         },
         openSolution(id) {
-            this.$router.push({name: 'solution', params: {solutionId: id}})
+            if (this.contestId) {
+                if (this.testContest) {
+                    this.$router.push({
+                        name: 'contest-test_solution',
+                        params: {
+                            contestId: this.contestId ? this.contestId.toString() : null,
+                            solutionId: id
+                        }
+                    })
+                } else {
+                    this.$router.push({
+                        name: 'contest-solution',
+                        params: {
+                            contestId: this.contestId ? this.contestId.toString() : null,
+                            solutionId: id
+                        }
+                    })
+                }
+            } else {
+                this.$router.push({
+                    name: 'solution',
+                    params: {solutionId: id}
+                })
+            }
         },
         openUser(userHandle) {
             this.$router.push({name: 'user', params: {handle: userHandle}})
         },
         openProblem(problemId) {
-            this.$router.push({name: 'problem', params: {problemId: problemId}})
+            if (this.contestId) {
+                this.$router.push({
+                    name: 'contest-problem',
+                    params: {
+                        contestId: this.contestId ? this.contestId.toString() : null,
+                        problemIndex: problemId
+                    }
+                })
+            } else {
+                this.$router.push({
+                    name: 'problem',
+                    params: {problemId: problemId}
+                })
+            }
         },
         disableSolution(userId) {
-            return this.$user.getCurUserId() !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
+            if (this.contestId) {
+                if (this.ownerAndCoAuthor.indexOf(this.$user.getCurUserData().handle) !== -1) {
+                    return false
+                }
+                return this.$user.getCurUserId() !== userId
+            } else {
+                return this.$user.getCurUserId() !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
+            }
         },
         changePageNum() {
             this.changeUrl()
@@ -160,7 +219,7 @@ export default {
             }
             if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
                 this.$router.push({
-                    name: 'status',
+                    name: this.$route.name,
                     query: query
                 })
             }

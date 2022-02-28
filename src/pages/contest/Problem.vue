@@ -9,7 +9,9 @@ import ProblemShow from "@/components/ProblemShow";
 
 export default {
     name: "Problem",
-    components: {ProblemShow},
+    components: {
+        ProblemShow
+    },
     data() {
         return {
             contestId: 0,

@@ -49,7 +49,11 @@ export default {
     name: "SolutionShow",
     props: {
         solutionId: Number,
-        contentId: Number,
+        contestId: Number,
+        testSolution: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
@@ -115,31 +119,36 @@ export default {
     created() {
         this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
         this.$common.getEnum('LanguageType', res => this.languageType = res)
-        if (this.contentId) {
-            // do nothing
-        } else {
-            this.$solution.getSolution(this.solutionId, res => {
-                if (!res) {
-                    this.solutionData = []
-                    this.code = ''
-                    this.compileMsg = ''
-                } else {
-                    this.solutionData = [res]
-                    this.code = res.code
-                    this.compileMsg = res.compileMsg
-                    if (res.judgeReportMsgMap) {
-                        this.runningMsg = []
-                        for (let name in res.judgeReportMsgMap) {
-                            this.runningMsg.push({
-                                name: name,
-                                status: res.judgeReportMsgMap[name].statusType,
-                                msg: res.judgeReportMsgMap[name].msg
-                            })
-                        }
-                        console.log(this.runningMsg)
+        let getSolutionData = res => {
+            if (!res) {
+                this.solutionData = []
+                this.code = ''
+                this.compileMsg = ''
+            } else {
+                this.solutionData = [res]
+                this.code = res.code
+                this.compileMsg = res.compileMsg
+                if (res.judgeReportMsgMap) {
+                    this.runningMsg = []
+                    for (let name in res.judgeReportMsgMap) {
+                        this.runningMsg.push({
+                            name: name,
+                            status: res.judgeReportMsgMap[name].statusType,
+                            msg: res.judgeReportMsgMap[name].msg
+                        })
                     }
+                    console.log(this.runningMsg)
                 }
-            })
+            }
+        }
+        if (this.contestId) {
+            if (this.testSolution) {
+                this.$contest.getContestTestSolution(this.solutionId, getSolutionData)
+            } else {
+                this.$contest.getContestSolution(this.solutionId, getSolutionData)
+            }
+        } else {
+            this.$solution.getSolution(this.solutionId, getSolutionData)
         }
     },
     methods: {
@@ -147,7 +156,11 @@ export default {
             this.$router.push({name: 'user', params: {handle: handle}})
         },
         toProblem(id) {
-            this.$router.push({name: 'problem', params: {problemId: id}})
+            if (this.contestId) {
+                this.$router.push({name: 'contest-problem', params: {contestId: this.contestId.toString(), problemIndex: id}})
+            } else {
+                this.$router.push({name: 'problem', params: {problemId: id}})
+            }
         },
     }
 }
