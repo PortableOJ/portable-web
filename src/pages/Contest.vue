@@ -3,8 +3,7 @@
         <div class="lm-rc-layout-left">
             <div v-if="contestData" style="display: grid; place-items: center">
                 <h1 style="margin: 0">{{ contestData.title }}</h1>
-                <InputSlider style="margin: 0; width: 100%" :disabled="true" v-model="slider" :max="100" :min="0"
-                             :valueFormat="v => `${v.toFixed(0)}%`"></InputSlider>
+                <InputSlider :read-only="true" :show-handle="false" style="margin: 0; width: 100%" v-model="slider" :max="100" :min="0"></InputSlider>
                 <NavMenu style="width: 100%" @change="toSelect" v-model="step" :options="selectOption"
                          :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
                 <router-view></router-view>
