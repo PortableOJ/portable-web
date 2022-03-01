@@ -145,6 +145,18 @@ function treatAndCheckProblem(problemId, callback) {
     }, callback, null)
 }
 
+function searchProblem(keyword, callback) {
+    Request.get(baseUrl + '/search', {
+        keyword: keyword,
+    }, callback, null)
+}
+
+function searchPrivateProblem(keyword, callback) {
+    Request.get(baseUrl + '/searchPrivate', {
+        keyword: keyword,
+    }, callback, null)
+}
+
 function submit(id, code, languageType, callback) {
     Request.post(baseUrl + '/submit', {
         problemId: id,
@@ -183,4 +195,7 @@ export default {
     treatAndCheckProblem,
 
     submit,
+
+    searchProblem,
+    searchPrivateProblem,
 }

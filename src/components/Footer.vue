@@ -1,15 +1,19 @@
 <template>
     <div class="footer">
         <div>
-            Copyright ©
+            <span>Copyright ©</span>
             <Link @click="open('https://github.com/PortableOJ')">Portable Online Judge Develop Team</Link>
-        </div>
-        <div>
-            Powered By
+            <i class="iconfont icon-app"></i>
+            <span>Powered By</span>
             <Link @click="open('https://github.com/PortableOJ/portable-oj')">Portable Online Judge Project</Link>
         </div>
         <div>
-            Contributor:
+            <span> Give us an </span>
+            <Link @click="open('https://github.com/PortableOJ/portable-oj/issues')">issue</Link>
+            <span> to make us do better </span>
+        </div>
+        <div>
+            Contributors:
             <Link @click="open('https://github.com/Hukeqing')">Shiroha</Link>
         </div>
     </div>

@@ -1,6 +1,6 @@
 import Request from "@/common/request";
 
-let baseUrl = 'api/judge'
+let baseUrl = '/api/judge'
 
 function getServerCode(callback) {
     Request.get(baseUrl + '/serverCode', null, callback, null)

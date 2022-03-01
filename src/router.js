@@ -77,6 +77,52 @@ const routes = [
                 component: () => import('@/pages/problemManager/Treat'),
             },
         ]
+    }, {
+        path: '/contestSet',
+        name: 'contestSet',
+        component: () => import('@/pages/ContestSet')
+    }, {
+        path: '/contest/:contestId',
+        component: () => import('@/pages/Contest'),
+        children: [
+            {
+                path: '',
+                name: 'contest',
+                redirect: '/contest/:contestId/content'
+            }, {
+                path: 'content',
+                name: 'contest-content',
+                component: () => import('@/pages/contest/Content'),
+            }, {
+                path: 'problem/:problemIndex',
+                name: 'contest-problem',
+                component: () => import('@/pages/contest/Problem'),
+            }, {
+                path: 'status',
+                name: 'contest-status',
+                component: () => import('@/pages/contest/Status'),
+            }, {
+                path: 'testStatus',
+                name: 'contest-test_status',
+                component: () => import('@/pages/contest/TestStatus'),
+            }, {
+                path: 'solution/:solutionId',
+                name: 'contest-solution',
+                component: () => import('@/pages/contest/Solution'),
+            }, {
+                path: 'testSolution/:solutionId',
+                name: 'contest-test_solution',
+                component: () => import('@/pages/contest/TestSolution'),
+            }, {
+                path: 'rank',
+                name: 'contest-rank',
+                component: () => import('@/pages/contest/Rank'),
+            }, {
+                path: 'manager',
+                name: 'contest-manager',
+                component: () => import('@/pages/contest/Manager'),
+            }
+        ]
     },
 
     // 404 页面要放在最后

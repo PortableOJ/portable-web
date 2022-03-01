@@ -24,6 +24,9 @@ export default {
                     label: '判题',
                     value: 'status',
                 }, {
+                    label: '比赛',
+                    value: 'contestSet',
+                }, {
                     label: '服务',
                     value: 'judge',
                     hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
@@ -37,6 +40,7 @@ export default {
                 problemTest: '数据',
                 problemManager: '管理',
                 notFound: '未知',
+                contest: '比赛',
             },
             select: this.$route.name
         }

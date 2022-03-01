@@ -24,6 +24,9 @@ let permissionTypeList = {
     VIEW_PUBLIC_SOLUTION: 'VIEW_PUBLIC_SOLUTION',
     MANAGER_JUDGE: 'MANAGER_JUDGE',
     VIEW_SOLUTION_MESSAGE: 'VIEW_SOLUTION_MESSAGE',
+    VIEW_ALL_CONTEST: 'VIEW_ALL_CONTEST',
+    CREATE_AND_EDIT_CONTEST: 'CREATE_AND_EDIT_CONTEST',
+    EDIT_NOT_OWNER_CONTEST: 'EDIT_NOT_OWNER_CONTEST',
 }
 
 let userStatusChange = {}
@@ -129,6 +132,10 @@ function getCurUserId() {
     return userData == null ? null : userData.id
 }
 
+function getCurUserHandle() {
+    return userData == null ? null : userData.handle
+}
+
 function isDominate(target) {
     if (!isNormal() || organizationType == null) {
         return false
@@ -178,6 +185,7 @@ export default {
     getUserInfo,
     getCurUserData,
     getCurUserId,
+    getCurUserHandle,
     isDominate,
     hasPermission,
 

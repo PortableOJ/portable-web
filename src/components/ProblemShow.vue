@@ -83,6 +83,10 @@ export default {
     name: "ProblemShow",
     props: {
         id: Number,
+        contestId: {
+            type: Number,
+            default: null
+        },
         problemData: {
             type: Object,
             default: () => {
@@ -193,8 +197,10 @@ export default {
                 })
                 return
             }
-            if (this.problemData.contestId) {
-                // do nothing
+            if (this.contestId) {
+                this.$contest.submit(this.contestId, this.problemData.id, this.submitCode, this.curLanguage, res => {
+                    this.$router.push({name: 'contest-solution', params: {solutionId: res}})
+                })
             } else {
                 this.$problem.submit(this.problemData.id, this.submitCode, this.curLanguage, res => {
                     this.$router.push({name: 'solution', params: {solutionId: res}})

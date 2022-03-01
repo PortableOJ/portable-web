@@ -96,7 +96,7 @@ export default {
             totalPage: 1,
 
             problemAccessType: {},
-            problemStatusType: {}
+            problemStatusType: {},
         }
     },
     created() {
@@ -108,9 +108,10 @@ export default {
     },
     methods: {
         initData() {
-            let query = {}
-            query.pageNum = this.pageNum.toString()
-            query.pageSize = this.pageSize.toString()
+            let query = {
+                pageNum: this.pageNum.toString(),
+                pageSize: this.pageSize.toString()
+            }
             if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
                 this.$router.push({
                     name: 'problemSet',

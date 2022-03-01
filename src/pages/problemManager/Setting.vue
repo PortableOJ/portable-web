@@ -1,6 +1,6 @@
 <template>
     <div style="display: grid; place-items: center">
-        <div v-if="problemData !== null" class="form">
+        <div v-if="problemData" class="form">
             <div>
                 <h3>访问权限</h3>
                 <InputSelect v-model="problemData.accessType" :data="problemAccessTypeList"></InputSelect>
@@ -39,7 +39,7 @@
                                v-model="templateTimeLimit.value"></InputText>
                     <span>s</span>
                     <InputButton @click="addSpecialTime">新增/更新</InputButton>
-                </div>
+        </div>
             </div>
             <div>
                 <h3>现有的特定时间限制</h3>
