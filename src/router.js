@@ -115,7 +115,12 @@ const routes = [
                 component: () => import('@/pages/contest/TestSolution'),
             }, {
                 path: 'rank',
-                name: 'contest-rank'
+                name: 'contest-rank',
+                component: () => import('@/pages/contest/Rank'),
+            }, {
+                path: 'manager',
+                name: 'contest-manager',
+                component: () => import('@/pages/contest/Manager'),
             }
         ]
     },

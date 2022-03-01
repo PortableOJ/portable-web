@@ -137,7 +137,6 @@ export default {
                             msg: res.judgeReportMsgMap[name].msg
                         })
                     }
-                    console.log(this.runningMsg)
                 }
             }
         }

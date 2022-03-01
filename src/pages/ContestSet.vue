@@ -20,6 +20,7 @@
                     {{ contestAccessType[scope.data.accessType].text }}
                 </template>
             </Table>
+            <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
         </div>
         <div>
             <UserCard></UserCard>
@@ -73,15 +74,28 @@ export default {
         this.$common.getEnum('ContestAccessType', res => this.contestAccessType = res)
         this.pageNum = this.$common.getQueryInt(this, 'pageNum', 1)
         this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
-        this.$contest.getList(this.pageNum, this.pageSize, res => {
-            this.pageNum = res.pageNum
-            this.pageSize = res.pageSize
-            this.totalNum = res.totalNum
-            this.totalPage = res.totalPage
-            this.tableData = res.data
-        })
+        this.initData()
     },
     methods: {
+        initData() {
+            let query = {
+                pageNum: this.pageNum.toString(),
+                pageSize: this.pageSize.toString()
+            }
+            if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
+                this.$router.push({
+                    name: 'contestSet',
+                    query: query
+                })
+            }
+            this.$contest.getList(this.pageNum, this.pageSize, res => {
+                this.pageNum = res.pageNum
+                this.pageSize = res.pageSize
+                this.totalNum = res.totalNum
+                this.totalPage = res.totalPage
+                this.tableData = res.data
+            })
+        },
         openContest(contest) {
             this.$contest.auth(contest.id, null, res => {
                 let inContest = (res) => {
@@ -117,7 +131,10 @@ export default {
                     inContest(res)
                 }
             })
-        }
+        },
+        changePageNum() {
+            this.initData()
+        },
     }
 }
 </script>

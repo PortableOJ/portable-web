@@ -63,18 +63,6 @@ export default {
                 {
                     label: '题目',
                     value: 'content',
-                }, {
-                    label: '判题',
-                    value: 'status',
-                }, {
-                    label: '测试',
-                    value: 'test_status',
-                }, {
-                    label: '榜单',
-                    value: 'rank',
-                }, {
-                    label: '管理',
-                    value: 'manager',
                 }
             ],
             hiddenOption: {
@@ -103,6 +91,26 @@ export default {
                     this.leftTime = this.leftTime.toFixed(0)
                 }
             }, 10)
+            this.selectOption = [
+                {
+                    label: '题目',
+                    value: 'content',
+                }, {
+                    label: '判题',
+                    value: 'status',
+                }, {
+                    label: '测试',
+                    value: 'test_status',
+                    hidden: this.hidden()
+                }, {
+                    label: '榜单',
+                    value: 'rank',
+                }, {
+                    label: '管理',
+                    value: 'manager',
+                    hidden: this.hidden()
+                }
+            ]
         })
     },
     methods: {
@@ -114,11 +122,20 @@ export default {
         },
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
+        },
+        hidden() {
+            // noinspection JSUnresolvedVariable
+            return  !this.contestData || (this.contestData.ownerHandle !== this.$user.getCurUserHandle() && this.contestData.coAuthor.indexOf(this.$user.getCurUserHandle()) === -1)
         }
     },
     watch: {
         $route(to) {
             this.step = to.name.split('-')[1]
+        }
+    },
+    beforeDestroy() {
+        if (this.sliderInterval) {
+            clearInterval(this.sliderInterval)
         }
     }
 }
