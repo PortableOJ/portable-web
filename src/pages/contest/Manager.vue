@@ -22,6 +22,22 @@
                 <h3>密码</h3>
                 <InputText :read-only="notOwner" v-model="contestData.password"></InputText>
             </div>
+            <div v-if="contestData.accessType === 'PRIVATE'">
+                <h3>邀请列表</h3>
+                <div>
+                    <template v-for="handle in contestData.inviteUserSet">
+                        <InputCheckbox :read-only="notOwner" @change="deleteInvite(handle)" :value="true" :key="handle">
+                            {{ handle }}
+                        </InputCheckbox>
+                    </template>
+                </div>
+                <h3>添加邀请</h3>
+                <div style="display: grid; grid-template-columns: 1fr auto">
+                    <InputText :read-only="notOwner" v-model="templateInvite"
+                               :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
+                    <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
+                </div>
+            </div>
             <div>
                 <h3>封榜时间(分钟)</h3>
                 <InputText :read-only="notOwner" v-model="contestData.freezeTime"></InputText>
@@ -45,22 +61,6 @@
                     <InputText :read-only="notOwner" v-model="templateCoAuthor"
                                :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
                     <InputButton :disabled="notOwner" @click="addCoAuthor">添加</InputButton>
-                </div>
-            </div>
-            <div v-if="contestData.accessType === 'PRIVATE'">
-                <h3>邀请列表</h3>
-                <div>
-                    <template v-for="handle in contestData.inviteUserSet">
-                        <InputCheckbox :read-only="notOwner" @change="deleteInvite(handle)" :value="true" :key="handle">
-                            {{ handle }}
-                        </InputCheckbox>
-                    </template>
-                </div>
-                <h3>添加邀请</h3>
-                <div style="display: grid; grid-template-columns: 1fr auto">
-                    <InputText :read-only="notOwner" v-model="templateInvite"
-                               :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
-                    <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
                 </div>
             </div>
             <div style="display: block">

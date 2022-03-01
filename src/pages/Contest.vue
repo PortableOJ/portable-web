@@ -1,10 +1,10 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
-            <div v-if="contestData" style="display: grid; place-items: center">
-                <h1 style="margin: 0">{{ contestData.title }}</h1>
-                <InputSlider :read-only="true" :show-handle="false" style="margin: 0; width: 100%" v-model="slider" :max="100" :min="0"></InputSlider>
-                <NavMenu style="width: 100%" @change="toSelect" v-model="step" :options="selectOption"
+            <div style="display: grid; place-items: center">
+                <h1 v-if="contestData"  style="margin: 0">{{ contestData.title }}</h1>
+                <InputSlider v-if="contestData"  :read-only="true" :show-handle="false" style="margin: 0; width: 100%" v-model="slider" :max="100" :min="0"></InputSlider>
+                <NavMenu v-if="contestData" style="width: 100%" @change="toSelect" v-model="step" :options="selectOption"
                          :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
                 <router-view></router-view>
             </div>
@@ -74,6 +74,9 @@ export default {
     },
     created() {
         this.contestId = parseInt(this.$route.params.contestId)
+        if (this.contestId === 0) {
+            return;
+        }
         this.$contest.getContestData(this.contestId, res => {
             this.contestData = res
             this.sliderInterval = setInterval(() => {

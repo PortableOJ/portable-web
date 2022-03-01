@@ -24,6 +24,10 @@
         </div>
         <div>
             <UserCard></UserCard>
+            <div class="card" v-if="canCreateContest()">
+                <span class="card-title">管理</span>
+                <InputButton @click="newContest">新建比赛</InputButton>
+            </div>
         </div>
     </div>
 </template>
@@ -134,6 +138,12 @@ export default {
         },
         changePageNum() {
             this.initData()
+        },
+        canCreateContest() {
+            return this.$user.hasPermission(this.$user.permissionTypeList.CREATE_AND_EDIT_CONTEST)
+        },
+        newContest() {
+            this.$router.push({name: 'contest-manager', params: {contestId: '0'}})
         },
     }
 }
