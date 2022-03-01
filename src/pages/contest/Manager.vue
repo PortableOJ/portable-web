@@ -108,7 +108,7 @@
             </div>
             <div style="display: block">
                 <h3>公告</h3>
-                <MarkdownEdit style="width: 100%" v-model="contestData.announcement"></MarkdownEdit>
+                <MarkdownEdit :read-only="notOwner" style="width: 100%" v-model="contestData.announcement"></MarkdownEdit>
             </div>
         </div>
         <InputButton @click="save">保存</InputButton>
