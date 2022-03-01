@@ -3,7 +3,7 @@
         <div v-if="contestData" class="form" style="width: 100%;">
             <div>
                 <h3>标题</h3>
-                <InputText :read-only="notOwner" style="width: 100%" v-model="contestData.title"></InputText>
+                <InputText :read-only="contestId !== 0" style="width: 100%" v-model="contestData.title"></InputText>
             </div>
             <div>
                 <h3>开始时间</h3>
@@ -181,8 +181,8 @@ export default {
                     // noinspection JSUnresolvedVariable
                     this.problemList[i].realId = res.problemRealId[i]
                 }
-                this.notOwner = res.ownerHandle !== this.$user.getCurUserHandle()
             })
+            this.$contest.auth(this.contestId, null, res => this.notOwner = res !== 'ADMIN')
         } else {
             this.contestData = {
                 id: null,
@@ -225,8 +225,18 @@ export default {
             if (this.templateCoAuthor && this.templateCoAuthor.length > 0) {
                 let templateList = this.templateCoAuthor.split(' ')
                 for (let i = 0; i < templateList.length; ++i) {
-                    // noinspection JSUnresolvedVariable
-                    this.contestData.coAuthor.push(templateList[i])
+                    this.$user.getUserInfo(templateList[i], () => {
+                        if (this.contestData.coAuthor.indexOf(templateList[i]) === -1) {
+                            this.contestData.coAuthor.push(templateList[i])
+                        } else {
+                            this.$toast({
+                                title: '失败',
+                                text: '此用户已经存在',
+                                duration: 'auto',
+                                type: 'error'
+                            })
+                        }
+                    })
                 }
                 this.templateCoAuthor = ''
             } else {
@@ -248,8 +258,18 @@ export default {
             if (this.templateInvite && this.templateInvite.length > 0) {
                 let templateList = this.templateInvite.split(' ')
                 for (let i = 0; i < templateList.length; ++i) {
-                    // noinspection JSUnresolvedVariable
-                    this.contestData.inviteUserSet.push(templateList[i])
+                    this.$user.getUserInfo(templateList[i], () => {
+                        if (this.contestData.inviteUserSet.indexOf(templateList[i]) === -1) {
+                            this.contestData.inviteUserSet.push(templateList[i])
+                        } else {
+                            this.$toast({
+                                title: '失败',
+                                text: '此用户已经存在',
+                                duration: 'auto',
+                                type: 'error'
+                            })
+                        }
+                    })
                 }
                 this.templateInvite = ''
             } else {

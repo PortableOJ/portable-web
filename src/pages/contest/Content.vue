@@ -39,7 +39,7 @@
                 )
             </template>
         </Table>
-        <div class="announcement-box">
+        <div class="announcement-box" v-if="announcement && announcement.length > 0">
             <h3>公告</h3>
             <div v-html="announcement" class="announcement"></div>
         </div>
