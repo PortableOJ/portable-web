@@ -28,7 +28,13 @@ function getContestProblem(contestId, problemIndex, success) {
     }, success, null)
 }
 
-// TODO: rank
+function rank(contestId, pageNum, pageSize, success) {
+    Request.get(baseUrl + '/rank', {
+        contestId: contestId,
+        pageNum: pageNum,
+        pageSize: pageSize
+    }, success, null)
+}
 
 function getContestStatus(contestId, pageNum, pageSize, userId, problemId, statusType, success) {
     Request.get(baseUrl + '/status', {
@@ -100,6 +106,7 @@ export default {
     getContestData,
     getContestDataAdmin,
     getContestProblem,
+    rank,
     getContestStatus,
     getContestSolution,
     getContestTestStatus,

@@ -4,7 +4,7 @@
             <div style="display: grid; place-items: center">
                 <h1 v-if="contestData"  style="margin: 0">{{ contestData.title }}</h1>
                 <InputSlider v-if="contestData"  :read-only="true" :show-handle="false" style="margin: 0; width: 100%" v-model="slider" :max="100" :min="0"></InputSlider>
-                <NavMenu v-if="contestData" style="width: 100%" @change="toSelect" v-model="step" :options="selectOption"
+                <NavMenu v-if="contestData" style="width: 80%" @change="toSelect" v-model="step" :options="selectOption"
                          :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
                 <router-view></router-view>
             </div>
@@ -35,7 +35,7 @@
                 </div>
                 <div v-if="leftTime > 0">
                     剩余时间：{{
-                        `${(leftTime / 3600).toFixed(0).padStart(2, '0')}:${(leftTime / 60).toFixed(0).padStart(2, '0')}:${(leftTime % 60).toString().padStart(2, '0')}`
+                        `${(leftTime / 3600).toFixed(0).padStart(2, '0')}:${((leftTime % 3600) / 60).toFixed(0).padStart(2, '0')}:${(leftTime % 60).toString().padStart(2, '0')}`
                     }}
                 </div>
             </div>
