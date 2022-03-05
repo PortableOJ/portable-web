@@ -15,6 +15,7 @@ import ProblemManager from "@/manager/problemManager";
 import SolutionManager from "@/manager/solutionManager";
 import JudgeManager from "@/manager/judgeManager";
 import ContestManager from "@/manager/contestManager";
+import FileManager from "@/manager/fileManager";
 
 Vue.use(Mevcl)
 Vue.config.productionTip = false
@@ -28,6 +29,7 @@ Vue.prototype.$problem = ProblemManager
 Vue.prototype.$solution = SolutionManager
 Vue.prototype.$judge = JudgeManager
 Vue.prototype.$contest = ContestManager
+Vue.prototype.$file = FileManager
 
 Date.prototype.format = function (fmt) {
     let o = {

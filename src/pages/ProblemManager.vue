@@ -10,6 +10,7 @@
         </div>
         <div>
             <UserCard></UserCard>
+            <ImageUpload></ImageUpload>
             <div class="card">
                 <span class="card-title">相关</span>
                 <InputButton @click="back">返回题面页面</InputButton>
@@ -20,10 +21,11 @@
 
 <script>
 import UserCard from "@/card/UserCard";
+import ImageUpload from "@/card/ImageUpload";
 
 export default {
     name: "ProblemManager",
-    components: {UserCard},
+    components: {ImageUpload, UserCard},
     data() {
         return {
             step: this.$route.name.split('-')[1],

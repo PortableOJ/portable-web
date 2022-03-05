@@ -12,6 +12,7 @@
         </div>
         <div>
             <UserCard></UserCard>
+            <ImageUpload v-if="step === 'manager'"></ImageUpload>
             <div class="card" v-if="contestData">
                 <span class="card-title">比赛信息</span>
                 <div>
@@ -46,10 +47,12 @@
 
 <script>
 import UserCard from "@/card/UserCard";
+import ImageUpload from "@/card/ImageUpload";
 
 export default {
     name: "Contest",
     components: {
+        ImageUpload,
         UserCard
     },
     data() {

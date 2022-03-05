@@ -171,6 +171,12 @@ function changeOrganization(targetId, newOrganization, success) {
     }, success, null)
 }
 
+function changeAvatar(file, success) {
+    Request.postFile(baseUrl + '/avatar', {
+        fileData: file
+    }, success, null)
+}
+
 export default {
     permissionTypeList,
 
@@ -192,4 +198,6 @@ export default {
     addPermission,
     removePermission,
     changeOrganization,
+
+    changeAvatar,
 }

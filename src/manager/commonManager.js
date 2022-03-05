@@ -85,6 +85,21 @@ function getQueryString(that, name, defaultValue) {
     return tmp ? tmp : defaultValue
 }
 
+function copy(str) {
+    const clipboard = navigator.clipboard;
+    if (clipboard) {
+        clipboard.writeText(str)
+    } else {
+        let tag = document.createElement('textarea');
+        tag.setAttribute('id', 'input_for_cp');
+        tag.value = str;
+        document.body.appendChild(tag);
+        document.getElementById('input_for_cp').select();
+        document.execCommand('copy');
+        document.getElementById('input_for_cp').remove();
+    }
+}
+
 export default {
     version,
     maxRequestFileSize,
@@ -98,4 +113,6 @@ export default {
 
     getQueryInt,
     getQueryString,
+
+    copy,
 }
