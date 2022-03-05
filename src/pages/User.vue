@@ -41,12 +41,12 @@
                     )
                 </div>
                 <div class="user-info-operator"></div>
-                <div class="user-info-title"></div>
-                <div class="user-info-value"></div>
-                <div class="user-info-operator"></div>
             </div>
         </div>
         <div>
+            <div class="card">
+                <InputImage @change="uploadAvatar" style="width: 200px; height: 200px;" :placeholder="`/api/file/get?id=${userData.avatar}&type=AVATAR`"></InputImage>
+            </div>
             <UserCard></UserCard>
         </div>
     </div>
@@ -71,7 +71,8 @@ export default {
                 submission: 0,
                 accept: 0,
                 permissionTypeSet: [],
-                email: null
+                email: null,
+                avatar: null,
             },
             isDominate: false,
 
@@ -103,6 +104,18 @@ export default {
         userManager() {
             this.$router.push({name: 'userManager', params: {handle: this.userData.handle}})
         },
+        uploadAvatar(file) {
+            if (file) {
+                this.$user.changeAvatar(file, () => {
+                    this.$toast({
+                        title: '更新成功',
+                        text: '头像更新成功',
+                        duration: 'auto',
+                        type: 'success',
+                    })
+                })
+            }
+        }
     },
     watch: {
         $route() {

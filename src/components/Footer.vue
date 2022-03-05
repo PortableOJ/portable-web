@@ -32,7 +32,7 @@ export default {
 
 <style scoped>
 .footer {
-    margin-top: 50px;
+    margin-top: 100px;
     font-size: small;
     user-select: none;
 }
