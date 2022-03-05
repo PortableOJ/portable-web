@@ -46,7 +46,7 @@
         <div>
             <div class="card">
                 <span class="card-title">更改头像</span>
-                <InputImage @change="uploadAvatar" style="width: 200px; height: 200px;" :placeholder="`/api/file/get?id=${userData.avatar}&type=AVATAR`"></InputImage>
+                <InputImage :disabled="userData.handle !== this.myHandle" @change="uploadAvatar" style="width: 200px; height: 200px;" :placeholder="`/api/file/get?id=${userData.avatar}&type=AVATAR`"></InputImage>
             </div>
         </div>
     </div>
@@ -80,6 +80,7 @@ export default {
             accountType: {},
             organizationType: {},
             permissionType: {},
+            myHandle: ''
         }
     },
     created() {
@@ -89,6 +90,7 @@ export default {
 
         this.CHANGE_ORGANIZATION = this.$user.hasPermission(this.$user.permissionTypeList.CHANGE_ORGANIZATION)
         this.GRANT = this.$user.hasPermission(this.$user.permissionTypeList.GRANT)
+        this.myHandle = this.$user.getCurUserHandle()
 
         this.init()
     },
