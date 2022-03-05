@@ -2,8 +2,9 @@
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
             <div style="display: grid; place-items: center">
-                <h1 v-if="contestData"  style="margin: 0">{{ contestData.title }}</h1>
-                <InputSlider v-if="contestData"  :read-only="true" :show-handle="false" style="margin: 0; width: 100%" v-model="slider" :max="100" :min="0"></InputSlider>
+                <h1 v-if="contestData" style="margin: 0">{{ contestData.title }}</h1>
+                <InputSlider v-if="contestData" :read-only="true" :show-handle="false" style="margin: 0; width: 100%"
+                             v-model="slider" :max="100" :min="0"></InputSlider>
                 <NavMenu v-if="contestData" style="width: 80%" @change="toSelect" v-model="step" :options="selectOption"
                          :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
                 <router-view></router-view>
@@ -127,7 +128,9 @@ export default {
         },
         hidden() {
             // noinspection JSUnresolvedVariable
-            return  !this.contestData || (this.contestData.ownerHandle !== this.$user.getCurUserHandle() && this.contestData.coAuthor.indexOf(this.$user.getCurUserHandle()) === -1)
+            return !this.contestData || (this.contestData.ownerHandle !== this.$user.getCurUserHandle()
+                && this.contestData.coAuthor.indexOf(this.$user.getCurUserHandle()) === -1
+                && this.$user.hasPermission(this.$user.permissionTypeList.EDIT_NOT_OWNER_CONTEST))
         }
     },
     watch: {
