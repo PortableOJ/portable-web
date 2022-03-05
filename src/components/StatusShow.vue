@@ -26,7 +26,14 @@
                 {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-status="scope">
-                {{ solutionStatusType[scope.data.status].text }}
+                <!--suppress JSUnresolvedVariable -->
+                <span :class="{
+                    'accept': scope.data.status === 'ACCEPT',
+                    'fail': scope.data.status !== 'ACCEPT' && solutionStatusType[scope.data.status].endingResult,
+                    'padding': !solutionStatusType[scope.data.status].endingResult
+                }">
+                    {{ solutionStatusType[scope.data.status].text }}
+                </span>
             </template>
         </Table>
         <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
@@ -218,7 +225,7 @@ export default {
                 query.statusType = this.statusType
             }
             if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
-                this.$router.push({
+                this.$router.replace({
                     name: this.$route.name,
                     query: query
                 })
@@ -240,5 +247,16 @@ export default {
 </script>
 
 <style scoped>
+.accept {
+    font-weight: 900;
+    color: var(--success-color);
+}
 
+.fail {
+    color: var(--error-color);
+}
+
+.padding {
+    color: var(--info-color);
+}
 </style>

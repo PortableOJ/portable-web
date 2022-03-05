@@ -3,15 +3,35 @@
         <div v-if="metaData">
             <h3>我</h3>
             <Table :head="tableHead" :data="metaData">
+                <template v-slot:body-handle="scope">
+                    <Link>{{scope.data.handle}}</Link>
+                </template>
                 <template v-slot:body-totalCost="scope">
-                    {{`${(scope.data.totalCost / 3600).toFixed(0).padStart(2, '0')}:${((scope.data.totalCost % 3600) / 60).toFixed(0).padStart(2, '0')}:${(scope.data.totalCost % 60).toFixed(0).padStart(2, '0')}`}}
+                    {{
+                        `${(scope.data.totalCost / 3600).toFixed(0).padStart(2, '0')}:${((scope.data.totalCost % 3600) / 60).toFixed(0).padStart(2, '0')}:${(scope.data.totalCost % 60).toFixed(0).padStart(2, '0')}`
+                    }}
+                </template>
+                <template v-for="id in problemLen" v-slot:[bodyRound(id)]="scope">
+                <span :key="id" v-if="scope.data[id]" :class="scope.data[id].solved">
+                    {{ scope.data[id].value }}
+                </span>
                 </template>
             </Table>
         </div>
         <h3>总榜单</h3>
         <Table :head="tableHead" :data="tableData">
+            <template v-slot:body-handle="scope">
+                <Link>{{scope.data.handle}}</Link>
+            </template>
             <template v-slot:body-totalCost="scope">
-                {{`${(scope.data.totalCost / 3600).toFixed(0).padStart(2, '0')}:${((scope.data.totalCost % 3600) / 60).toFixed(0).padStart(2, '0')}:${(scope.data.totalCost % 60).toFixed(0).padStart(2, '0')}`}}
+                {{
+                    `${(scope.data.totalCost / 3600).toFixed(0).padStart(2, '0')}:${((scope.data.totalCost % 3600) / 60).toFixed(0).padStart(2, '0')}:${(scope.data.totalCost % 60).toFixed(0).padStart(2, '0')}`
+                }}
+            </template>
+            <template v-for="id in problemLen" v-slot:[bodyRound(id)]="scope">
+                <span :key="id" v-if="scope.data[id]" :class="scope.data[id].solved">
+                    {{ scope.data[id].value }}
+                </span>
             </template>
         </Table>
         <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
@@ -35,6 +55,7 @@ export default {
             tableHead: [],
             tableData: [],
             metaData: [],
+            problemLen: [],
         }
     },
     created() {
@@ -59,11 +80,13 @@ export default {
                 value: 'totalCost',
                 width: '50',
             }]
+            this.problemLen = []
             for (let i = 0; i < res.problemList.length; i++) {
                 this.tableHead.push({
                     label: i,
                     value: `p${i}`,
                 })
+                this.problemLen.push(`p${i}`)
             }
         })
         this.initData()
@@ -75,7 +98,7 @@ export default {
                 pageSize: this.pageSize.toString()
             }
             if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
-                this.$router.push({
+                this.$router.replace({
                     name: 'contest-rank',
                     query: query
                 })
@@ -125,17 +148,37 @@ export default {
                 if (tmp.runningSubmit && tmp.runningSubmit !== 0) {
                     value += `+${tmp.runningSubmit}`
                 }
-                res[`p${submitStatusKey}`] = value;
+                // noinspection JSUnresolvedVariable
+                res[`p${submitStatusKey}`] = {
+                    value: value,
+                    solved: tmp.firstSolveId != null ? 'accept'
+                        : (tmp.runningSubmit && tmp.runningSubmit !== 0)
+                            ? 'padding' : 'fail'
+                };
             }
             return res
         },
         changePageNum() {
             this.initData()
         },
+        bodyRound(id) {
+            return `body-${id}`
+        }
     }
 }
 </script>
 
-<style scoped>
+<style>
+.accept {
+    font-weight: 900;
+    color: var(--success-color);
+}
 
+.fail {
+    color: var(--error-color);
+}
+
+.padding {
+    color: var(--info-color);
+}
 </style>
