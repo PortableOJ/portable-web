@@ -87,7 +87,7 @@ export default {
                 pageSize: this.pageSize.toString()
             }
             if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
-                this.$router.push({
+                this.$router.replace({
                     name: 'contestSet',
                     query: query
                 })
