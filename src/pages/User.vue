@@ -45,20 +45,18 @@
         </div>
         <div>
             <div class="card">
+                <span class="card-title">更改头像</span>
                 <InputImage @change="uploadAvatar" style="width: 200px; height: 200px;" :placeholder="`/api/file/get?id=${userData.avatar}&type=AVATAR`"></InputImage>
             </div>
-            <UserCard></UserCard>
         </div>
     </div>
 </template>
 
 <script>
-import UserCard from "@/card/UserCard";
 
 export default {
     name: "User",
     components: {
-        UserCard
     },
     data() {
         return {

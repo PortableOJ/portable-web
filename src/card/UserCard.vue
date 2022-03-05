@@ -2,10 +2,9 @@
     <div class="card">
         <div v-if="isLogin" style="text-align: left">
             Hi
+            <Link @click="openMine" style="font-weight: 900;">{{ userData.handle }}</Link>
             <div>
-                <Link @click="openMine">
-                    <h1>{{ userData.handle }}</h1>
-                </Link>
+                <img @click="openMine" style="width: 250px; border: 1px solid var(--info-color); cursor: pointer" :src="`/api/file/get?id=${userData.avatar}&type=AVATAR`" alt="avatar">
             </div>
             欢迎来到 Portable OJ
             <InputButton @click="logout">登出</InputButton>
