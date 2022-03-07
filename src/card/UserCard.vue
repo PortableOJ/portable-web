@@ -1,22 +1,34 @@
 <template>
     <div class="card">
-        <div v-if="isLogin" style="text-align: left">
-            Hi
-            <Link @click="openMine" style="font-weight: 900;">{{ userData.handle }}</Link>
-            <div>
-                <img @click="openMine" style="width: 250px; border: 1px solid var(--info-color); cursor: pointer" :src="`/api/file/get?id=${userData.avatar}&type=AVATAR`" alt="avatar">
+        <template v-if="isLogin" style="text-align: left">
+            <span class="card-title">
+                <Link @click="openMine">
+                    {{ userData.handle }}
+                </Link>
+            </span>
+            <div style="display: grid; grid-template-columns: auto 100px">
+                <div style="margin-right: 30px; display: grid; place-items: center start;">
+                    <Link @click="openMine">个人资料</Link>
+                    <Link @click="logout">登出</Link>
+                </div>
+                <img @click="openMine"
+                     style="border-radius: 50%; width: 100px; cursor: pointer"
+                     :src="avatarUrl" alt="avatar">
             </div>
-            欢迎来到 Portable OJ
-            <InputButton @click="logout">登出</InputButton>
-        </div>
-        <div v-else>
+        </template>
+        <template v-else>
+            <span class="card-title">
+                <Link @click="openMine">
+                    {{ userData.handle }}
+                </Link>
+            </span>
             <InputText class="card-input" placeholder="用户名" v-model="handle"></InputText>
             <InputText class="card-input" type="password" placeholder="密码" v-model="password"></InputText>
             <div class="button-box">
                 <InputButton @click="login" :loading="onLogin" :disabled="onRegister">登录</InputButton>
                 <InputButton @click="register" :loading="onRegister" :disabled="onLogin">注册</InputButton>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -38,6 +50,7 @@ export default {
             handle: '',
             password: '',
             reportPassword: '',
+            avatarUrl: '',
 
             onLogin: false,
             onRegister: false
@@ -54,6 +67,7 @@ export default {
             this.isLogin = this.$user.isLogin()
             if (this.isLogin) {
                 this.userData = this.$user.getCurUserData()
+                this.avatarUrl = process.env.VUE_APP_AVATAR_URL + this.userData.avatar
             }
             this.onLogin = false
             this.onRegister = false

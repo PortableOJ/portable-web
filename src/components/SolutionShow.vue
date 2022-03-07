@@ -21,7 +21,7 @@
                 </template>
             </template>
         </Table>
-        <div style="text-align: left; width: 80%">
+        <div style="text-align: left; width: 100%">
             <div v-if="code !== ''">
                 <h3>代码</h3>
                 <MarkdownBlockCode :value="code"></MarkdownBlockCode>

@@ -1,62 +1,54 @@
 <template>
     <div class="lm-rc-layout">
-        <div class="lm-rc-layout-left" style="display: grid; place-items: center;">
-            <div>
-                <h1 style="display: inline-block">{{ userData.handle }}</h1>
-            </div>
-            <div class="user-info" style="width: 90%">
-                <div class="user-info-title">账号类型</div>
-                <div class="user-info-value">
-                    <Tag type="success" v-if="accountType[userData.type]">{{ accountType[userData.type].text }}</Tag>
-                </div>
-                <div class="user-info-operator"></div>
-                <div class="user-info-title">所属组织</div>
-                <div class="user-info-value">
-                    <Tag v-if="organizationType[userData.organizationType]" type="success">
-                        {{ organizationType[userData.organizationType].text }}
-                    </Tag>
-                </div>
-                <div class="user-info-operator">
-                    <Link @click="userManager" v-if="isDominate && CHANGE_ORGANIZATION">修改组织</Link>
-                </div>
-                <div class="user-info-title">拥有的权限</div>
-                <div class="user-info-value">
-                    <template v-for="permission in userData.permissionTypeSet">
-                        <Tag style="margin-top: 5px" type="success" :key="permission"
-                             v-if="permissionType[permission]">
-                            {{ permissionType[permission].text }}
+        <div class="lm-rc-layout-left" style="display: grid; place-items: center; margin-top: 15px">
+            <div style="display: grid; grid-template-columns: minmax(500px, 1fr) 250px">
+                <div style="display: grid; grid-template-columns: 120px 1fr; margin-top: 40px; place-items: center">
+                    <div>昵称：</div>
+                    <div>
+                        <span style="font-size: 35px">
+                            {{ userData.handle }}
+                        </span>
+                    </div>
+                    <div>账号类型</div>
+                    <div>
+                        <Tag type="success"
+                             v-if="accountType[userData.type]">{{ accountType[userData.type].text }}
                         </Tag>
-                    </template>
+                    </div>
+                    <div>所属组织：</div>
+                    <div>{{ organizationType[userData.organizationType].text }}</div>
+                    <div>提交通过率：</div>
+                    <div>
+                        {{ userData.accept }} / {{ userData.submission }}
+                        (
+                        <template v-if="userData.submission !== 0">
+                            {{ (userData.accept / userData.submission * 100).toFixed(2) }} %
+                        </template>
+                        <template v-else>
+                            -
+                        </template>
+                        )
+                    </div>
                 </div>
-                <div class="user-info-operator">
-                    <Link @click="userManager" v-if="isDominate && GRANT">调整权限</Link>
+                <div>
+                    <img :src="avatarUrl" alt="avatar" style="width: 250px; border-radius: 50%">
                 </div>
-                <div class="user-info-title">通过/提交率</div>
-                <div class="user-info-value">
-                    {{ userData.accept }} / {{ userData.submission }} (
-                    <template v-if="userData.submission !== 0">
-                        {{ (userData.accept / userData.submission * 100).toFixed(2) }} %
-                    </template>
-                    <template v-else>-</template>
-                    )
-                </div>
-                <div class="user-info-operator"></div>
             </div>
         </div>
         <div>
-            <div class="card">
-                <span class="card-title">更改头像</span>
-                <InputImage :disabled="userData.handle !== this.myHandle" @change="uploadAvatar" style="width: 200px; height: 200px;" :placeholder="`/api/file/get?id=${userData.avatar}&type=AVATAR`"></InputImage>
-            </div>
+            <UserCard></UserCard>
         </div>
     </div>
 </template>
 
 <script>
 
+import UserCard from "@/card/UserCard";
+
 export default {
     name: "User",
     components: {
+        UserCard
     },
     data() {
         return {
@@ -72,6 +64,7 @@ export default {
                 email: null,
                 avatar: null,
             },
+            avatarUrl: '',
             isDominate: false,
 
             CHANGE_ORGANIZATION: false,
@@ -99,6 +92,7 @@ export default {
             this.$user.getUserInfo(this.handle, res => {
                 this.userData = res
                 this.isDominate = this.userData.type === 'NORMAL' && this.$user.isDominate(this.userData.organizationType)
+                this.avatarUrl = process.env.VUE_APP_AVATAR_URL + this.userData.avatar
             })
         },
         userManager() {

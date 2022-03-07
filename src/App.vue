@@ -1,6 +1,7 @@
 <template>
     <div id="app" class="main-layout">
-        <NavMenu @change="toSelect" :options="selectOption" v-model="select" :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
+        <NavMenu @change="toSelect" :options="selectOption" v-model="select"
+                 :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
         <router-view></router-view>
         <Footer></Footer>
     </div>
@@ -8,6 +9,7 @@
 
 <script>
 import Footer from "@/components/Footer";
+
 export default {
     name: 'App',
     components: {Footer},
@@ -50,7 +52,7 @@ export default {
     },
     methods: {
         init() {
-            this.selectOption =  [
+            this.selectOption = [
                 {
                     label: '主页',
                     value: 'home',
@@ -84,7 +86,8 @@ export default {
 
 <style>
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
+    font-family: "PingFang SC", "Microsoft Yahei", Arial, serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -95,6 +98,9 @@ export default {
 .main-layout {
     display: grid;
     grid-template-rows: auto 1fr auto;
+    min-width: 920px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .lm-rc-layout {
@@ -109,12 +115,12 @@ export default {
 .card {
     box-shadow: var(--open-shadowbox);
     border: 1px solid var(--border-color-level-1);
-    padding: 10px 10px;
     margin-top: 10px;
     border-radius: 10px;
     display: grid;
     place-items: center;
     transition: 0.2s ease all;
+    padding: 10px 10px 20px;
 }
 
 .card:hover {
