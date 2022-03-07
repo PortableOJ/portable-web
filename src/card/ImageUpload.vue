@@ -26,7 +26,6 @@ export default {
             }
             this.$file.uploadImage(this.cacheImage, res => {
                 this.imageUrl = this.$file.fileUrl(res, 'IMAGE')
-                console.log(this.imageUrl)
                 this.$common.copy(`![](${this.imageUrl})`)
                 this.$toast({
                     title: '完成',

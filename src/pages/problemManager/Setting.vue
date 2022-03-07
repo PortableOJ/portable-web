@@ -197,7 +197,7 @@ export default {
     display: grid;
     grid-template-columns: 300px minmax(500px, 1fr);
     place-items: center;
-    border-bottom: 1px solid var(--brand-color);
+    border-bottom: 1px solid var(--border-color-level-1);
 }
 
 .special {

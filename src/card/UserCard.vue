@@ -104,8 +104,19 @@ export default {
             })
         },
         logout() {
-            this.$user.signOut()
-            this.isLogin = false
+            this.$message({
+                text: '即将登出，请确认',
+                type: 'info',
+                inputType: 'password',
+                ok: '确定',
+                cancel: '取消注册',
+                input: false,
+                confirmOK: () => {
+                    this.$user.signOut()
+                    this.isLogin = false
+                },
+                confirmCancel: () => {},
+            })
         },
         openMine() {
             this.$router.push({name: 'user', params: {handle: this.userData.handle}})
