@@ -1,8 +1,11 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left" style="display: grid; place-items: center; margin-top: 15px">
-            <div style="display: grid; grid-template-columns: minmax(500px, 1fr) 250px">
-                <div style="display: grid; grid-template-columns: 120px 1fr; margin-top: 40px; place-items: center">
+            <div style="display: grid; grid-template-columns: 250px minmax(500px, 1fr)">
+                <div>
+                    <img :src="avatarUrl" alt="avatar" style="width: 250px; border-radius: 50%">
+                </div>
+                <div style="display: grid; margin-left: 30px; grid-template-columns: 120px 1fr; place-items: center">
                     <div>昵称：</div>
                     <div>
                         <span style="font-size: 35px">
@@ -29,9 +32,6 @@
                         </template>
                         )
                     </div>
-                </div>
-                <div>
-                    <img :src="avatarUrl" alt="avatar" style="width: 250px; border-radius: 50%">
                 </div>
             </div>
         </div>

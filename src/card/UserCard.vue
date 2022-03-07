@@ -17,11 +17,7 @@
             </div>
         </template>
         <template v-else>
-            <span class="card-title">
-                <Link @click="openMine">
-                    {{ userData.handle }}
-                </Link>
-            </span>
+            <span class="card-title">登录</span>
             <InputText class="card-input" placeholder="用户名" v-model="handle"></InputText>
             <InputText class="card-input" type="password" placeholder="密码" v-model="password"></InputText>
             <div class="button-box">
