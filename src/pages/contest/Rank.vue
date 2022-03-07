@@ -153,7 +153,7 @@ export default {
                     value: value,
                     solved: tmp.firstSolveId != null ? 'accept'
                         : (tmp.runningSubmit && tmp.runningSubmit !== 0)
-                            ? 'padding' : 'fail'
+                            ? 'pending' : 'fail'
                 };
             }
             return res
@@ -181,7 +181,7 @@ export default {
     color: var(--error-color);
 }
 
-.padding {
+.pending {
     color: var(--info-color);
 }
 </style>
