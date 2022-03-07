@@ -10,39 +10,57 @@ const routes = [
     }, {
         path: '/home',
         name: 'home',
-        component: () => import('@/pages/Home')
+        component: () => import('@/pages/Home'),
     }, {
         path: '/user/:handle',
-        name: 'user',
-        component: () => import('@/pages/User')
-    }, {
-        path: '/user/manager/:handle',
-        name: 'userManager',
-        component: () => import('@/pages/UserManager')
+        component: () => import('@/pages/User'),
+        children: [
+            {
+                path: '',
+                name: 'user',
+                redirect: '/user/:handle/info'
+            }, {
+                path: 'info',
+                name: 'user-info',
+                component: () => import('@/pages/user/Info')
+            }, {
+                path: 'setting',
+                name: 'user-setting',
+                component: () => import('@/pages/user/Setting')
+            }, {
+                path: 'security',
+                name: 'user-security',
+                component: () => import('@/pages/user/Security')
+            }, {
+                path: 'manager',
+                name: 'user-manager',
+                component: () => import('@/pages/user/Manager')
+            }
+        ]
     }, {
         path: '/problemSet',
         name: 'problemSet',
-        component: () => import('@/pages/ProblemSet')
+        component: () => import('@/pages/ProblemSet'),
     }, {
         path: '/problemSet/problem/:problemId',
         name: 'problem',
-        component: () => import('@/pages/Problem')
+        component: () => import('@/pages/Problem'),
     }, {
         path: '/status',
         name: 'status',
-        component: () => import('@/pages/StatusPage')
+        component: () => import('@/pages/StatusPage'),
     }, {
         path: '/status/:solutionId',
         name: 'solution',
-        component: () => import('@/pages/SolutionPage')
+        component: () => import('@/pages/SolutionPage'),
     }, {
         path: '/judge',
         name: 'judge',
-        component: () => import('@/pages/JudgeManagerPage')
+        component: () => import('@/pages/JudgeManagerPage'),
     }, {
         path: '/problemSet/problem/:problemId/test',
         name: 'problemTest',
-        component: () => import('@/pages/ProblemTestPage')
+        component: () => import('@/pages/ProblemTestPage'),
     }, {
         path: '/problemSet/problem/:problemId/manager',
         component: () => import('@/pages/ProblemManager'),
@@ -80,7 +98,7 @@ const routes = [
     }, {
         path: '/contestSet',
         name: 'contestSet',
-        component: () => import('@/pages/ContestSet')
+        component: () => import('@/pages/ContestSet'),
     }, {
         path: '/contest/:contestId',
         component: () => import('@/pages/Contest'),
@@ -129,7 +147,7 @@ const routes = [
     {
         path: '*',
         name: 'notFound',
-        component: () => import('@/pages/NotFound')
+        component: () => import('@/pages/NotFound'),
     }
 ]
 

@@ -17,19 +17,19 @@ export default {
         return {
             selectOption: [
                 {
-                    label: '主页',
+                    label: '<i class="iconfont icon-app" />主页',
                     value: 'home',
                 }, {
-                    label: '题库',
+                    label: '<i class="iconfont icon-disk" />题库',
                     value: 'problemSet',
                 }, {
-                    label: '判题',
+                    label: '<i class="iconfont icon-monitor" />判题',
                     value: 'status',
                 }, {
-                    label: '比赛',
+                    label: '<i class="iconfont icon-data-analyse" />比赛',
                     value: 'contestSet',
                 }, {
-                    label: '服务',
+                    label: '<i class="iconfont icon-dashboard" />服务',
                     value: 'judge',
                     hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
                 }

@@ -4,7 +4,7 @@
             <h3>我</h3>
             <Table :head="tableHead" :data="metaData">
                 <template v-slot:body-handle="scope">
-                    <Link>{{scope.data.handle}}</Link>
+                    <Link @click="openUser(scope.data.handle)">{{ scope.data.handle }}</Link>
                 </template>
                 <template v-slot:body-totalCost="scope">
                     {{
@@ -21,7 +21,7 @@
         <h3>总榜单</h3>
         <Table :head="tableHead" :data="tableData">
             <template v-slot:body-handle="scope">
-                <Link>{{scope.data.handle}}</Link>
+                <Link @click="openUser(scope.data.handle)">{{ scope.data.handle }}</Link>
             </template>
             <template v-slot:body-totalCost="scope">
                 {{
@@ -153,7 +153,7 @@ export default {
                     value: value,
                     solved: tmp.firstSolveId != null ? 'accept'
                         : (tmp.runningSubmit && tmp.runningSubmit !== 0)
-                            ? 'padding' : 'fail'
+                            ? 'pending' : 'fail'
                 };
             }
             return res
@@ -163,7 +163,10 @@ export default {
         },
         bodyRound(id) {
             return `body-${id}`
-        }
+        },
+        openUser(handle) {
+            this.$router.push({name: 'user', params: {handle: handle}})
+        },
     }
 }
 </script>
@@ -178,7 +181,7 @@ export default {
     color: var(--error-color);
 }
 
-.padding {
+.pending {
     color: var(--info-color);
 }
 </style>

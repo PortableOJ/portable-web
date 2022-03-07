@@ -77,7 +77,8 @@
                         {{ problemAccessType[scope.data.accessType].text }}
                     </template>
                     <template v-slot:body-lock="scope">
-                        <i v-show="scope.data.lock !== null" :class="{'iconfont': true, 'icon-success': scope.data.lock, 'icon-error': !scope.data.lock}"></i>
+                        <i v-show="scope.data.lock !== null"
+                           :class="{'iconfont': true, 'icon-success': scope.data.lock, 'icon-error': !scope.data.lock}"></i>
                     </template>
                     <template v-slot:body-operator="scope">
                         <InputButton :disabled="scope.data.id === 0 || notOwner" style="width: 30px; height: 30px"
@@ -95,7 +96,8 @@
                 </Table>
                 <h3>添加题目</h3>
                 <div style="display: grid; grid-template-columns: auto 1fr auto">
-                    <InputCheckbox @change="clearSearchKey" :disabled="notOwner" v-model="usePublic">启用公开题库</InputCheckbox>
+                    <InputCheckbox @change="clearSearchKey" :disabled="notOwner" v-model="usePublic">启用公开题库
+                    </InputCheckbox>
                     <InputSelect @search="changeSearchKey"
                                  style="width: 100%"
                                  :data="searchProblemList"
@@ -108,7 +110,8 @@
             </div>
             <div style="display: block">
                 <h3>公告</h3>
-                <MarkdownEdit :read-only="notOwner" style="width: 100%" v-model="contestData.announcement"></MarkdownEdit>
+                <MarkdownEdit :read-only="notOwner" style="width: 100%"
+                              v-model="contestData.announcement"></MarkdownEdit>
             </div>
         </div>
         <InputButton @click="save">保存</InputButton>
@@ -404,6 +407,6 @@ export default {
     display: grid;
     grid-template-columns: 20% 80%;
     place-items: center;
-    border-bottom: 1px solid var(--brand-color);
+    border-bottom: 1px solid var(--border-color-level-1);
 }
 </style>
