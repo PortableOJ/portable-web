@@ -2,11 +2,9 @@
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
             <div style="display: grid; place-items: center">
-                <h1 v-if="contestData" style="margin: 0">{{ contestData.title }}</h1>
-                <InputSlider v-if="contestData" :read-only="true" :show-handle="false" style="margin: 0; width: 100%"
-                             v-model="slider" :max="100" :min="0"></InputSlider>
-                <NavMenu v-if="contestData" style="width: 80%" @change="toSelect" v-model="step" :options="selectOption"
-                         :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
+                <h1 v-if="contestData">{{ contestData.title }}</h1>
+                <TabMenu v-if="contestData" style="width: 100%" @change="toSelect" v-model="step"
+                         :options="selectOption"></TabMenu>
                 <router-view></router-view>
             </div>
         </div>
@@ -14,7 +12,7 @@
             <UserCard></UserCard>
             <ImageUpload v-if="step === 'manager'"></ImageUpload>
             <div class="card" v-if="contestData">
-                <span class="card-title">比赛信息</span>
+                <span class="card-title">{{ contestData.title }}</span>
                 <div>
                     比赛管理员：
                     <Link @click="openUser(contestData.ownerHandle)">{{ contestData.ownerHandle }}</Link>
@@ -40,6 +38,14 @@
                         `${(leftTime / 3600).toFixed(0).padStart(2, '0')}:${((leftTime % 3600) / 60).toFixed(0).padStart(2, '0')}:${(leftTime % 60).toString().padStart(2, '0')}`
                     }}
                 </div>
+                <InputSlider v-if="leftTime > 0"
+                             :read-only="true"
+                             :show-handle="false"
+                             style="margin: 0; width: 100%"
+                             v-model="slider"
+                             :max="100"
+                             :min="0">
+                </InputSlider>
             </div>
         </div>
     </div>
@@ -73,10 +79,11 @@ export default {
                 solution: '提交',
                 test_solution: '测试',
             },
-            step: this.$route.name.split('-')[1]
+            step: null,
         }
     },
     created() {
+        this.step = this.$route.name.split('-')[1]
         this.contestId = parseInt(this.$route.params.contestId)
         if (this.contestId === 0) {
             return;
@@ -97,6 +104,12 @@ export default {
                     this.leftTime = this.leftTime.toFixed(0)
                 }
             }, 10)
+        })
+        this.$contest.auth(this.contestId, null, res => {
+            let hidden = true
+            if (res === 'ADMIN' || res === 'CO)AUTHOR') {
+                hidden = false
+            }
             this.selectOption = [
                 {
                     label: '题目',
@@ -107,14 +120,14 @@ export default {
                 }, {
                     label: '测试',
                     value: 'test_status',
-                    hidden: this.hidden()
+                    hidden: hidden
                 }, {
                     label: '榜单',
                     value: 'rank',
                 }, {
                     label: '管理',
                     value: 'manager',
-                    hidden: this.hidden()
+                    hidden: hidden
                 }
             ]
         })
@@ -128,12 +141,6 @@ export default {
         },
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
-        },
-        hidden() {
-            // noinspection JSUnresolvedVariable
-            return !this.contestData || (this.contestData.ownerHandle !== this.$user.getCurUserHandle()
-                && this.contestData.coAuthor.indexOf(this.$user.getCurUserHandle()) === -1
-                && this.$user.hasPermission(this.$user.permissionTypeList.EDIT_NOT_OWNER_CONTEST))
         }
     },
     watch: {

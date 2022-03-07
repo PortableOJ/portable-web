@@ -3,8 +3,7 @@
         <div class="lm-rc-layout-left">
             <h1>{{ problemId === 0 ? '创建' : '编辑' }}题目</h1>
             <!--suppress JSValidateTypes -->
-            <NavMenu v-if="problemId !== 0" @change="toSelect" style="margin-top: 30px; background-color: var(--border-color-level-4)"
-                     :value="step" :options="stepList"></NavMenu>
+            <TabMenu v-if="problemId !== 0" @change="toSelect" :value="step" :options="stepList"></TabMenu>
             <div style="height: 30px"></div>
             <router-view></router-view>
         </div>
