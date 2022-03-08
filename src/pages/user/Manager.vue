@@ -1,5 +1,7 @@
 <template>
-    <div></div>
+    <div style="margin-top: 100px">
+        暂时不开放调整权限呢～
+    </div>
 </template>
 
 <script>
