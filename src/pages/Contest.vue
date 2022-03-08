@@ -107,7 +107,7 @@ export default {
         })
         this.$contest.auth(this.contestId, null, res => {
             let hidden = true
-            if (res === 'ADMIN' || res === 'CO)AUTHOR') {
+            if (res === 'ADMIN' || res === 'CO_AUTHOR') {
                 hidden = false
             }
             this.selectOption = [
