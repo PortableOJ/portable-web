@@ -26,12 +26,12 @@
                 <h3>代码</h3>
                 <MarkdownBlockCode :value="code"></MarkdownBlockCode>
             </div>
-            <div v-if="compileMsg !== ''">
+            <div v-if="compileMsg && compileMsg !== ''">
                 <h3>编译信息</h3>
                 <MarkdownBlockCode :value="compileMsg"></MarkdownBlockCode>
             </div>
         </div>
-        <Table style="width: 100%" :head="judgeMsgHead" :data="runningMsg">
+        <Table v-if="runningMsg.length > 0" style="width: 100%" :head="judgeMsgHead" :data="runningMsg">
             <template v-slot:body-status="scope">
                 <template v-if="solutionStatusType[scope.data.status]">
                     {{ solutionStatusType[scope.data.status].text }}
@@ -128,8 +128,8 @@ export default {
                 this.solutionData = [res]
                 this.code = res.code
                 this.compileMsg = res.compileMsg
+                this.runningMsg = []
                 if (res.judgeReportMsgMap) {
-                    this.runningMsg = []
                     for (let name in res.judgeReportMsgMap) {
                         this.runningMsg.push({
                             name: name,
@@ -156,7 +156,10 @@ export default {
         },
         toProblem(id) {
             if (this.contestId) {
-                this.$router.push({name: 'contest-problem', params: {contestId: this.contestId.toString(), problemIndex: id}})
+                this.$router.push({
+                    name: 'contest-problem',
+                    params: {contestId: this.contestId.toString(), problemIndex: id}
+                })
             } else {
                 this.$router.push({name: 'problem', params: {problemId: id}})
             }
