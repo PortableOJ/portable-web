@@ -200,6 +200,96 @@
                         </template>
                     </UserPermissionSet>
                 </div>
+                <div>
+                    <h3>
+                        比赛管理
+                    </h3>
+                    <div class="desc">
+                        比赛管理可以让用户拥有管理比赛的权限，同时，比赛的权限是独立于其他的模块的，但是在少部分地方时，
+                        仍然需要其他权限辅助，例如添加公开题库中的题目时，若比赛管理员没有访问隐藏题目的权限时，则无法添加隐藏题目
+                    </div>
+                    <!--VIEW_ALL_CONTEST 查看所有比赛-->
+                    <UserPermissionSet :user-id="userData.id"
+                                       :permission-type="permissionType"
+                                       :permission-state="permissionState"
+                                       :permission="permissionTypeList.VIEW_ALL_CONTEST">
+                        <template v-slot:title>
+                            可以以访问者的方式，查看所有比赛的内容
+                        </template>
+                        <template v-slot:desc>
+                            <div class="desc">
+                                <p>
+                                    用户可以查看所有比赛的内容，包括公开的题面、参与者的提交列表（不包括提交详情）、被封榜后的榜单等信息。
+                                    但是用户在没有授权的情况下，仍然无法在比赛中进行提交
+                                </p>
+                            </div>
+                        </template>
+                    </UserPermissionSet>
+                    <!--CREATE_AND_EDIT_CONTEST 查看所有比赛-->
+                    <UserPermissionSet :user-id="userData.id"
+                                       :permission-type="permissionType"
+                                       :permission-state="permissionState"
+                                       :permission="permissionTypeList.CREATE_AND_EDIT_CONTEST">
+                        <template v-slot:title>
+                            允许用户创建/编辑自己的比赛
+                        </template>
+                        <template v-slot:desc>
+                            <div class="desc">
+                                <p>
+                                    拥有此权限后，用户可以创建/编辑自己拥有的比赛，并且可以上传图片。
+                                </p>
+                                <p class="desc-important">
+                                    注意！并非是所有参与出题的人都需要此权限，只需要比赛拥有者持有此权限后，可以将其他用户添加至本比赛，
+                                    然后这些用户虽然没有此权限，但是仍然可以进行诸如向比赛中添加题目、提交测试代码等行为
+                                </p>
+                                <p>
+                                    值得注意的是，上传图片的行为本意是让用户能够在比赛的介绍页面能够添加一些图片。
+                                    请妥善授予其他用户此权限
+                                </p>
+                            </div>
+                        </template>
+                    </UserPermissionSet>
+                    <!--EDIT_NOT_OWNER_CONTEST 编辑其他人的比赛-->
+                    <UserPermissionSet :user-id="userData.id"
+                                       :permission-type="permissionType"
+                                       :permission-state="permissionState"
+                                       :permission="permissionTypeList.EDIT_NOT_OWNER_CONTEST">
+                        <template v-slot:title>
+                            允许用户编辑其他用户所有的比赛
+                        </template>
+                        <template v-slot:desc>
+                            <div class="desc">
+                                <p>
+                                    拥有此权限后，用户可以编辑其他用户拥有的比赛
+                                </p>
+                                <p class="desc-important">
+                                    注意！这是一个非常危险的权限，这意味着将所有比赛的安全与此用户挂钩
+                                </p>
+                            </div>
+                        </template>
+                    </UserPermissionSet>
+                </div>
+                <div>
+                    <h3>
+                        其他权限
+                    </h3>
+                    <!--MANAGER_JUDGE 编辑其他人的比赛-->
+                    <UserPermissionSet :user-id="userData.id"
+                                       :permission-type="permissionType"
+                                       :permission-state="permissionState"
+                                       :permission="permissionTypeList.MANAGER_JUDGE">
+                        <template v-slot:title>
+                            管理判题系统的权限
+                        </template>
+                        <template v-slot:desc>
+                            <div class="desc">
+                                <p>
+                                    拥有此权限后，用户可以管理判题系统
+                                </p>
+                            </div>
+                        </template>
+                    </UserPermissionSet>
+                </div>
             </template>
         </div>
     </div>
