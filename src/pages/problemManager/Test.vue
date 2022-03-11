@@ -19,7 +19,8 @@
                 </div>
             </template>
             <template v-slot:body-delete="scope">
-                <InputButton v-if="scope.data.notUpload" :process="scope.data.process" type="success" @click="upload(scope.data)">
+                <InputButton v-if="scope.data.notUpload" :process="scope.data.process" type="success"
+                             @click="upload(scope.data)">
                     上传
                 </InputButton>
                 <InputButton type="error" @click="deleteTest(scope.data)">删除</InputButton>
@@ -30,7 +31,8 @@
             预览的数据内容仅为开头部分仅可见的 ASCII 内容，并非完整数据。如需要完整数据，请采用"下载"
             <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
         </div>
-        <div style="border: 1px solid var(--brand-color); border-radius: 15px; margin-top: 30px; display: grid; place-items: center">
+        <div
+            style="border: 1px solid var(--brand-color); border-radius: 15px; margin-top: 30px; display: grid; place-items: center">
             <h3>新增数据</h3>
             <InputFile placeholder="选择文件加入暂存" :multiple="true" v-model="templateFileList"></InputFile>
             <InputButton @click="save">添加至暂存区域</InputButton>
@@ -39,6 +41,7 @@
 </template>
 
 <script>
+
 export default {
     name: "Test",
     data() {
@@ -112,6 +115,10 @@ export default {
             this.tableData = tmpTableData
         },
         upload(scope) {
+            let index = this.tableData.findIndex(v => v.name === scope.name)
+            if (index === -1) {
+                return
+            }
             this.$problem.addTest(this.problemId, scope.name, this.fileDict[scope.originalName], () => {
                 this.$toast({
                     title: '成功',
@@ -120,14 +127,27 @@ export default {
                     type: 'success'
                 })
                 this.fileDict[scope.originalName] = null
-                let index = this.tableData.findIndex(v => v.name === scope.name)
-                if (index !== -1) {
-                    this.$set(this.tableData, index, {
-                        name: scope.name,
-                        notUpload: false,
-                    })
+                this.$set(this.tableData, index, {
+                    name: scope.name,
+                    notUpload: false,
+                })
+            }, proc => {
+                this.$set(this.tableData, index, {
+                    name: scope.name,
+                    originalName: scope.originalName,
+                    notUpload: true,
+                    process: proc
+                })
+            }, (status) => {
+                if (status) {
+                    return
                 }
-            }, proc => scope.process = proc)
+                this.$set(this.tableData, index, {
+                    name: scope.name,
+                    originalName: scope.originalName,
+                    notUpload: true,
+                })
+            })
         },
         save() {
             for (let i = 0; i < this.templateFileList.length; ++i) {

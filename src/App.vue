@@ -98,8 +98,8 @@ export default {
 .main-layout {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    min-width: 920px;
-    max-width: 1200px;
+    min-width: 1200px;
+    max-width: 1440px;
     margin: 0 auto;
 }
 
@@ -113,7 +113,7 @@ export default {
 }
 
 .card {
-    box-shadow: var(--open-shadowbox);
+    /*box-shadow: var(--open-shadowbox);*/
     border: 1px solid var(--border-color-level-1);
     margin-top: 10px;
     border-radius: 10px;

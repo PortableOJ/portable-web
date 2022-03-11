@@ -35,5 +35,7 @@ export default {
     margin-top: 100px;
     font-size: small;
     user-select: none;
+    border-top: 1px solid var(--border-color-level-1);
+    padding-top: 10px;
 }
 </style>

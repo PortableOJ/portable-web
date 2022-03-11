@@ -1,9 +1,9 @@
 <template>
-    <div style="display: grid; grid-template-columns: 250px minmax(500px, 1fr); margin-top: 30px">
+    <div style="display: grid; grid-template-columns: 350px minmax(500px, 1fr); margin-top: 30px">
         <div>
             <img :src="avatarUrl" alt="avatar" style="width: 250px; border-radius: 50%">
         </div>
-        <div style="display: grid; margin-left: 30px; grid-template-columns: 120px 1fr; place-items: center">
+        <div style="display: grid; grid-template-columns: 120px 1fr; place-items: center">
             <div>昵称：</div>
             <div>
                 <span style="font-size: 35px">
@@ -83,26 +83,5 @@ export default {
 </script>
 
 <style scoped>
-.user-info {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: repeat(12, 1fr);
-    place-items: center;
-}
 
-.user-info > div {
-    padding-top: 4px;
-}
-
-.user-info-title {
-    grid-column: 1 / span 2;
-}
-
-.user-info-value {
-    grid-column: 3 / span 9;
-}
-
-.user-info-operator {
-    grid-column: 12 / span 1;
-}
 </style>

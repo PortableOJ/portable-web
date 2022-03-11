@@ -1,0 +1,99 @@
+<template>
+    <div v-show="this.status !== null && this.status !== undefined"
+         class="input-desc-box"
+         v-if="permissionType[permission]">
+        <div class="input-desc">
+            <div @click="openDesc = !openDesc" :class="{
+                'desc-open-button': true,
+                'desc-open-button-open': openDesc
+            }">
+                <i class="iconfont icon-right"></i>
+            </div>
+            <InputCheckbox :value="status" @change="changePermission(permission)">
+                {{ permissionType[permission].text }}
+                (
+                <slot name="title">
+                    暂时没有对此权限的描述内容
+                </slot>
+                )
+            </InputCheckbox>
+        </div>
+        <div v-show="openDesc">
+            <slot name="desc">
+                暂时没有对此权限的描述内容
+            </slot>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "UserPermissionSet",
+    props: {
+        userId: Number,
+        permissionType: Object,
+        permission: String,
+        permissionState: Object,
+    },
+    data() {
+        return {
+            status: false,
+            openDesc: false,
+        }
+    },
+    created() {
+        this.status = this.permissionState[this.permission]
+    },
+    methods: {
+        changePermission(target) {
+            if (this.status) {
+                this.$user.removePermission(this.userId, target, () => {
+                    this.$toast({
+                        title: '成功',
+                        text: '已经移除对方的权限',
+                        duration: 'auto',
+                        type: 'success'
+                    })
+                })
+            } else {
+                this.$user.addPermission(this.userId, target, () => {
+                    this.$toast({
+                        title: '成功',
+                        text: '已经为对方添加新的权限',
+                        duration: 'auto',
+                        type: 'success'
+                    })
+                })
+            }
+        }
+    }
+}
+</script>
+
+<style scoped>
+.input-desc-box:nth-child(1n + 2) {
+    margin-top: 10px;
+}
+
+.desc-open-button {
+    transform: rotate(0deg);
+    transition: 0.2s ease all;
+    display: inline-block;
+    cursor: pointer;
+    color: var(--brand-color);
+    font-weight: 900;
+}
+
+.desc-open-button:hover {
+    transform: scale(1.5);
+}
+
+.desc-open-button-open {
+    transform: rotate(90deg);
+}
+
+.desc-open-button-open:hover {
+    transform: scale(1.5) rotate(90deg);
+}
+
+</style>
