@@ -25,7 +25,7 @@ function axiosSend(data, success, callback) {
     axios(data).then(res => {
         dealResponse(res.data, success)
         if (callback) {
-            callback()
+            callback(true)
         }
     }).catch(e => {
         Toast({
@@ -35,7 +35,7 @@ function axiosSend(data, success, callback) {
             type: 'error'
         })
         if (callback) {
-            callback()
+            callback(false)
         }
     })
 }
@@ -66,7 +66,7 @@ function post(url, data, success, callback) {
     }, success, callback)
 }
 
-function postFile(url, data, success, callback) {
+function postFile(url, data, success, process, callback) {
     let form = new FormData()
     for (let i in data) {
         form.append(i, data[i])
@@ -78,16 +78,11 @@ function postFile(url, data, success, callback) {
         responseType: 'json',
         onUploadProgress: (progressEvent) => {
             if (progressEvent.lengthComputable) {
-                let complete =
-                    (((progressEvent.loaded / progressEvent.total) * 100) | 0);
-                this.percent = complete
-                if (complete >= 100) {
-                    complete = 100
-                }
-                callback(complete)
+                const complete = (progressEvent.loaded / progressEvent.total)
+                process(complete)
             }
         }
-    }, success, null)
+    }, success, callback)
 }
 
 export default {
