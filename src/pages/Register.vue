@@ -2,8 +2,8 @@
     <div style="display: grid;place-items: center;">
         <h1>注册</h1>
         <InputText style="width: 350px" v-model="handle" placeholder="用户名"></InputText>
-        <InputText style="width: 350px" v-model="password" placeholder="密码"></InputText>
-        <InputText style="width: 350px" v-model="rePassword" placeholder="再次输入密码"></InputText>
+        <InputText type="password" style="width: 350px" v-model="password" placeholder="密码"></InputText>
+        <InputText type="password" style="width: 350px" v-model="rePassword" placeholder="再次输入密码"></InputText>
         <div style="display: grid; grid-template-columns: 1fr auto; place-items: center; width: 350px;">
             <InputText style="width: 100%" v-model="captcha" placeholder="验证码"></InputText>
             <Link @click="flushCaptcha">
