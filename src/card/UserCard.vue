@@ -21,8 +21,10 @@
             <InputText class="card-input" placeholder="用户名" v-model="handle"></InputText>
             <InputText class="card-input" type="password" placeholder="密码" v-model="password"></InputText>
             <div class="button-box">
-                <InputButton @click="login" :loading="onLogin" :disabled="onRegister">登录</InputButton>
-                <InputButton @click="register" :loading="onRegister" :disabled="onLogin">注册</InputButton>
+                <InputButton @click="login" :loading="onLogin">登录</InputButton>
+                <Link @click="register">
+                    去注册<i class="iconfont icon-right"></i>
+                </Link>
             </div>
         </template>
     </div>
@@ -49,7 +51,6 @@ export default {
             avatarUrl: '',
 
             onLogin: false,
-            onRegister: false
         }
     },
     created() {
@@ -66,7 +67,6 @@ export default {
                 this.avatarUrl = process.env.VUE_APP_AVATAR_URL + this.userData.avatar
             }
             this.onLogin = false
-            this.onRegister = false
         },
         login() {
             this.onLogin = true
@@ -75,33 +75,7 @@ export default {
             })
         },
         register() {
-            this.onRegister = true
-            this.$message({
-                text: '请再次输入密码来进行注册',
-                type: 'info',
-                inputType: 'password',
-                ok: '确定',
-                cancel: '取消注册',
-                input: true,
-                confirmOK: (v) => {
-                    if (v === this.password) {
-                        this.$user.signUp(this.handle, this.password, () => {
-                            this.init()
-                        })
-                    } else {
-                        this.$toast({
-                            title: '错误',
-                            text: '两次输入的密码不同',
-                            duration: 'auto',
-                            type: 'error'
-                        })
-                        this.onRegister = false
-                    }
-                },
-                confirmCancel: () => {
-                    this.onRegister = false
-                },
-            })
+            this.$router.push({name: 'register', query: {back: this.$route.fullPath}})
         },
         logout() {
             this.$message({
@@ -109,13 +83,14 @@ export default {
                 type: 'info',
                 inputType: 'password',
                 ok: '确定',
-                cancel: '取消注册',
+                cancel: '取消',
                 input: false,
                 confirmOK: () => {
                     this.$user.signOut()
                     this.isLogin = false
                 },
-                confirmCancel: () => {},
+                confirmCancel: () => {
+                },
             })
         },
         openMine() {
@@ -129,5 +104,7 @@ export default {
 .button-box {
     display: grid;
     grid-template-columns: auto auto;
+    place-items: center;
+    grid-gap: 10px;
 }
 </style>
