@@ -12,6 +12,10 @@ const routes = [
         name: 'home',
         component: () => import('@/pages/Home'),
     }, {
+        path: '/register',
+        name: 'register',
+        component: () => import('@/pages/Register')
+    }, {
         path: '/user/:handle',
         component: () => import('@/pages/User'),
         children: [

@@ -63,6 +63,18 @@ function post(url, data, success, callback) {
         method: 'POST',
         data: data,
         responseType: 'json',
+
+    }, success, callback)
+}
+
+function postWithCaptcha(url, data, captcha, success, callback) {
+    axiosSend({
+        url: url,
+        method: 'POST',
+        data: data,
+        headers: {captcha: captcha},
+        responseType: 'json',
+
     }, success, callback)
 }
 
@@ -89,6 +101,7 @@ export default {
     init,
     get,
     post,
+    postWithCaptcha,
     download,
     postFile,
 }

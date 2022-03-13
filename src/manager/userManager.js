@@ -91,13 +91,15 @@ function signIn(handle, password, callback) {
     }, callback);
 }
 
-function signUp(handle, password, callback) {
-    Request.post(baseUrl + '/register', {
+function signUp(handle, password, captcha, success, callback) {
+    Request.postWithCaptcha(baseUrl + '/register', {
         handle: handle,
         password: password
-    }, res => {
+    }, captcha, res => {
         userData = res
-        location.reload()
+        if (success) {
+            success()
+        }
     }, callback);
 }
 
