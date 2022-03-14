@@ -8,7 +8,9 @@
             </span>
             <div style="display: grid; grid-template-columns: auto 100px">
                 <div style="margin-right: 30px; display: grid; place-items: center start;">
-                    <Link @click="openMine">个人资料</Link>
+                    <Link @click="openMine('user')">个人资料</Link>
+                    <Link @click="openMine('user-setting')">更新资料</Link>
+                    <Link @click="openMine('user-security')">修改密码</Link>
                     <Link @click="logout">登出</Link>
                 </div>
                 <img @click="openMine"
@@ -93,8 +95,8 @@ export default {
                 },
             })
         },
-        openMine() {
-            this.$router.push({name: 'user', params: {handle: this.userData.handle}})
+        openMine(name) {
+            this.$router.push({name: name, params: {handle: this.userData.handle}})
         },
     },
 }
