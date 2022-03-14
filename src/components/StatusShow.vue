@@ -1,7 +1,7 @@
 <template>
     <div style="display: grid; place-items: center">
         <!--suppress JSValidateTypes -->
-        <Table v-if="solutionStatusType && languageType" :head="tableHead" :data="tableData">
+        <Table v-if="languageType" :head="tableHead" :data="tableData">
             <template v-slot:body-id="scope">
                 <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userId)">
                     {{ scope.data.id }}
@@ -26,14 +26,7 @@
                 {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-status="scope">
-                <!--suppress JSUnresolvedVariable -->
-                <span :class="{
-                    'accept': scope.data.status === 'ACCEPT',
-                    'fail': scope.data.status !== 'ACCEPT' && solutionStatusType[scope.data.status].endingResult,
-                    'padding': !solutionStatusType[scope.data.status].endingResult
-                }">
-                    {{ solutionStatusType[scope.data.status].text }}
-                </span>
+                <SolutionStatus :value="scope.data.status"></SolutionStatus>
             </template>
         </Table>
         <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
@@ -41,8 +34,10 @@
 </template>
 
 <script>
+import SolutionStatus from "@/components/SolutionStatus";
 export default {
     name: "StatusShow",
+    components: {SolutionStatus},
     props: {
         contestId: {
             type: Number,
@@ -109,12 +104,10 @@ export default {
             // 管理员和出题人的 handle 集合
             ownerAndCoAuthor: [],
 
-            solutionStatusType: {},
             languageType: {},
         }
     },
     created() {
-        this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
         this.$common.getEnum('LanguageType', res => this.languageType = res)
         this.pageNum = this.$common.getQueryInt(this, 'pageNum', 1)
         this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
@@ -247,16 +240,5 @@ export default {
 </script>
 
 <style scoped>
-.accept {
-    font-weight: 900;
-    color: var(--success-color);
-}
 
-.fail {
-    color: var(--error-color);
-}
-
-.padding {
-    color: var(--info-color);
-}
 </style>
