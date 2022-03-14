@@ -2,7 +2,7 @@
     <div class="card">
         <template v-if="isLogin" style="text-align: left">
             <span class="card-title">
-                <Link @click="openMine">
+                <Link @click="openMine('user')">
                     {{ userData.handle }}
                 </Link>
             </span>
@@ -13,7 +13,7 @@
                     <Link @click="openMine('user-security')">修改密码</Link>
                     <Link @click="logout">登出</Link>
                 </div>
-                <img @click="openMine"
+                <img @click="openMine('user')"
                      style="border-radius: 50%; width: 100px; cursor: pointer"
                      :src="avatarUrl" alt="avatar">
             </div>
