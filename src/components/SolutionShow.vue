@@ -16,9 +16,7 @@
                 {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-status="scope">
-                <template v-if="solutionStatusType[scope.data.status]">
-                    {{ solutionStatusType[scope.data.status].text }}
-                </template>
+                <SolutionStatus :value="scope.data.status"></SolutionStatus>
             </template>
         </Table>
         <div style="text-align: left; width: 100%">
@@ -33,9 +31,7 @@
         </div>
         <Table v-if="runningMsg.length > 0" style="width: 100%" :head="judgeMsgHead" :data="runningMsg">
             <template v-slot:body-status="scope">
-                <template v-if="solutionStatusType[scope.data.status]">
-                    {{ solutionStatusType[scope.data.status].text }}
-                </template>
+                <SolutionStatus :value="scope.data.status"></SolutionStatus>
             </template>
             <template v-slot:body-msg="scope">
                 <MarkdownBlockCode style="width: 100%; display: grid" :value="scope.data.msg"></MarkdownBlockCode>
@@ -45,8 +41,10 @@
 </template>
 
 <script>
+import SolutionStatus from "@/components/SolutionStatus";
 export default {
     name: "SolutionShow",
+    components: {SolutionStatus},
     props: {
         solutionId: Number,
         contestId: Number,
@@ -112,12 +110,10 @@ export default {
             compileMsg: '',
             runningMsg: [],
 
-            solutionStatusType: {},
             languageType: {},
         }
     },
     created() {
-        this.$common.getEnum('SolutionStatusType', res => this.solutionStatusType = res)
         this.$common.getEnum('LanguageType', res => this.languageType = res)
         let getSolutionData = res => {
             if (!res) {

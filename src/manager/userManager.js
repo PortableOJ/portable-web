@@ -9,6 +9,7 @@ let userData = {
     type: null,
     organizationType: null,
     permissionTypeSet: [],
+    avatar: null,
 }
 
 let organizationType = null
@@ -173,10 +174,21 @@ function changeOrganization(targetId, newOrganization, success) {
     }, success, null)
 }
 
-function changeAvatar(file, success) {
+function changeAvatar(cutValue, success) {
     Request.postFile(baseUrl + '/avatar', {
-        fileData: file
-    }, success, null)
+        fileData: cutValue.file,
+        left: cutValue.left,
+        top: cutValue.top,
+        width: cutValue.width,
+        height: cutValue.height,
+    }, success, null, null)
+}
+
+function changePassword(oldPassword, newPassword, success) {
+    Request.post(baseUrl + '/changePassword', {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+    }, success, null, null)
 }
 
 export default {
@@ -202,4 +214,5 @@ export default {
     changeOrganization,
 
     changeAvatar,
+    changePassword,
 }
