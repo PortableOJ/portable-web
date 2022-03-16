@@ -271,6 +271,30 @@
                 </div>
                 <div>
                     <h3>
+                        批量用户管理
+                    </h3>
+                    <div class="desc">
+                        这里均为较为危险的权限，因为用户可以不经过审核创造大量的数据，请谨慎授权
+                    </div>
+                    <!--CREATE_AND_EDIT_BATCH 创建和拥有批量用户-->
+                    <UserPermissionSet :user-id="userData.id"
+                                       :permission-type="permissionType"
+                                       :permission-state="permissionState"
+                                       :permission="permissionTypeList.CREATE_AND_EDIT_BATCH">
+                        <template v-slot:title>
+                            可以创建、拥有、管理批量用户
+                        </template>
+                        <template v-slot:desc>
+                            <div class="desc">
+                                <p>
+                                    用户可以快速创建大量的用户，并与比赛配合使用，使得比赛可以使用提供的批量用户账号。这些账号较为干净，且不可以做许多事情
+                                </p>
+                            </div>
+                        </template>
+                    </UserPermissionSet>
+                </div>
+                <div>
+                    <h3>
                         其他权限
                     </h3>
                     <!--MANAGER_JUDGE 编辑其他人的比赛-->
