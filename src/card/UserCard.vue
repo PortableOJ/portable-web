@@ -9,8 +9,9 @@
             <div style="display: grid; grid-template-columns: auto 100px">
                 <div style="margin-right: 30px; display: grid; place-items: center start;">
                     <Link @click="openMine('user')">个人资料</Link>
-                    <Link @click="openMine('user-setting')">更新资料</Link>
-                    <Link @click="openMine('user-security')">修改密码</Link>
+                    <Link v-if="userData.type === 'NORMAL'" @click="openMine('user-setting')">更新资料</Link>
+                    <Link v-if="userData.type === 'NORMAL'" @click="openMine('user-security')">修改密码</Link>
+                    <Link v-if="userData.type === 'BATCH'" :disabled="!userData.contestId" @click="openContest">前往比赛</Link>
                     <Link @click="logout">登出</Link>
                 </div>
                 <img @click="openMine('user')"
@@ -98,6 +99,9 @@ export default {
         openMine(name) {
             this.$router.push({name: name, params: {handle: this.userData.handle}})
         },
+        openContest() {
+            this.$router.push({name: 'contest', params: {contestId: this.userData.contestId}})
+        }
     },
 }
 </script>

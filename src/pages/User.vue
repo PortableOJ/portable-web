@@ -40,8 +40,9 @@ export default {
             this.step = this.$route.name.split('-')[1]
             this.handle = this.$route.params.handle
             this.$user.getUserInfo(this.handle, res => {
-                let isDominate = res.type === 'NORMAL' && this.$user.isDominate(res.organizationType)
-                let isSelf = res.handle === this.$user.getCurUserHandle()
+                const normal = res.type === 'NORMAL'
+                const isDominate = normal && this.$user.isDominate(res.organizationType)
+                const isSelf = res.handle === this.$user.getCurUserHandle()
                 this.menuOption = [
                     {
                         label: res.handle,
@@ -49,15 +50,15 @@ export default {
                     }, {
                         label: '更新信息',
                         value: 'setting',
-                        hidden: !isSelf,
+                        hidden: !isSelf || !normal,
                     }, {
                         label: '密码与安全',
                         value: 'security',
-                        hidden: !isSelf,
+                        hidden: !isSelf || !normal,
                     }, {
                         label: '管理用户',
                         value: 'manager',
-                        hidden: !isDominate
+                        hidden: !isDominate || !normal
                     }
                 ]
             })
