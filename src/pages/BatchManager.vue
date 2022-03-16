@@ -16,6 +16,12 @@
                 <template v-slot:body-status="scope">
                     {{ batchStatusType[scope.data.status].text }}
                 </template>
+                <template v-slot:body-operator="scope">
+                    <InputButton @click="changeStatus(scope.data.id, 'DISABLE')" v-if="scope.data.status === 'NORMAL'">
+                        禁止登录
+                    </InputButton>
+                    <InputButton @click="changeStatus(scope.data.id, 'NORMAL')" v-else>允许登录</InputButton>
+                </template>
             </Table>
             <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
         </div>
@@ -143,6 +149,7 @@ export default {
                             duration: 'auto',
                             type: 'success'
                         })
+                    }, () => {
                         this.onNew = false
                     })
                 },
@@ -153,6 +160,29 @@ export default {
         download() {
             console.log(this.userHandleAndPassword)
             window.open(this.userHandleAndPassword, '_blank')
+        },
+        changeStatus(id, newStatus) {
+            this.$batch.updateStatus(id, newStatus, () => {
+                const i = this.tableData.findIndex(v => v.id === id)
+                if (i !== -1) {
+                    let tmp = this.tableData[i]
+                    this.$set(this.tableData, i, {
+                        id: id,
+                        contestId: tmp.contestId,
+                        contestTitle: tmp.contestTitle,
+                        prefix: tmp.prefix,
+                        count: tmp.count,
+                        ipLock: tmp.ipLock,
+                        status: newStatus
+                    })
+                }
+                this.$toast({
+                    title: '更新成功',
+                    text: '成功更新状态',
+                    duration: 'auto',
+                    type: 'success'
+                })
+            })
         }
     }
 }

@@ -9,8 +9,8 @@ function getList(pageNum, pageSize, success) {
     }, success, null)
 }
 
-function newBatch(batch, success) {
-    Request.post(baseUrl + '/new', batch, success, null)
+function newBatch(batch, success, callback) {
+    Request.post(baseUrl + '/new', batch, success, callback)
 }
 
 function updateStatus(id, newStatus, success) {
