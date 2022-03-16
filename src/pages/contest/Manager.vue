@@ -38,6 +38,14 @@
                     <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
                 </div>
             </div>
+            <div v-if="contestData.accessType === 'BATCH'">
+                <h3>批量用户组 ID</h3>
+                <div style="display: grid; grid-template-columns: 250px 50px; place-items: center ">
+                    <!--suppress JSUnresolvedVariable -->
+                    <InputText style="width: 250px" :read-only="notOwner" v-model="contestData.batchId"></InputText>
+                    <Link @click="checkBatch">校验</Link>
+                </div>
+            </div>
             <div>
                 <h3>封榜时间(分钟)</h3>
                 <InputText :read-only="notOwner" v-model="contestData.freezeTime"></InputText>
@@ -397,6 +405,29 @@ export default {
                     })
                 })
             }
+        },
+        checkBatch() {
+            // noinspection JSUnresolvedVariable
+            this.$batch.get(this.contestData.batchId, res => {
+                if (res.contestId == null) {
+                    this.$toast({
+                        title: '成功',
+                        text: '这是一个全新的批量用户组',
+                        duration: 'auto',
+                        type: 'success'
+                    })
+                } else {
+                    // noinspection JSUnresolvedVariable
+                    this.$toast({
+                        title: '注意',
+                        text: `请注意，这个批量用户组已经被分配至比赛 "${res.contestTitle}"，如果继续操作，
+                        将会使得这个用户组不再能登录比赛 "${res.contestTitle}", 而只能登录本比赛，若不希望发生如上事件，
+                        请刷新页面来放弃所有的更改`,
+                        duration: -1,
+                        type: 'warning'
+                    })
+                }
+            })
         }
     }
 }

@@ -32,6 +32,10 @@ export default {
                     label: '<i class="iconfont icon-dashboard" />服务',
                     value: 'judge',
                     hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
+                }, {
+                    label: '<i class="iconfont icon-userinfo" />批量用户',
+                    value: 'batch',
+                    hidden: !this.$user.hasPermission(this.$user.permissionTypeList.CREATE_AND_EDIT_BATCH)
                 }
             ],
             hiddenOption: {
@@ -48,27 +52,8 @@ export default {
         }
     },
     created() {
-        this.$user.registerUserStatusChange('menu', this.init)
     },
     methods: {
-        init() {
-            this.selectOption = [
-                {
-                    label: '主页',
-                    value: 'home',
-                }, {
-                    label: '题库',
-                    value: 'problemSet',
-                }, {
-                    label: '判题',
-                    value: 'status',
-                }, {
-                    label: '服务',
-                    value: 'judge',
-                    hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
-                }
-            ]
-        },
         toSelect(value) {
             if (value === this.$route.name) {
                 return
@@ -137,4 +122,8 @@ export default {
     margin-top: 15px !important;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
 </style>
