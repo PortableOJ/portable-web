@@ -116,7 +116,7 @@
                     <InputButton @click="addProblem">添加</InputButton>
                 </div>
             </div>
-            <div style="display: block">
+            <div style="display: block; text-align: left">
                 <h3>公告</h3>
                 <MarkdownEdit :read-only="notOwner" style="width: 100%"
                               v-model="contestData.announcement"></MarkdownEdit>
