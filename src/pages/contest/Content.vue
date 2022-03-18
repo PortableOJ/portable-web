@@ -39,10 +39,6 @@
                 )
             </template>
         </Table>
-        <div class="announcement-box" v-if="announcement && announcement.length > 0">
-            <h3>公告</h3>
-            <div v-html="announcement" class="announcement"></div>
-        </div>
     </div>
 </template>
 
@@ -116,14 +112,4 @@ export default {
 </script>
 
 <style scoped>
-.announcement {
-    padding: 40px 40px;
-    margin: 20px 20px;
-    border-radius: 30px;
-    background: var(--border-color-level-3);
-}
-.announcement-box {
-    border-radius: 15px;
-    border: 1px solid var(--brand-color);
-}
 </style>

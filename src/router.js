@@ -110,7 +110,11 @@ const routes = [
             {
                 path: '',
                 name: 'contest',
-                redirect: '/contest/:contestId/content'
+                redirect: '/contest/:contestId/info'
+            }, {
+                path: 'info',
+                name: 'contest-info',
+                component: () => import('@/pages/contest/Info'),
             }, {
                 path: 'content',
                 name: 'contest-content',
@@ -145,6 +149,10 @@ const routes = [
                 component: () => import('@/pages/contest/Manager'),
             }
         ]
+    }, {
+        path: '/batch',
+        name: 'batch',
+        component: () => import('@/pages/BatchManager')
     },
 
     // 404 页面要放在最后

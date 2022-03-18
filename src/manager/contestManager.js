@@ -9,6 +9,12 @@ function getList(pageNum, pageSize, success) {
     }, success, null)
 }
 
+function getContestInfo(contestId, success) {
+    Request.get(baseUrl + '/getInfo', {
+        contestId: contestId
+    }, success, null)
+}
+
 function getContestData(contestId, success) {
     Request.get(baseUrl + '/get', {
         contestId: contestId
@@ -103,6 +109,7 @@ function submit(contestId, problemIndex, code, languageType, success) {
 
 export default {
     getList,
+    getContestInfo,
     getContestData,
     getContestDataAdmin,
     getContestProblem,

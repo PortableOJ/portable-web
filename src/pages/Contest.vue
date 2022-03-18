@@ -88,7 +88,7 @@ export default {
         if (this.contestId === 0) {
             return;
         }
-        this.$contest.getContestData(this.contestId, res => {
+        this.$contest.getContestInfo(this.contestId, res => {
             this.contestData = res
             this.sliderInterval = setInterval(() => {
                 let usedTime = new Date().getTime() - new Date(this.contestData.startTime).getTime()
@@ -112,6 +112,9 @@ export default {
             }
             this.selectOption = [
                 {
+                    label: '公告',
+                    value: 'info',
+                }, {
                     label: '题目',
                     value: 'content',
                 }, {
