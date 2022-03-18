@@ -137,7 +137,7 @@ export default {
                 } else {
                     this.$contest.getContestStatus(this.contestId, this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
                 }
-                this.$contest.getContestData(this.contestId, res => {
+                this.$contest.getContestInfo(this.contestId, res => {
                     // noinspection JSUnresolvedVariable
                     this.ownerAndCoAuthor = res.coAuthor
                     this.ownerAndCoAuthor.push(res.ownerHandle)

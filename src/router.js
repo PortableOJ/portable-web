@@ -110,7 +110,11 @@ const routes = [
             {
                 path: '',
                 name: 'contest',
-                redirect: '/contest/:contestId/content'
+                redirect: '/contest/:contestId/info'
+            }, {
+                path: 'info',
+                name: 'contest-info',
+                component: () => import('@/pages/contest/Info'),
             }, {
                 path: 'content',
                 name: 'contest-content',

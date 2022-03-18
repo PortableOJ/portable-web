@@ -1,6 +1,7 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
+            <!--suppress JSValidateTypes -->
             <Table :head="tableHead" :data="tableData">
                 <template v-slot:body-id="scope">
                     <Link @click="openContest(scope.data)">{{ scope.data.id }}</Link>
@@ -18,6 +19,11 @@
                 </template>
                 <template v-slot:body-accessType="scope">
                     {{ contestAccessType[scope.data.accessType].text }}
+                </template>
+                <template v-slot:body-status="scope">
+                    <Tag type="success"  v-if="status(scope.data.startTime, scope.data.duration) === -1">未开始</Tag>
+                    <Tag type="error" v-if="status(scope.data.startTime, scope.data.duration) === 0">正在比赛中</Tag>
+                    <Tag type="info" v-if="status(scope.data.startTime, scope.data.duration) === 1">已经结束</Tag>
                 </template>
             </Table>
             <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
@@ -62,6 +68,10 @@ export default {
                 }, {
                     label: '访问限制',
                     value: 'accessType',
+                    width: '50',
+                }, {
+                    label: '当前状态',
+                    value: 'status',
                     width: '50',
                 }
             ],
@@ -145,6 +155,18 @@ export default {
         newContest() {
             this.$router.push({name: 'contest-manager', params: {contestId: '0'}})
         },
+        status(startTime, duration) {
+            const start = new Date(startTime)
+            const end = new Date(startTime).add(duration)
+            const now = new Date()
+            if (now < start) {
+                return -1
+            } else if (now < end) {
+                return 0
+            } else {
+                return 1
+            }
+        }
     }
 }
 </script>
