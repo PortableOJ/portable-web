@@ -71,7 +71,7 @@
                 </InputSelect>
             </div>
             <div style="border: 1px solid var(--border-color-level-1)">
-                <InputCode mode="text/x-c++src" v-model="submitCode"></InputCode>
+                <InputCode mode="text/x-c++src" placeholder="请输入需要提交的代码" @change="updateCode"></InputCode>
             </div>
             <InputButton @click="submit">提交</InputButton>
         </div>
@@ -150,7 +150,7 @@ export default {
             problemType: {},
             problemStatusType: {},
 
-            submitCode: '',
+            submitCode: '123',
         }
     },
     created() {
@@ -186,6 +186,9 @@ export default {
             let t = this.problemData.specialMemoryLimit[this.curLanguage]
             if (t) return t
             return this.problemData.defaultMemoryLimit
+        },
+        updateCode(v) {
+            this.submitCode = v
         },
         submit() {
             if (this.languageSupport.findIndex(value => value.value === this.curLanguage) === -1) {
