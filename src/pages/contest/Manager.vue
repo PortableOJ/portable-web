@@ -116,9 +116,9 @@
                     <InputButton @click="addProblem">添加</InputButton>
                 </div>
             </div>
-            <div style="display: block">
+            <div style="display: block; text-align: left">
                 <h3>公告</h3>
-                <MarkdownEdit :read-only="notOwner" style="width: 100%"
+                <MarkdownEdit :min-height="100" :read-only="notOwner" style="width: 100%"
                               v-model="contestData.announcement"></MarkdownEdit>
             </div>
         </div>
@@ -206,7 +206,7 @@ export default {
                 password: '',
                 penaltyTime: 0,
                 problemList: [],
-                startTime: '2022-03-01T05:23',
+                startTime: new Date().format("yyyy-MM-ddThh:mm"),
                 title: ''
             }
             this.notOwner = false
@@ -385,6 +385,7 @@ export default {
             for (let i = 0; i < this.problemList.length; i++) {
                 this.contestData.problemList.push(this.problemList[i].realId)
             }
+            this.contestData.startTime = new Date(this.contestData.startTime)
             if (this.contestId === 0) {
                 this.$contest.newContest(this.contestData, id => {
                     this.$toast({
@@ -394,6 +395,7 @@ export default {
                         type: 'success'
                     })
                     this.$router.replace({name: 'contest-manager', params: {contestId: id}})
+                    location.reload()
                 })
             } else {
                 this.$contest.updateContest(this.contestData, () => {
@@ -405,6 +407,7 @@ export default {
                     })
                 })
             }
+            this.contestData.startTime = this.contestData.startTime.format("yyyy-MM-ddThh:mm")
         },
         checkBatch() {
             // noinspection JSUnresolvedVariable

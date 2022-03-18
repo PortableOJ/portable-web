@@ -70,8 +70,8 @@
                              @change="initLimit">
                 </InputSelect>
             </div>
-            <div>
-                <InputTextarea :min-height="100" :code-mode="true" v-model="submitCode"></InputTextarea>
+            <div style="border: 1px solid var(--border-color-level-1)">
+                <InputCode mode="text/x-c++src" v-model="submitCode"></InputCode>
             </div>
             <InputButton @click="submit">提交</InputButton>
         </div>

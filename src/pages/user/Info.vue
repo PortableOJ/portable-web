@@ -16,20 +16,22 @@
                      v-if="accountType[userData.type]">{{ accountType[userData.type].text }}
                 </Tag>
             </div>
-            <div v-if="userData.type === 'NORMAL'">所属组织：</div>
-            <div v-if="userData.type === 'NORMAL'">{{ organizationType[userData.organizationType].text }}</div>
-            <div v-if="userData.type === 'NORMAL'">提交通过率：</div>
-            <div v-if="userData.type === 'NORMAL'">
-                {{ userData.accept }} / {{ userData.submission }}
-                (
-                <template v-if="userData.submission !== 0">
-                    {{ (userData.accept / userData.submission * 100).toFixed(2) }} %
-                </template>
-                <template v-else>
-                    -
-                </template>
-                )
-            </div>
+            <template v-if="userData.type === 'NORMAL'">
+                <div>所属组织：</div>
+                <div>{{ organizationType[userData.organizationType].text }}</div>
+                <div>提交通过率：</div>
+                <div>
+                    {{ userData.accept }} / {{ userData.submission }}
+                    (
+                    <template v-if="userData.submission !== 0">
+                        {{ (userData.accept / userData.submission * 100).toFixed(2) }} %
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                    )
+                </div>
+            </template>
         </div>
     </div>
 </template>
