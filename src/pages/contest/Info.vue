@@ -1,5 +1,8 @@
 <template>
-    <div v-html="announcement" class="announcement"></div>
+    <div style="width: 100%">
+        <h1>公告</h1>
+        <div v-html="announcement" class="announcement"></div>
+    </div>
 </template>
 
 <script>
