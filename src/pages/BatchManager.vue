@@ -10,8 +10,10 @@
                 </template>
                 <template v-slot:body-ipLock="scope">
                     <!--suppress JSUnresolvedVariable -->
-                    <i class="iconfont icon-success" v-if="scope.data.ipLock"></i>
-                    <i class="iconfont icon-error" v-else></i>
+                    <InputButton style="width: 40px" @click="changeIpLock(scope.data.id, scope.data.ipLock)">
+                        <i class="iconfont icon-success" v-if="scope.data.ipLock"></i>
+                        <i class="iconfont icon-error" v-else></i>
+                    </InputButton>
                 </template>
                 <template v-slot:body-status="scope">
                     {{ batchStatusType[scope.data.status].text }}
@@ -161,20 +163,29 @@ export default {
             console.log(this.userHandleAndPassword)
             window.open(this.userHandleAndPassword, '_blank')
         },
+        changeIpLock(id, lastIpLock) {
+            this.$batch.updateIpLock(id, !lastIpLock, () => {
+                this.$toast({
+                    title: '更新成功',
+                    text: '成功更新 IP 锁状态',
+                    duration: 'auto',
+                    type: 'success'
+                })
+                const i = this.tableData.findIndex(v => v.id === id)
+                if (i !== -1) {
+                    let tmp = this.tableData[i]
+                    tmp.ipLock = !tmp.ipLock
+                    this.$set(this.tableData, i, this.tableData[i])
+                }
+            })
+        },
         changeStatus(id, newStatus) {
             this.$batch.updateStatus(id, newStatus, () => {
                 const i = this.tableData.findIndex(v => v.id === id)
                 if (i !== -1) {
                     let tmp = this.tableData[i]
-                    this.$set(this.tableData, i, {
-                        id: id,
-                        contestId: tmp.contestId,
-                        contestTitle: tmp.contestTitle,
-                        prefix: tmp.prefix,
-                        count: tmp.count,
-                        ipLock: tmp.ipLock,
-                        status: newStatus
-                    })
+                    tmp.status = newStatus
+                    this.$set(this.tableData, i, this.tableData[i])
                 }
                 this.$toast({
                     title: '更新成功',

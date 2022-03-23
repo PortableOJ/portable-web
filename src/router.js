@@ -39,6 +39,10 @@ const routes = [
                 path: 'manager',
                 name: 'user-manager',
                 component: () => import('@/pages/user/Manager')
+            }, {
+                path: 'batch',
+                name: 'user-batch',
+                component: () => import('@/pages/user/Batch')
             }
         ]
     }, {

@@ -16,7 +16,7 @@
                      v-if="accountType[userData.type]">{{ accountType[userData.type].text }}
                 </Tag>
             </div>
-            <template v-if="userData.type === 'NORMAL'">
+            <template v-if="userData.type !== 'BATCH'">
                 <div>所属组织：</div>
                 <div>{{ organizationType[userData.organizationType].text }}</div>
                 <div>提交通过率：</div>
@@ -30,6 +30,16 @@
                         -
                     </template>
                     )
+                </div>
+            </template>
+            <template v-else>
+                <div>关联比赛</div>
+                <div>
+                    <Link
+                        :disabled="!userData.contestId"
+                        @click="openContest(userData.contestId)">点击前往关联比赛
+                        <i class="iconfont icon-right"></i>
+                    </Link>
                 </div>
             </template>
         </div>
@@ -73,6 +83,9 @@ export default {
                 this.userData = res
                 this.avatarUrl = process.env.VUE_APP_AVATAR_URL + this.userData.avatar
             })
+        },
+        openContest(id) {
+            this.$router.push({name: 'contest', params: {contestId: id}})
         }
     },
     watch: {

@@ -20,6 +20,13 @@ function updateStatus(id, newStatus, success) {
     }, success, null)
 }
 
+function updateIpLock(id, newIpLock, success) {
+    Request.post(baseUrl + '/updateIpLock', {
+        id: id,
+        ipLock: newIpLock
+    }, success, null)
+}
+
 function get(id, success) {
     Request.get(baseUrl + '/check', {
         id: id
@@ -30,5 +37,6 @@ export default {
     getList,
     newBatch,
     updateStatus,
+    updateIpLock,
     get,
 }

@@ -29,13 +29,13 @@ export default {
                     label: '<i class="iconfont icon-data-analyse" />比赛',
                     value: 'contestSet',
                 }, {
-                    label: '<i class="iconfont icon-dashboard" />服务',
-                    value: 'judge',
-                    hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
-                }, {
                     label: '<i class="iconfont icon-userinfo" />批量用户',
                     value: 'batch',
                     hidden: !this.$user.hasPermission(this.$user.permissionTypeList.CREATE_AND_EDIT_BATCH)
+                }, {
+                    label: '<i class="iconfont icon-dashboard" />服务',
+                    value: 'judge',
+                    hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
                 }
             ],
             hiddenOption: {
