@@ -59,6 +59,10 @@ export default {
                         label: '管理用户',
                         value: 'manager',
                         hidden: !isDominate || !normal
+                    }, {
+                        label: '管理用户',
+                        value: 'batch',
+                        hidden: !res.isOwner
                     }
                 ]
             })

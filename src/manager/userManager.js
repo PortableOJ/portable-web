@@ -118,14 +118,26 @@ function signOut() {
     })
 }
 
-function getUserInfo(handle, callback) {
+function getUserInfo(handle, success) {
     if (isLogin() && handle === userData.handle) {
-        callback(userData)
+        success(userData)
         return
     }
-    Request.get(baseUrl + '/getUserInfo', {handle: handle}, res => {
-        callback(res)
-    })
+    Request.get(baseUrl + '/getUserInfo', {
+        handle: handle
+    }, success)
+}
+
+function getBatchUserAdminInfo(handle, success) {
+    Request.get(baseUrl + '/getBatchUserAdminInfo', {
+        handle: handle
+    }, success)
+}
+
+function clearIpList(handle, success) {
+    Request.post(baseUrl + '/clearIpList', {
+        name: handle
+    }, success)
 }
 
 function getCurUserData() {
@@ -204,6 +216,8 @@ export default {
     signIn,
     signOut,
     getUserInfo,
+    getBatchUserAdminInfo,
+    clearIpList,
     getCurUserData,
     getCurUserId,
     getCurUserHandle,
