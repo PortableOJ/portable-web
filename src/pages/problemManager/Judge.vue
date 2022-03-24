@@ -1,20 +1,24 @@
 <template>
     <div>
-        <div v-if="problemData !== null"
-             :class="{'diy': problemData.judgeCodeType === 'DIY', 'no-diy': problemData.judgeCodeType !== 'DIY'}">
-            <InputSelect placeholder="选择使用的 judge 代码"
-                         v-model="problemData.judgeCodeType"
-                         :data="judgeCodeTypeList"></InputSelect>
-            <div v-show="problemData.judgeCodeType === 'DIY'" style="margin-top: 30px">
-                请在此处键入自定义的 Judge 代码
-                <InputTextarea style="width: 100%"
-                               :min-height="100"
-                               v-model="problemData.judgeCode">
-                </InputTextarea>
+        <div v-if="problemData !== null">
+            <div style="width: 100%; display: grid; grid-template-columns: auto 1fr;text-align: left;">
+                <InputSelect placeholder="选择使用的 judge 代码"
+                             v-model="problemData.judgeCodeType"
+                             :data="judgeCodeTypeList">
+                </InputSelect>
+                <div v-if="problemData.judgeCodeType === 'DIY'" style="max-width: 650px">
+                    <InputCode
+                        :value="problemData.judgeCode"
+                        style="border: 1px solid var(--border-color-level-1)"
+                        mode="text/x-c++src"
+                        placeholder="请在此处键入自定义的 Judge 代码"
+                        @change="v => problemData.judgeCode = v">
+                    </InputCode>
+                </div>
             </div>
-        </div>
-        <div class="no-diy">
-            <InputButton @click="save">保存</InputButton>
+            <div style="display: grid; place-items: center;">
+                <InputButton @click="save">保存</InputButton>
+            </div>
         </div>
         <Link style="margin-top: 50px" @click="openHelp">
             关于本页面的帮助，请前往 PortableTestLib
@@ -70,14 +74,5 @@ export default {
 </script>
 
 <style scoped>
-.diy {
-    display: grid;
-    grid-template-columns: auto 1fr;
-}
-
-.no-diy {
-    display: grid;
-    place-items: center;
-}
 
 </style>
