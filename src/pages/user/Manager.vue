@@ -320,7 +320,7 @@
 </template>
 
 <script>
-import UserPermissionSet from "@/components/UserPermissionSet";
+import UserPermissionSet from "@/kit/UserPermissionSet";
 
 export default {
     name: "Manager",

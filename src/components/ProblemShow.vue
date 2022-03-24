@@ -1,7 +1,7 @@
 <template>
     <div style="display: grid; place-items: center">
         <h1>{{ problemData.title }}</h1>
-        <div style="text-align: left; width: 80%">
+        <div style="text-align: left; width: 80%;">
             <div style="display: grid; grid-template-columns: auto 1fr">
                 <h3>
                     题目配置
@@ -70,7 +70,7 @@
                              @change="initLimit">
                 </InputSelect>
             </div>
-            <div style="border: 1px solid var(--border-color-level-1)">
+            <div style="border: 1px solid var(--border-color-level-1); max-width: 800px">
                 <InputCode mode="text/x-c++src" placeholder="请输入需要提交的代码" @change="updateCode"></InputCode>
             </div>
             <InputButton @click="submit">提交</InputButton>
