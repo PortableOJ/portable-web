@@ -41,6 +41,9 @@
 <script>
 export default {
     name: "Rank",
+    props: {
+        freeze: Boolean,
+    },
     data() {
         return {
             contestId: parseInt(this.$route.params.contestId),
@@ -103,7 +106,7 @@ export default {
                     query: query
                 })
             }
-            this.$contest.rank(this.contestId, this.pageNum, this.pageSize, res => {
+            this.$contest.rank(this.contestId, this.pageNum, this.pageSize, this.freeze, res => {
                 this.pageNum = res.pageNum
                 this.pageSize = res.pageSize
                 this.totalNum = res.totalNum
@@ -167,6 +170,11 @@ export default {
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
         },
+    },
+    watch: {
+        freeze() {
+            this.initData()
+        }
     }
 }
 </script>

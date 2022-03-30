@@ -2,35 +2,35 @@
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
             <div style="display: grid; place-items: center">
-                <h1 v-if="contestData">{{ contestData.title }}</h1>
-                <TabMenu v-if="contestData" style="width: 100%" @change="toSelect" v-model="step"
+                <h1 v-if="contestInfo">{{ contestInfo.title }}</h1>
+                <TabMenu v-if="contestInfo" style="width: 100%" @change="toSelect" v-model="step"
                          :options="selectOption"></TabMenu>
-                <router-view></router-view>
+                <router-view :freeze="freeze"></router-view>
             </div>
         </div>
         <div>
             <UserCard></UserCard>
             <ImageUpload v-if="step === 'manager'"></ImageUpload>
-            <div class="card" v-if="contestData">
-                <span class="card-title">{{ contestData.title }}</span>
+            <div class="card" v-if="contestInfo">
+                <span class="card-title">{{ contestInfo.title }}</span>
                 <div>
                     比赛管理员：
-                    <Link @click="openUser(contestData.ownerHandle)">{{ contestData.ownerHandle }}</Link>
+                    <Link @click="openUser(contestInfo.ownerHandle)">{{ contestInfo.ownerHandle }}</Link>
                 </div>
                 <div>
                     合作出题人：
                     <!--suppress JSUnresolvedVariable -->
                     <Link style="margin-right: 10px" @click="openUser(handle)" :key="handle"
-                          v-for="handle in contestData.coAuthor">
+                          v-for="handle in contestInfo.coAuthor">
                         {{ handle }}
                     </Link>
                 </div>
                 <div>
-                    开始时间：{{ new Date(contestData.startTime).format("yyyy-MM-dd hh:mm:ss") }}
+                    开始时间：{{ new Date(contestInfo.startTime).format("yyyy-MM-dd hh:mm:ss") }}
                 </div>
                 <div>
                     持续时间：{{
-                        `${(contestData.duration / 60).toFixed(0).padStart(2, '0')}:${(contestData.duration % 60).toString().padStart(2, '0')}:00`
+                        `${(contestInfo.duration / 60).toFixed(0).padStart(2, '0')}:${(contestInfo.duration % 60).toString().padStart(2, '0')}:00`
                     }}
                 </div>
                 <div v-if="leftTime > 0">
@@ -46,6 +46,10 @@
                              :max="100"
                              :min="0">
                 </InputSlider>
+            </div>
+            <div class="card" v-if="step === 'rank' && isOwner">
+                <span class="card-title">榜单属性</span>
+                <InputCheckbox v-model="freeze">显示封榜后的榜单</InputCheckbox>
             </div>
         </div>
     </div>
@@ -64,7 +68,7 @@ export default {
     data() {
         return {
             contestId: 0,
-            contestData: null,
+            contestInfo: null,
             slider: 0,
             leftTime: 0,
             sliderInterval: null,
@@ -80,6 +84,10 @@ export default {
                 test_solution: '测试',
             },
             step: null,
+            // 是否是比赛的管理员
+            isOwner: false,
+            // 使用封榜后的榜单
+            freeze: true,
         }
     },
     created() {
@@ -89,27 +97,24 @@ export default {
             return;
         }
         this.$contest.getContestInfo(this.contestId, res => {
-            this.contestData = res
+            this.contestInfo = res
             this.sliderInterval = setInterval(() => {
-                let usedTime = new Date().getTime() - new Date(this.contestData.startTime).getTime()
+                let usedTime = new Date().getTime() - new Date(this.contestInfo.startTime).getTime()
                 usedTime /= 1000
                 this.leftTime = -1
                 if (usedTime < 0) {
                     this.slider = 0
-                } else if (usedTime > this.contestData.duration * 60) {
+                } else if (usedTime > this.contestInfo.duration * 60) {
                     this.slider = 100
                 } else {
-                    this.slider = (usedTime / this.contestData.duration) / 6 * 10;
-                    this.leftTime = this.contestData.duration * 60 - usedTime
+                    this.slider = (usedTime / this.contestInfo.duration) / 6 * 10;
+                    this.leftTime = this.contestInfo.duration * 60 - usedTime
                     this.leftTime = this.leftTime.toFixed(0)
                 }
             }, 10)
         })
         this.$contest.auth(this.contestId, null, res => {
-            let hidden = true
-            if (res === 'ADMIN' || res === 'CO_AUTHOR') {
-                hidden = false
-            }
+            this.isOwner = res === 'ADMIN' || res === 'CO_AUTHOR';
             this.selectOption = [
                 {
                     label: '公告',
@@ -123,14 +128,14 @@ export default {
                 }, {
                     label: '测试',
                     value: 'test_status',
-                    hidden: hidden
+                    hidden: !this.isOwner
                 }, {
                     label: '榜单',
                     value: 'rank',
                 }, {
                     label: '管理',
                     value: 'manager',
-                    hidden: hidden
+                    hidden: !this.isOwner
                 }
             ]
         })
@@ -144,7 +149,7 @@ export default {
         },
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
-        }
+        },
     },
     watch: {
         $route(to) {
