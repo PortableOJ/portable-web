@@ -9,11 +9,6 @@
             <template v-slot:body-languageType="scope">
                 {{ languageType[scope.data.languageType].text }}
             </template>
-            <template v-slot:body-solutionResult="scope">
-                <Link v-if="scope.solutionId !== null" @click="toSolution(scope.data.solutionId)">
-                    {{ scope.data.solutionResult }}
-                </Link>
-            </template>
             <template v-slot:body-operator>
                 <InputButton @click="showStdCode">查看</InputButton>
                 <InputButton @click="downloadStdCode">下载</InputButton>
@@ -28,7 +23,8 @@
                 {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-solutionStatusType="scope">
-                <Link v-if="scope.solutionId !== null" @click="toSolution(scope.data.solutionId)">
+                <!--TODO: 允许访问-->
+                <Link :disabled="true" v-if="scope.data.solutionId" @click="toSolution(scope.data.solutionId)">
                     {{ solutionStatusType[scope.data.solutionStatusType].text }}
                 </Link>
             </template>
@@ -48,7 +44,7 @@
             <InputTextarea :min-height="100" :code-mode="true" v-model="code" :key="keyNum"></InputTextarea>
             <div style="display: grid; grid-template-columns: auto auto; place-items: center">
                 <InputButton @click="updateStd">更新标准代码</InputButton>
-                <InputButton @click="addTest">添加至覆盖测试代码</InputButton>
+                <InputButton @click="addTest">添加/覆盖测试代码</InputButton>
             </div>
         </div>
     </div>
