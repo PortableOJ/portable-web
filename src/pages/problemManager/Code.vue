@@ -23,7 +23,8 @@
                 {{ languageType[scope.data.languageType].text }}
             </template>
             <template v-slot:body-solutionStatusType="scope">
-                <Link v-if="scope.data.solutionId" @click="toSolution(scope.data.solutionId)">
+                <!--TODO: 允许访问-->
+                <Link :disabled="true" v-if="scope.data.solutionId" @click="toSolution(scope.data.solutionId)">
                     {{ solutionStatusType[scope.data.solutionStatusType].text }}
                 </Link>
             </template>
