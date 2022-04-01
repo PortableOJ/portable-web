@@ -8,14 +8,16 @@
             </template>
             <template v-slot:body-input="scope">
                 <div v-if="!scope.data.notUpload">
-                    <InputButton @click="showInput(scope.data.name)">预览</InputButton>
-                    <InputButton @click="downloadInput(scope.data.name)">下载</InputButton>
+                    <Link @click="showInput(scope.data.name)">预览</Link>
+                    |
+                    <Link @click="downloadInput(scope.data.name)">下载</Link>
                 </div>
             </template>
             <template v-slot:body-output="scope">
                 <div v-if="!scope.data.notUpload">
-                    <InputButton @click="showOutput(scope.data.name)">预览</InputButton>
-                    <InputButton @click="downloadOutput(scope.data.name)">下载</InputButton>
+                    <Link @click="showOutput(scope.data.name)">预览</Link>
+                    |
+                    <Link @click="downloadOutput(scope.data.name)">下载</Link>
                 </div>
             </template>
             <template v-slot:body-delete="scope">

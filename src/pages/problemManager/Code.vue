@@ -41,7 +41,9 @@
                 <InputSelect :data="languageTypeList" placeholder="语言" v-model="language"></InputSelect>
                 <InputSelect :data="solutionStatusTypeList" placeholder="期望结果" v-model="result"></InputSelect>
             </div>
-            <InputTextarea :min-height="100" :code-mode="true" v-model="code" :key="keyNum"></InputTextarea>
+            <div style="text-align: left; margin: 0 10px;">
+                <InputCode v-model="code" :key="keyNum"></InputCode>
+            </div>
             <div style="display: grid; grid-template-columns: auto auto; place-items: center">
                 <InputButton @click="updateStd">更新标准代码</InputButton>
                 <InputButton @click="addTest">添加/覆盖测试代码</InputButton>
