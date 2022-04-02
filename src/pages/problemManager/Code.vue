@@ -36,7 +36,7 @@
         </Table>
 
         <div style="display: grid; place-items: center">
-            <InputButton @click="showCode(false)">新增测试代码</InputButton>
+            <InputButton @click="newTest()">新增测试代码</InputButton>
         </div>
 
         <Dialog v-model="showDialog" :title="isStdCode ? '查看/覆盖标准代码' : '查看/新增/覆盖测试代码'">
@@ -46,11 +46,11 @@
                 <InputSelect :data="solutionStatusTypeList" placeholder="期望结果" v-model="result"></InputSelect>
             </div>
             <div style="text-align: left">
-                <InputCode ref="inputCode" :key="keyNum" v-model="code"></InputCode>
+                <InputCode mode="text/x-c++src" ref="inputCode" :key="keyNum" v-model="code"></InputCode>
             </div>
             <div style="display: grid; place-items: center">
-                <InputButton v-if="isStdCode" @click="updateStd">更新标准代码</InputButton>
-                <InputButton v-else @click="addTest">添加/覆盖测试代码</InputButton>
+                <InputButton :loading="updating" v-if="isStdCode" @click="updateStd">更新标准代码</InputButton>
+                <InputButton :loading="updating" v-else @click="addTest">添加/覆盖测试代码</InputButton>
             </div>
         </Dialog>
     </div>
@@ -108,7 +108,8 @@ export default {
             keyNum: 0,
 
             showDialog: false,
-            isStdCode: false
+            isStdCode: false,
+            updating: false
         }
     },
     created() {
@@ -185,6 +186,7 @@ export default {
             })
         },
         updateStd() {
+            this.updating = true
             this.$problem.updateStdCode(this.problemId, this.code, this.language, () => {
                 this.$toast({
                     title: '成功',
@@ -203,10 +205,11 @@ export default {
                 this.name = ''
                 this.language = null
                 this.result = null
-                this.keyNum++
-            })
+                this.showDialog = false
+            }, () => this.updating = false)
         },
         addTest() {
+            this.updating = true
             this.$problem.addTestCode(this.problemId, this.code, this.language, this.name, this.result, () => {
                 this.$toast({
                     title: '成功',
@@ -214,25 +217,38 @@ export default {
                     duration: 'auto',
                     type: 'success'
                 })
-                this.tableTestData.push({
-                    name: this.name,
-                    expectResultType: this.result,
-                    languageType: this.language,
-                    solutionId: null,
-                    solutionResult: null
-                })
+                let index = this.tableTestData.findIndex(t => t.name === this.name)
+                if (index !== -1) {
+                    this.$set(this.tableTestData, index, {
+                        name: this.name,
+                        expectResultType: this.result,
+                        languageType: this.language,
+                        solutionId: null,
+                        solutionResult: null
+                    })
+                } else {
+                    this.tableTestData.push({
+                        name: this.name,
+                        expectResultType: this.result,
+                        languageType: this.language,
+                        solutionId: null,
+                        solutionResult: null
+                    })
+                }
                 this.code = ''
                 this.name = ''
                 this.language = null
                 this.result = null
-                this.keyNum++
-            })
+                this.showDialog = false
+            }, () => this.updating = false)
         },
         newTest() {
             this.code = ''
             this.name = ''
             this.language = null
             this.result = null
+            this.keyNum++
+            this.showCode(false)
         },
         showCode(flag) {
             this.showDialog = true

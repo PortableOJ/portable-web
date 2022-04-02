@@ -86,24 +86,24 @@ function getStdTestCode(problemId, callback) {
     }, callback, null)
 }
 
-function updateStdCode(problemId, code, languageType, callback) {
+function updateStdCode(problemId, code, languageType, success, callback) {
     Request.post(baseUrl + '/updateStdCode', {
         id: problemId,
         code: code,
         languageType: languageType,
         codeName: 'STD',
         resultType: 'ACCEPT'
-    }, callback, null)
+    }, success, callback)
 }
 
-function addTestCode(problemId, code, languageType, name, resultType, callback) {
+function addTestCode(problemId, code, languageType, name, resultType, success, callback) {
     Request.post(baseUrl + '/addTestCode', {
         id: problemId,
         code: code,
         languageType: languageType,
         codeName: name,
         resultType: resultType
-    }, callback, null)
+    }, success, callback)
 }
 
 function removeTestCode(problemId, name, callback) {

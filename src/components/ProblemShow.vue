@@ -58,7 +58,9 @@
                 判题系统
             </h3>
             <div class="text-area">
-                {{ judgeCodeType[problemData.judgeCodeType].text }}
+                <Link :disabled="problemData.judgeCodeType==='DIY'" @click="openSTDJudge">
+                    {{ judgeCodeType[problemData.judgeCodeType].text }}
+                </Link>
             </div>
             <div style="display: grid; grid-template-columns: auto 1fr">
                 <h3>
@@ -209,6 +211,9 @@ export default {
                     this.$router.push({name: 'solution', params: {solutionId: res}})
                 })
             }
+        },
+        openSTDJudge() {
+            window.open(`https://github.com/PortableOJ/portable-testlib/blob/master/standard/${this.problemData.judgeCodeType}.cpp`, '_blank')
         }
     }
 }

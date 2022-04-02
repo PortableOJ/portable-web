@@ -1,20 +1,18 @@
 <template>
     <div>
         <div v-if="problemData !== null">
-            <div style="width: 100%; display: grid; grid-template-columns: auto 1fr;text-align: left;">
+            <div style="display: grid; place-items: center;">
                 <InputSelect placeholder="选择使用的 judge 代码"
                              v-model="problemData.judgeCodeType"
                              :data="judgeCodeTypeList">
                 </InputSelect>
-                <div v-if="problemData.judgeCodeType === 'DIY'">
+                <div style="width: 800px; text-align: left;" v-if="problemData.judgeCodeType === 'DIY'">
                     <InputCode
                         v-model="problemData.judgeCode"
                         mode="text/x-c++src"
                         placeholder="请在此处键入自定义的 Judge 代码">
                     </InputCode>
                 </div>
-            </div>
-            <div style="display: grid; place-items: center;">
                 <InputButton @click="save">保存</InputButton>
             </div>
         </div>

@@ -11,6 +11,7 @@ function dealResponse(response, success) {
         if (success) {
             success(response.data)
         }
+        return true
     } else {
         Toast({
             title: `失败(${response.code})`,
@@ -18,14 +19,15 @@ function dealResponse(response, success) {
             duration: 'auto',
             type: 'error'
         })
+        return false
     }
 }
 
 function axiosSend(data, success, callback) {
     axios(data).then(res => {
-        dealResponse(res.data, success)
+        const flag = dealResponse(res.data, success)
         if (callback) {
-            callback(true)
+            callback(flag)
         }
     }).catch(e => {
         Toast({
