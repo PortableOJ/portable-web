@@ -34,21 +34,25 @@
                 <InputButton type="error" @click="removeTestCode(scope.data.name)">删除</InputButton>
             </template>
         </Table>
-        <div style="border: 1px solid var(--brand-color); border-radius: 15px;">
-            <h3>添加/查看代码</h3>
+
+        <div style="display: grid; place-items: center">
+            <InputButton @click="showCode(false)">新增测试代码</InputButton>
+        </div>
+
+        <Dialog v-model="showDialog" :title="isStdCode ? '查看/覆盖标准代码' : '查看/新增/覆盖测试代码'">
             <div style="display: grid; grid-template-columns: auto auto auto; place-items: center">
                 <InputText placeholder="名称" v-model="name"></InputText>
                 <InputSelect :data="languageTypeList" placeholder="语言" v-model="language"></InputSelect>
                 <InputSelect :data="solutionStatusTypeList" placeholder="期望结果" v-model="result"></InputSelect>
             </div>
-            <div style="text-align: left; margin: 0 10px;">
-                <InputCode v-model="code" :key="keyNum"></InputCode>
+            <div style="text-align: left">
+                <InputCode ref="inputCode" :key="keyNum" v-model="code"></InputCode>
             </div>
-            <div style="display: grid; grid-template-columns: auto auto; place-items: center">
-                <InputButton @click="updateStd">更新标准代码</InputButton>
-                <InputButton @click="addTest">添加/覆盖测试代码</InputButton>
+            <div style="display: grid; place-items: center">
+                <InputButton v-if="isStdCode" @click="updateStd">更新标准代码</InputButton>
+                <InputButton v-else @click="addTest">添加/覆盖测试代码</InputButton>
             </div>
-        </div>
+        </Dialog>
     </div>
 </template>
 
@@ -102,6 +106,9 @@ export default {
             language: null,
             result: null,
             keyNum: 0,
+
+            showDialog: false,
+            isStdCode: false
         }
     },
     created() {
@@ -144,6 +151,7 @@ export default {
                 this.language = this.tableStdData[0].languageType
                 this.result = this.tableStdData[0].expectResultType
                 this.keyNum++
+                this.showCode(true)
             })
         },
         downloadStdCode() {
@@ -156,6 +164,7 @@ export default {
                 this.language = data.languageType
                 this.result = data.expectResultType
                 this.keyNum++
+                this.showCode(false)
             })
         },
         downloadTestCode(name) {
@@ -171,7 +180,7 @@ export default {
                 })
                 let index = this.tableTestData.findIndex(t => t.name === name)
                 if (index !== -1) {
-                    this.tableTestData.slice(index, 1)
+                    this.tableTestData.splice(index, 1)
                 }
             })
         },
@@ -218,6 +227,19 @@ export default {
                 this.result = null
                 this.keyNum++
             })
+        },
+        newTest() {
+            this.code = ''
+            this.name = ''
+            this.language = null
+            this.result = null
+        },
+        showCode(flag) {
+            this.showDialog = true
+            this.isStdCode = flag
+            setTimeout(() => {
+                this.$refs.inputCode.fresh()
+            }, 500)
         }
     }
 }
