@@ -49,16 +49,18 @@
             </h3>
             <div v-for="(example, index) in problemData.example" :key="example.in">
                 <h4>第 {{ index + 1 }} 组</h4>
-                输入(最左侧为行号)
-                <MarkdownBlockCode class="text-area" :value="example.in"></MarkdownBlockCode>
-                输出(最左侧为行号)
-                <MarkdownBlockCode class="text-area" :value="example.out"></MarkdownBlockCode>
+                输入
+                <MarkdownBlockCode :show-line="false" class="text-area" :value="example.in"></MarkdownBlockCode>
+                输出
+                <MarkdownBlockCode :show-line="false" class="text-area" :value="example.out"></MarkdownBlockCode>
             </div>
             <h3>
                 判题系统
             </h3>
             <div class="text-area">
-                {{ judgeCodeType[problemData.judgeCodeType].text }}
+                <Link :disabled="problemData.judgeCodeType==='DIY'" @click="openSTDJudge">
+                    {{ judgeCodeType[problemData.judgeCodeType].text }}
+                </Link>
             </div>
             <div style="display: grid; grid-template-columns: auto 1fr">
                 <h3>
@@ -70,8 +72,8 @@
                              @change="initLimit">
                 </InputSelect>
             </div>
-            <div style="border: 1px solid var(--border-color-level-1); max-width: 800px">
-                <InputCode mode="text/x-c++src" placeholder="请输入需要提交的代码" @change="updateCode"></InputCode>
+            <div>
+                <InputCode v-model="submitCode" mode="text/x-c++src" placeholder="请输入需要提交的代码"></InputCode>
             </div>
             <InputButton @click="submit">提交</InputButton>
         </div>
@@ -150,7 +152,7 @@ export default {
             problemType: {},
             problemStatusType: {},
 
-            submitCode: '123',
+            submitCode: '',
         }
     },
     created() {
@@ -209,6 +211,9 @@ export default {
                     this.$router.push({name: 'solution', params: {solutionId: res}})
                 })
             }
+        },
+        openSTDJudge() {
+            window.open(`https://github.com/PortableOJ/portable-testlib/blob/master/standard/${this.problemData.judgeCodeType}.cpp`, '_blank')
         }
     }
 }

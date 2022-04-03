@@ -2,20 +2,27 @@
     <div>
         <Table :head="tableHead" :data="tableData">
             <template v-slot:body-name="scope">
-                <InputText v-if="scope.data.notUpload" v-model="scope.data.name" style="width: 150px">
-                </InputText>
+                <div v-if="scope.data.notUpload">
+                    <i style="color: var(--warning-color)"
+                       v-if="tableData.filter(t => t.name === scope.data.name).length > 1"
+                       class="iconfont icon-warning"></i>
+                    <InputText v-model="scope.data.name" style="width: 150px">
+                    </InputText>
+                </div>
                 <span v-else>{{ scope.data.name }}</span>
             </template>
             <template v-slot:body-input="scope">
                 <div v-if="!scope.data.notUpload">
-                    <InputButton @click="showInput(scope.data.name)">预览</InputButton>
-                    <InputButton @click="downloadInput(scope.data.name)">下载</InputButton>
+                    <Link @click="showInput(scope.data.name)">预览</Link>
+                    |
+                    <Link @click="downloadInput(scope.data.name)">下载</Link>
                 </div>
             </template>
             <template v-slot:body-output="scope">
                 <div v-if="!scope.data.notUpload">
-                    <InputButton @click="showOutput(scope.data.name)">预览</InputButton>
-                    <InputButton @click="downloadOutput(scope.data.name)">下载</InputButton>
+                    <Link @click="showOutput(scope.data.name)">预览</Link>
+                    |
+                    <Link @click="downloadOutput(scope.data.name)">下载</Link>
                 </div>
             </template>
             <template v-slot:body-delete="scope">
@@ -26,17 +33,20 @@
                 <InputButton type="error" @click="deleteTest(scope.data)">删除</InputButton>
             </template>
         </Table>
-        <div v-if="showValue !== null">
-            <h3>预览</h3>
-            预览的数据内容仅为开头部分仅可见的 ASCII 内容，并非完整数据。如需要完整数据，请采用"下载"
-            <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
+        <div style="display: grid; place-items: center">
+            <InputButton @click="showAddFileDialog = true">添加测试数据</InputButton>
         </div>
-        <div
-            style="border: 1px solid var(--brand-color); border-radius: 15px; margin-top: 30px; display: grid; place-items: center">
-            <h3>新增数据</h3>
-            <InputFile placeholder="选择文件加入暂存" :multiple="true" v-model="templateFileList"></InputFile>
-            <InputButton @click="save">添加至暂存区域</InputButton>
-        </div>
+        <Dialog v-model="showTestDialog" title="预览部分数据">
+            <div style="width: 800px">
+                <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
+            </div>
+        </Dialog>
+        <Dialog v-model="showAddFileDialog" title="新增数据">
+            <div style="width: 800px; display: grid; place-items: center">
+                <InputFile v-if="showAddFileDialog" placeholder="选择文件加入暂存" :multiple="true" v-model="templateFileList"></InputFile>
+                <InputButton @click="save">添加至暂存区域</InputButton>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -67,7 +77,10 @@ export default {
             showValue: null,
             keyNum: 0,
             fileDict: {},
-            templateFileList: []
+            templateFileList: [],
+
+            showTestDialog: false,
+            showAddFileDialog: false
         }
     },
     created() {
@@ -86,6 +99,7 @@ export default {
             this.$problem.getTestInputShow(this.problemId, name, res => {
                 this.showValue = res
                 this.keyNum++
+                this.showTestDialog = true
             })
         },
         downloadInput(name) {
@@ -95,6 +109,7 @@ export default {
             this.$problem.getTestOutputShow(this.problemId, name, res => {
                 this.showValue = res
                 this.keyNum++
+                this.showTestDialog = true
             })
         },
         downloadOutput(name) {
@@ -146,6 +161,7 @@ export default {
                     name: scope.name,
                     originalName: scope.originalName,
                     notUpload: true,
+                    process: null,
                 })
             })
         },
@@ -162,6 +178,7 @@ export default {
                     })
                     continue
                 }
+                name = name.split('.', 1)[0]
                 this.fileDict[name] = this.templateFileList[i]
                 this.tableData.push({
                     name: name,
@@ -170,6 +187,7 @@ export default {
                 })
             }
             this.templateFileList = []
+            this.showAddFileDialog = false
         }
     }
 }
