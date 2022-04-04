@@ -3,19 +3,21 @@
         <div class="lm-rc-layout-left">
             <Table :head="tableHead" :data="tableData">
                 <template v-slot:body-input="scope">
-                    <InputButton @click="showInput(scope.data.name)">预览</InputButton>
-                    <InputButton @click="downloadInput(scope.data.name)">下载</InputButton>
+                    <Link @click="showInput(scope.data.name)">预览</Link>
+                    |
+                    <Link @click="downloadInput(scope.data.name)">下载</Link>
                 </template>
                 <template v-slot:body-output="scope">
-                    <InputButton @click="showOutput(scope.data.name)">预览</InputButton>
-                    <InputButton @click="downloadOutput(scope.data.name)">下载</InputButton>
+                    <Link @click="showOutput(scope.data.name)">预览</Link>
+                    |
+                    <Link @click="downloadOutput(scope.data.name)">下载</Link>
                 </template>
             </Table>
-            <div v-if="showValue !== null">
-                <h3>预览</h3>
-                预览的数据内容仅为开头部分仅可见的 ASCII 内容，并非完整数据。如需要完整数据，请采用"下载"
-                <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
-            </div>
+            <Dialog v-model="showTestDialog" title="预览部分数据">
+                <div style="width: 800px">
+                    <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
+                </div>
+            </Dialog>
         </div>
         <div>
             <UserCard></UserCard>
@@ -50,6 +52,7 @@ export default {
             tableData: [],
 
             showValue: null,
+            showTestDialog: false,
             keyNum: 0,
         }
     },
@@ -68,6 +71,7 @@ export default {
             this.$problem.getTestInputShow(this.problemId, name, res => {
                 this.showValue = res
                 this.keyNum++
+                this.showTestDialog = true
             })
         },
         downloadInput(name) {
@@ -77,6 +81,7 @@ export default {
             this.$problem.getTestOutputShow(this.problemId, name, res => {
                 this.showValue = res
                 this.keyNum++
+                this.showTestDialog = true
             })
         },
         downloadOutput(name) {

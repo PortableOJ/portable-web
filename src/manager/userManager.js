@@ -144,10 +144,6 @@ function getCurUserData() {
     return userData
 }
 
-function getCurUserId() {
-    return userData == null ? null : userData.id
-}
-
 function getCurUserHandle() {
     return userData == null ? null : userData.handle
 }
@@ -166,23 +162,23 @@ function hasPermission(permission) {
     return userData.permissionTypeSet.find(e => e === permission) != null
 }
 
-function addPermission(targetId, newPermission, success) {
+function addPermission(targetHandle, newPermission, success) {
     Request.post(baseUrl + '/addPermission', {
-        targetId: targetId,
+        targetHandle: targetHandle,
         permissionType: newPermission
     }, success, null)
 }
 
-function removePermission(targetId, removePermission, success) {
+function removePermission(targetHandle, removePermission, success) {
     Request.post(baseUrl + '/removePermission', {
-        targetId: targetId,
+        targetHandle: targetHandle,
         permissionType: removePermission
     }, success, null)
 }
 
-function changeOrganization(targetId, newOrganization, success) {
+function changeOrganization(targetHandle, newOrganization, success) {
     Request.post(baseUrl + '/changeOrganization', {
-        targetId: targetId,
+        targetHandle: targetHandle,
         newOrganization: newOrganization
     }, success, null)
 }
@@ -219,7 +215,6 @@ export default {
     getBatchUserAdminInfo,
     clearIpList,
     getCurUserData,
-    getCurUserId,
     getCurUserHandle,
     isDominate,
     hasPermission,

@@ -95,6 +95,7 @@ export default {
 
 .lm-rc-layout-left {
     margin-right: 8px;
+    margin-top: 10px;
 }
 
 .card {

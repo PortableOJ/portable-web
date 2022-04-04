@@ -30,7 +30,7 @@
 export default {
     name: "UserPermissionSet",
     props: {
-        userId: Number,
+        userHandle: String,
         permissionType: Object,
         permission: String,
         permissionState: Object,
@@ -47,7 +47,7 @@ export default {
     methods: {
         changePermission(target) {
             if (this.status) {
-                this.$user.removePermission(this.userId, target, () => {
+                this.$user.removePermission(this.userHandle, target, () => {
                     this.$toast({
                         title: '成功',
                         text: '已经移除对方的权限',
@@ -56,7 +56,7 @@ export default {
                     })
                 })
             } else {
-                this.$user.addPermission(this.userId, target, () => {
+                this.$user.addPermission(this.userHandle, target, () => {
                     this.$toast({
                         title: '成功',
                         text: '已经为对方添加新的权限',

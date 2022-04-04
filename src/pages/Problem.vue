@@ -106,9 +106,9 @@ export default {
             this.problemData = res
             this.canEdit = this.$user.hasPermission(this.$user.permissionTypeList.CREATE_AND_EDIT_PROBLEM)
                 && (this.$user.hasPermission(this.$user.permissionTypeList.EDIT_NOT_OWNER_PROBLEM)
-                    || this.$user.getCurUserId() === this.problemData.owner)
+                    || this.$user.getCurUserHandle() === this.problemData.ownerHandle)
             if (this.isLogin) {
-                this.$solution.getPublicSolutionList(1, 5, this.$user.getCurUserId(), this.problemId, null, res => {
+                this.$solution.getPublicSolutionList(1, 5, this.$user.getCurUserHandle(), this.problemId, null, res => {
                     this.tableData = res.data
                 })
             }

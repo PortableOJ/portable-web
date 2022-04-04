@@ -1,6 +1,6 @@
 <template>
     <div class="lm-rc-layout">
-        <div class="lm-rc-layout-left">
+        <div class="lm-rc-layout-left" style="margin-top: 0">
             <TabMenu @change="toSelect" :options="menuOption" v-model="step"></TabMenu>
             <router-view></router-view>
         </div>

@@ -43,12 +43,12 @@ function rank(contestId, pageNum, pageSize, freeze, success) {
     }, success, null)
 }
 
-function getContestStatus(contestId, pageNum, pageSize, userId, problemId, statusType, success) {
+function getContestStatus(contestId, pageNum, pageSize, userHandle, problemId, statusType, success) {
     Request.get(baseUrl + '/status', {
         contestId: contestId,
         pageNum: pageNum,
         pageSize: pageSize,
-        userId: userId,
+        userHandle: userHandle,
         problemId: problemId,
         statusType: statusType
     }, success, null)
@@ -60,12 +60,12 @@ function getContestSolution(solutionId, success) {
     }, success, null)
 }
 
-function getContestTestStatus(contestId, pageNum, pageSize, userId, problemId, statusType, success) {
+function getContestTestStatus(contestId, pageNum, pageSize, userHandle, problemId, statusType, success) {
     Request.get(baseUrl + '/testStatus', {
         contestId: contestId,
         pageNum: pageNum,
         pageSize: pageSize,
-        userId: userId,
+        userHandle: userHandle,
         problemId: problemId,
         statusType: statusType
     }, success, null)
