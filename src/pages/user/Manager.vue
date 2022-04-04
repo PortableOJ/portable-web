@@ -33,7 +33,7 @@
                         </p>
                     </div>
                     <!--GRANT 授权他人-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.GRANT">
@@ -54,7 +54,7 @@
                         </template>
                     </UserPermissionSet>
                     <!--CHANGE_ORGANIZATION 修改组织-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.CHANGE_ORGANIZATION">
@@ -86,7 +86,7 @@
                         </p>
                     </div>
                     <!--VIEW_HIDDEN_PROBLEM 查看隐藏题目-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.VIEW_HIDDEN_PROBLEM">
@@ -106,7 +106,7 @@
                         </template>
                     </UserPermissionSet>
                     <!--CREATE_AND_EDIT_PROBLEM 创建编辑题目-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.CREATE_AND_EDIT_PROBLEM">
@@ -127,7 +127,7 @@
                         </template>
                     </UserPermissionSet>
                     <!--EDIT_NOT_OWNER_PROBLEM 编辑其他人的题目-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.EDIT_NOT_OWNER_PROBLEM">
@@ -162,7 +162,7 @@
                         若需要查看管理比赛相关的内容，请前往比赛管理
                     </div>
                     <!--VIEW_PUBLIC_SOLUTION 查看提交内容-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.VIEW_PUBLIC_SOLUTION">
@@ -178,7 +178,7 @@
                         </template>
                     </UserPermissionSet>
                     <!--VIEW_SOLUTION_MESSAGE 查看提交中的 judge 信息-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.VIEW_SOLUTION_MESSAGE">
@@ -209,7 +209,7 @@
                         仍然需要其他权限辅助，例如添加公开题库中的题目时，若比赛管理员没有访问隐藏题目的权限时，则无法添加隐藏题目
                     </div>
                     <!--VIEW_ALL_CONTEST 查看所有比赛-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.VIEW_ALL_CONTEST">
@@ -226,7 +226,7 @@
                         </template>
                     </UserPermissionSet>
                     <!--CREATE_AND_EDIT_CONTEST 查看所有比赛-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.CREATE_AND_EDIT_CONTEST">
@@ -250,7 +250,7 @@
                         </template>
                     </UserPermissionSet>
                     <!--EDIT_NOT_OWNER_CONTEST 编辑其他人的比赛-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.EDIT_NOT_OWNER_CONTEST">
@@ -277,7 +277,7 @@
                         这里均为较为危险的权限，因为用户可以不经过审核创造大量的数据，请谨慎授权
                     </div>
                     <!--CREATE_AND_EDIT_BATCH 创建和拥有批量用户-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.CREATE_AND_EDIT_BATCH">
@@ -298,7 +298,7 @@
                         其他权限
                     </h3>
                     <!--MANAGER_JUDGE 编辑其他人的比赛-->
-                    <UserPermissionSet :user-id="userData.id"
+                    <UserPermissionSet :user-handle="userData.handle"
                                        :permission-type="permissionType"
                                        :permission-state="permissionState"
                                        :permission="permissionTypeList.MANAGER_JUDGE">
@@ -390,7 +390,7 @@ export default {
     },
     methods: {
         changeOrganization(target) {
-            this.$user.changeOrganization(this.userData.id, target, () => {
+            this.$user.changeOrganization(this.userData.handle, target, () => {
                 this.$toast({
                     title: '成功',
                     text: '已经更新对方的组织',

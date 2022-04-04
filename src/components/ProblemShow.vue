@@ -58,7 +58,7 @@
                 判题系统
             </h3>
             <div class="text-area">
-                <Link :disabled="problemData.judgeCodeType==='DIY'" @click="openSTDJudge">
+                <Link v-if="judgeCodeType[problemData.judgeCodeType]" :disabled="problemData.judgeCodeType==='DIY'" @click="openSTDJudge">
                     {{ judgeCodeType[problemData.judgeCodeType].text }}
                 </Link>
             </div>

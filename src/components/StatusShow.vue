@@ -1,9 +1,23 @@
 <template>
     <div style="display: grid; place-items: center">
         <!--suppress JSValidateTypes -->
-        <Table v-if="languageType" :head="tableHead" :data="tableData">
+        <div style="width: 100%; display: grid; grid-template-columns: repeat(6, auto); place-items: center;">
+            <div>过滤条件：</div>
+            <InputText style="width: 250px" placeholder="用户昵称" v-model="userHandle"></InputText>
+            <InputButton style="width: 50px"
+                         :disabled="myUserHandle === null"
+                         type="info"
+                         @click="userHandle = myUserHandle">
+                填入我
+            </InputButton>
+            <InputText style="width: 200px" placeholder="题号" v-model="problemId"></InputText>
+            <InputSelect style="width: 250px" placeholder="状态" v-model="statusType"
+                         :data="solutionStatusTypeList"></InputSelect>
+            <InputButton style="width: 80px" @click="changeUrl">刷新</InputButton>
+        </div>
+        <Table style="width: 100%;" v-if="languageType" :head="tableHead" :data="tableData">
             <template v-slot:body-id="scope">
-                <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userId)">
+                <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userHandle)">
                     {{ scope.data.id }}
                 </Link>
             </template>
@@ -35,6 +49,7 @@
 
 <script>
 import SolutionStatus from "@/components/SolutionStatus";
+
 export default {
     name: "StatusShow",
     components: {SolutionStatus},
@@ -46,14 +61,6 @@ export default {
         testContest: {
             type: Boolean,
             default: false,
-        },
-        onlyThisUserId: {
-            type: Number,
-            default: null
-        },
-        selectStatusType: {
-            type: String,
-            default: null
         }
     },
     data() {
@@ -98,28 +105,41 @@ export default {
             pageSize: 30,
             totalNum: 0,
             totalPage: 1,
-            userId: null,
+            userHandle: null,
             problemId: null,
             statusType: null,
             // 管理员和出题人的 handle 集合
             ownerAndCoAuthor: [],
 
+            myUserHandle: null,
+
             languageType: {},
+            solutionStatusType: {},
+            solutionStatusTypeList: []
         }
     },
     created() {
         this.$common.getEnum('LanguageType', res => this.languageType = res)
         this.pageNum = this.$common.getQueryInt(this, 'pageNum', 1)
         this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
-        this.userId = this.$common.getQueryInt(this, 'userId', null)
+        this.userHandle = this.$common.getQueryString(this, 'userHandle', null)
         this.problemId = this.$common.getQueryInt(this, 'problemId', null)
         this.statusType = this.$common.getQueryString(this, 'statusType', null)
-        if (this.onlyThisUserId) {
-            this.userId = this.onlyThisUserId
-        }
-        if (this.selectStatusType) {
-            this.statusType = this.selectStatusType
-        }
+        this.$common.getEnum('SolutionStatusType', res => {
+            this.solutionStatusType = res
+            this.solutionStatusTypeList = []
+            this.solutionStatusTypeList.push({
+                label: '不过滤',
+                value: null
+            })
+            for (let i in res) {
+                this.solutionStatusTypeList.push({
+                    label: res[i].text,
+                    value: i
+                })
+            }
+        })
+        this.myUserHandle = this.$user.getCurUserHandle()
         this.changeUrl()
     },
     methods: {
@@ -133,9 +153,9 @@ export default {
             }
             if (this.contestId) {
                 if (this.testContest) {
-                    this.$contest.getContestTestStatus(this.contestId, this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
+                    this.$contest.getContestTestStatus(this.contestId, this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus)
                 } else {
-                    this.$contest.getContestStatus(this.contestId, this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
+                    this.$contest.getContestStatus(this.contestId, this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus)
                 }
                 this.$contest.getContestInfo(this.contestId, res => {
                     // noinspection JSUnresolvedVariable
@@ -143,7 +163,7 @@ export default {
                     this.ownerAndCoAuthor.push(res.ownerHandle)
                 })
             } else {
-                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userId, this.problemId, this.statusType, getStatus)
+                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus)
             }
         },
         openSolution(id) {
@@ -191,14 +211,14 @@ export default {
                 })
             }
         },
-        disableSolution(userId) {
+        disableSolution(userHandle) {
             if (this.contestId) {
                 if (this.ownerAndCoAuthor.indexOf(this.$user.getCurUserData().handle) !== -1) {
                     return false
                 }
-                return this.$user.getCurUserId() !== userId
+                return this.$user.getCurUserHandle() !== userHandle
             } else {
-                return this.$user.getCurUserId() !== userId && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
+                return this.$user.getCurUserHandle() !== userHandle && !this.$user.hasPermission(this.$user.permissionTypeList.VIEW_PUBLIC_SOLUTION)
             }
         },
         changePageNum() {
@@ -208,8 +228,8 @@ export default {
             let query = {}
             query.pageNum = this.pageNum.toString()
             query.pageSize = this.pageSize.toString()
-            if (this.userId) {
-                query.userId = this.userId.toString()
+            if (this.userHandle) {
+                query.userHandle = this.userHandle
             }
             if (this.problemId) {
                 query.problemId = this.problemId.toString()
@@ -226,16 +246,6 @@ export default {
             this.initData()
         }
     },
-    watch: {
-        onlyThisUserId(v) {
-            this.userId = v
-            this.changeUrl()
-        },
-        selectStatusType(v) {
-            this.statusType = v
-            this.changeUrl()
-        }
-    }
 }
 </script>
 

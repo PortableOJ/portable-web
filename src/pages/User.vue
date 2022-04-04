@@ -1,6 +1,7 @@
 <template>
     <div class="lm-rc-layout">
         <div class="lm-rc-layout-left">
+            <h2>{{ handle }}</h2>
             <TabMenu @change="toSelect" :options="menuOption" v-model="step"></TabMenu>
             <router-view></router-view>
         </div>
