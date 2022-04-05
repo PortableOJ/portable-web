@@ -1,62 +1,86 @@
 <template>
     <div style="display: grid; place-items: center; width: 100%;">
-        <div v-if="contestData" class="form" style="width: 100%;">
+        <div v-if="contestData" class="form-box">
+            <div>标题</div>
             <div>
-                <h3>标题</h3>
-                <InputText :read-only="contestId !== 0" style="width: 100%" v-model="contestData.title"></InputText>
+                <InputText :read-only="contestId !== 0" style="width: 500px" v-model="contestData.title"></InputText>
             </div>
-            <div>
-                <h3>开始时间</h3>
-                <InputDateTime :read-only="notOwner" v-model="contestData.startTime"></InputDateTime>
-            </div>
-            <div>
-                <h3>持续时间(分钟)</h3>
-                <InputText :read-only="notOwner" :type="'number'" v-model="contestData.duration"></InputText>
-            </div>
-            <div>
-                <h3>访问权限</h3>
-                <InputSelect :disabled="contestId !== 0 || notOwner" v-model="contestData.accessType"
-                             :data="contestAccessTypeList"></InputSelect>
-            </div>
-            <div v-if="contestData.accessType === 'PASSWORD'">
-                <h3>密码</h3>
-                <InputText :read-only="notOwner" v-model="contestData.password"></InputText>
-            </div>
-            <div v-if="contestData.accessType === 'PRIVATE'">
-                <h3>邀请列表</h3>
+            <div>时间</div>
+            <div style="display: flex; place-items: center">
+                <InputDateTime style="width: 150px"
+                               :read-only="notOwner"
+                               v-model="contestData.startTime">
+                </InputDateTime>
+                <div>至</div>
+                <InputText style="width: 150px"
+                           :disabled="true"
+                           :value="new Date(contestData.startTime).add(contestData.duration).format('yyyy-MM-dd hh:mm')">
+                </InputText>
+                <div>，持续</div>
+                <InputText style="width: 150px"
+                           :read-only="notOwner"
+                           :type="'number'"
+                           v-model="contestData.duration">
+                </InputText>
                 <div>
+                    分钟
+                </div>
+            </div>
+            <div>访问权限</div>
+            <div style="display: flex; place-items: center;">
+                <InputSelect style="width: 200px"
+                             :disabled="contestId !== 0"
+                             v-model="contestData.accessType"
+                             :data="contestAccessTypeList">
+                </InputSelect>
+                <div v-if="contestData.accessType === 'BATCH'">
+                    批量用户组 ID
+                </div>
+                <div v-if="contestData.accessType === 'BATCH'">
+                    <div style="display: grid; grid-template-columns: 250px 50px; place-items: center ">
+                        <!--suppress JSUnresolvedVariable -->
+                        <InputText style="width: 250px" :read-only="notOwner" v-model="contestData.batchId"></InputText>
+                        <Link @click="checkBatch">校验</Link>
+                    </div>
+                </div>
+                <div v-if="contestData.accessType === 'PASSWORD'">
+                    密码
+                </div>
+                <div v-if="contestData.accessType === 'PASSWORD'">
+                    <InputText :read-only="notOwner" v-model="contestData.password"></InputText>
+                </div>
+                <div v-if="contestData.accessType === 'PRIVATE'">
+                    已邀请：
+                </div>
+                <div style="max-width: 300px; display: flex; overflow: auto; place-items: center"
+                     v-if="contestData.accessType === 'PRIVATE'">
                     <template v-for="handle in contestData.inviteUserSet">
                         <InputCheckbox :read-only="notOwner" @change="deleteInvite(handle)" :value="true" :key="handle">
                             {{ handle }}
                         </InputCheckbox>
                     </template>
                 </div>
-                <h3>添加邀请</h3>
-                <div style="display: grid; grid-template-columns: 1fr auto">
-                    <InputText :read-only="notOwner" v-model="templateInvite"
-                               :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
-                    <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
-                </div>
-            </div>
-            <div v-if="contestData.accessType === 'BATCH'">
-                <h3>批量用户组 ID</h3>
-                <div style="display: grid; grid-template-columns: 250px 50px; place-items: center ">
-                    <!--suppress JSUnresolvedVariable -->
-                    <InputText style="width: 250px" :read-only="notOwner" v-model="contestData.batchId"></InputText>
-                    <Link @click="checkBatch">校验</Link>
+                <div v-if="contestData.accessType === 'PRIVATE'">
+                    <Link @click="showPrivateUserDialog = true">邀请更多</Link>
                 </div>
             </div>
             <div>
-                <h3>封榜时间(分钟)</h3>
+                封榜时间(分钟)
+            </div>
+            <div>
                 <InputText :read-only="notOwner" v-model="contestData.freezeTime"></InputText>
             </div>
             <div>
-                <h3>惩罚时间(分钟)</h3>
+                惩罚时间(分钟)
+            </div>
+            <div>
                 <InputText :read-only="notOwner" v-model="contestData.penaltyTime"></InputText>
             </div>
             <div>
-                <h3>共同出题人</h3>
-                <div>
+                共同出题人
+            </div>
+            <div style="display: flex; place-items: center">
+                <div style="display: flex; max-width: 500px; overflow: auto">
                     <template v-for="handle in contestData.coAuthor">
                         <InputCheckbox :read-only="notOwner" @change="deleteCoAuthor(handle)" :value="true"
                                        :key="handle">
@@ -64,17 +88,14 @@
                         </InputCheckbox>
                     </template>
                 </div>
-                <h3>添加邀请</h3>
-                <div style="display: grid; grid-template-columns: 1fr auto">
-                    <InputText :read-only="notOwner" v-model="templateCoAuthor"
-                               :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
-                    <InputButton :disabled="notOwner" @click="addCoAuthor">添加</InputButton>
-                </div>
+                <Link @click="showCoAuthorDialog = true">邀请更多</Link>
             </div>
-            <div style="display: block">
-                <h3>题目</h3>
+        </div>
+        <div v-if="contestData" style="width: 100%">
+            <h1>题目</h1>
+            <div style="display: grid; place-items: center;">
                 <!--suppress JSValidateTypes -->
-                <Table :head="tableHead" :data="problemList" ref="problemTable">
+                <Table style="width: 100%" :head="tableHead" :data="problemList" ref="problemTable">
                     <template v-slot:body-title="scope">
                         <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
                     </template>
@@ -102,27 +123,41 @@
                         </InputButton>
                     </template>
                 </Table>
-                <h3>添加题目</h3>
-                <div style="display: grid; grid-template-columns: auto 1fr auto">
-                    <InputCheckbox @change="clearSearchKey" :disabled="notOwner" v-model="usePublic">启用公开题库
-                    </InputCheckbox>
-                    <InputSelect @search="changeSearchKey"
-                                 style="width: 100%"
-                                 :data="searchProblemList"
-                                 :placeholder="usePublic ? '键入来搜索公开题库' : '键入来搜索私有题库'"
-                                 v-model="selectedProblem"
-                    >
-                    </InputSelect>
-                    <InputButton @click="addProblem">添加</InputButton>
-                </div>
+                <InputButton @click="showAddProblemDialog = true">添加题目</InputButton>
             </div>
+            <h1>公告</h1>
             <div style="display: block; text-align: left">
-                <h3>公告</h3>
                 <MarkdownEdit :min-height="100" :read-only="notOwner" style="width: 100%"
                               v-model="contestData.announcement"></MarkdownEdit>
             </div>
         </div>
         <InputButton @click="save">保存</InputButton>
+        <Dialog title="邀请列表" v-model="showPrivateUserDialog">
+            <div style="display: grid; grid-template-columns: 1fr auto">
+                <InputText :read-only="notOwner" v-model="templateInvite"
+                           :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
+                <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
+            </div>
+        </Dialog>
+        <Dialog title="邀请合作出题人" v-model="showCoAuthorDialog">
+            <div style="display: grid; grid-template-columns: 1fr auto">
+                <InputText :read-only="notOwner" v-model="templateCoAuthor"
+                           :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
+                <InputButton :disabled="notOwner" @click="addCoAuthor">添加</InputButton>
+            </div>
+        </Dialog>
+        <Dialog title="添加题目" v-model="showAddProblemDialog">
+            <div style="display: grid; grid-template-columns: auto 1fr auto">
+                <InputCheckbox @change="clearSearchKey" :disabled="notOwner" v-model="usePublic">启用公开题库
+                </InputCheckbox>
+                <InputSelect @search="changeSearchKey"
+                             :data="searchProblemList"
+                             :placeholder="usePublic ? '键入来搜索公开题库' : '键入来搜索私有题库'"
+                             v-model="selectedProblem">
+                </InputSelect>
+                <InputButton @click="addProblem">添加</InputButton>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -177,6 +212,10 @@ export default {
             contestAccessTypeList: [],
             problemAccessType: {},
             problemStatusType: {},
+
+            showPrivateUserDialog: false,
+            showCoAuthorDialog: false,
+            showAddProblemDialog: false,
         }
     },
     created() {
@@ -258,6 +297,7 @@ export default {
                     type: 'error'
                 })
             }
+            this.showCoAuthorDialog = false
         },
         deleteInvite(handle) {
             // noinspection JSUnresolvedVariable
@@ -270,6 +310,9 @@ export default {
                 let templateList = this.templateInvite.split(' ')
                 for (let i = 0; i < templateList.length; ++i) {
                     this.$user.getUserInfo(templateList[i], () => {
+                        if (!this.contestData.inviteUserSet) {
+                            this.contestData.inviteUserSet = []
+                        }
                         if (this.contestData.inviteUserSet.indexOf(templateList[i]) === -1) {
                             this.contestData.inviteUserSet.push(templateList[i])
                         } else {
@@ -291,6 +334,7 @@ export default {
                     type: 'error'
                 })
             }
+            this.showPrivateUserDialog = false
         },
         openProblem(id) {
             this.$router.push({
@@ -379,6 +423,7 @@ export default {
                     lock: null,
                 })
             }
+            this.showAddProblemDialog = false
         },
         save() {
             this.contestData.problemList = []

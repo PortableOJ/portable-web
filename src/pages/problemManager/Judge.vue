@@ -8,6 +8,7 @@
                 </InputSelect>
                 <div style="width: 800px; text-align: left;" v-if="problemData.judgeCodeType === 'DIY'">
                     <InputCode
+                        style="height: 550px"
                         v-model="problemData.judgeCode"
                         mode="text/x-c++src"
                         placeholder="请在此处键入自定义的 Judge 代码">

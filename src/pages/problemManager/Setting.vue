@@ -1,36 +1,63 @@
 <template>
     <div style="display: grid; place-items: center">
-        <div v-if="problemData" class="form">
+        <div v-if="problemData" class="form-box">
             <div>
-                <h3>访问权限</h3>
+                访问权限
+            </div>
+            <div>
                 <InputSelect v-model="problemData.accessType" :data="problemAccessTypeList"></InputSelect>
             </div>
             <div>
-                <h3>支持的语言</h3>
-                <div>
-                    <template v-for="(value, language) in languageType">
-                        <InputCheckbox @change="() => {
+                支持的语言
+            </div>
+            <div>
+                <template v-for="(value, language) in languageType">
+                    <InputCheckbox @change="() => {
                             if (!supportLanguageStatus[language]) {
                                 deleteTime(language)
                                 deleteMemory(language)
                             }
                         }" v-model="supportLanguageStatus[language]" :key="language">
-                            {{ value.text }}
-                        </InputCheckbox>
-                    </template>
+                        {{ value.text }}
+                    </InputCheckbox>
+                </template>
+            </div>
+            <div>
+                资源限制
+            </div>
+            <div style="display: grid; place-items: center left; grid-template-columns: auto 200px 1fr;">
+                <div>
+                    默认时间限制(s):
                 </div>
+                <InputText placeholder="时间" style="width: 150px" type="number"
+                           v-model="problemData.defaultTimeLimit"></InputText>
+                <Link @click="showSpecialTime = true">特殊时间限制管理</Link>
+                <div>
+                    默认内存限制(MB):
+                </div>
+                <InputText placeholder="内存" style="width: 150px" type="number"
+                           v-model="problemData.defaultMemoryLimit"></InputText>
+                <Link @click="showSpecialMemory = true">特殊内存限制管理</Link>
             </div>
             <div>
-                <h3>默认的时间限制(s)</h3>
-                <InputText type="number" v-model="problemData.defaultTimeLimit"></InputText>
+                是否允许下载样例
             </div>
             <div>
-                <h3>默认的内存限制(MB)</h3>
-                <InputText type="number" v-model="problemData.defaultMemoryLimit"></InputText>
+                <InputCheckbox v-model="problemData.shareTest">
+                    {{ problemData.shareTest ? '是' : '否' }}
+                </InputCheckbox>
             </div>
+        </div>
+        <InputButton @click="save">保存</InputButton>
+        <Dialog v-model="showSpecialTime" title="特殊时间限制">
             <div>
-                <h3>为特定的语言设置时间限制</h3>
-                <div class="special">
+                <span v-for="(value, language) in problemData.specialTimeLimit" :key="language">
+                    <InputCheckbox type="success" @change="deleteTime(language)" :value="true">
+                        当使用 {{ languageType[language].text }} 时，时间限制应为 {{ value }} s
+                    </InputCheckbox>
+                    <br>
+                </span>
+                <div class="special-add">
                     <span>当使用</span>
                     <InputSelect placeholder="语言" style="width: 200px" v-model="templateTimeLimit.language"
                                  :data="languageTypeList"></InputSelect>
@@ -39,21 +66,17 @@
                                v-model="templateTimeLimit.value"></InputText>
                     <span>s</span>
                     <InputButton @click="addSpecialTime">新增/更新</InputButton>
-        </div>
-            </div>
-            <div>
-                <h3>现有的特定时间限制</h3>
-                <div>
-                    <span v-for="(value, language) in problemData.specialTimeLimit" :key="language">
-                        <InputCheckbox @change="deleteTime(language)" :value="true">
-                            当使用 {{ languageType[language].text }} 时，时间限制应为 {{ value }} s
-                        </InputCheckbox>
-                    </span>
                 </div>
             </div>
+        </Dialog>
+        <Dialog v-model="showSpecialMemory" title="特殊时间限制">
             <div>
-                <h3>为特定的语言设置内存限制</h3>
-                <div class="special">
+                <span v-for="(value, language) in problemData.specialMemoryLimit" :key="language">
+                    <InputCheckbox type="success" @change="deleteMemory(language)" :value="true">
+                        当使用 {{ languageType[language].text }} 时，内存限制应为 {{ value }} MB
+                    </InputCheckbox>
+                </span>
+                <div class="special-add">
                     <span>当使用</span>
                     <InputSelect placeholder="语言" style="width: 200px" v-model="templateMemoryLimit.language"
                                  :data="languageTypeList"></InputSelect>
@@ -64,24 +87,7 @@
                     <InputButton @click="addSpecialMemory">新增/更新</InputButton>
                 </div>
             </div>
-            <div>
-                <h3>现有的特定内存限制</h3>
-                <div>
-                    <span v-for="(value, language) in problemData.specialMemoryLimit" :key="language">
-                        <InputCheckbox @change="deleteMemory(language)" :value="true">
-                            当使用 {{ languageType[language].text }} 时，内存限制应为 {{ value }} MB
-                        </InputCheckbox>
-                    </span>
-                </div>
-            </div>
-            <div>
-                <h3>是否允许下载样例</h3>
-                <InputCheckbox v-model="problemData.shareTest">
-                    {{ problemData.shareTest ? '是' : '否' }}
-                </InputCheckbox>
-            </div>
-        </div>
-        <InputButton @click="save">保存</InputButton>
+        </Dialog>
     </div>
 </template>
 
@@ -107,7 +113,10 @@ export default {
             templateMemoryLimit: {
                 language: '',
                 value: 128
-            }
+            },
+
+            showSpecialTime: false,
+            showSpecialMemory: false,
         }
     },
     created() {
@@ -193,16 +202,11 @@ export default {
 </script>
 
 <style scoped>
-.form > div {
-    display: grid;
-    grid-template-columns: 300px minmax(500px, 1fr);
-    place-items: center;
-    border-bottom: 1px solid var(--border-color-level-1);
-}
 
-.special {
+.special-add {
     display: grid;
-    grid-template-columns: auto 1fr auto 1fr auto 1fr;
-    place-items: center;
+    grid-template-columns: repeat(6, auto);
+    place-items: center left;
+    margin-top: 150px;
 }
 </style>

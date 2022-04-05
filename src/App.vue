@@ -127,4 +127,19 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+.form-box {
+    display: grid;
+    grid-template-columns: minmax(120px, auto) 1fr;
+    grid-column-gap: 20px;
+}
+
+.form-box > div:nth-child(odd) {
+    text-align: right;
+    line-height: 60px;
+}
+
+.form-box > div:nth-child(even) {
+    text-align: left;
+}
 </style>
