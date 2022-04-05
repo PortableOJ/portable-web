@@ -4,7 +4,6 @@
             <h1>{{ problemId === 0 ? '创建' : '编辑' }}题目</h1>
             <!--suppress JSValidateTypes -->
             <TabMenu v-if="problemId !== 0" @change="toSelect" :value="step" :options="stepList"></TabMenu>
-            <div style="height: 30px"></div>
             <router-view></router-view>
         </div>
         <div>

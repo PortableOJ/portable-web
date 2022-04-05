@@ -1,38 +1,47 @@
 <template>
     <div>
-        <div v-if="problemData !== null" style="text-align: left">
-            <h3>
+        <div v-if="problemData !== null" class="form-box">
+            <div>
                 标题
-            </h3>
-            <InputText style="width: auto" v-model="problemData.title"></InputText>
-            <h3>
-                题面描述
-            </h3>
-            <MarkdownEdit v-model="problemData.description"></MarkdownEdit>
-            <h3>
-                输入格式
-            </h3>
-            <MarkdownEdit v-model="problemData.input"></MarkdownEdit>
-            <h3>
-                输出格式
-            </h3>
-            <MarkdownEdit v-model="problemData.output"></MarkdownEdit>
-            <div style="display: grid; grid-template-columns: auto 1fr">
-                <h3>
-                    样例
-                </h3>
-                <!--suppress JSUnresolvedVariable -->
-                <InputButton @click="problemData.example.push({in: '', out: '', hash: hashCode++})">新增一组</InputButton>
             </div>
-            <div ref="example" v-for="(example, index) in problemData.example" :key="example.hash" class="test-data">
-                <div style="display: grid; grid-template-columns: auto 1fr">
-                    <h4>第 {{ index + 1 }} 组</h4>
-                    <InputButton @click="deleteExample(index)">删除本组</InputButton>
+            <InputText style="width: auto" v-model="problemData.title"></InputText>
+            <div>
+                题面描述
+            </div>
+            <MarkdownEdit v-model="problemData.description" min-height="120"></MarkdownEdit>
+            <div>
+                输入格式
+            </div>
+            <MarkdownEdit v-model="problemData.input" min-height="120"></MarkdownEdit>
+            <div>
+                输出格式
+            </div>
+            <MarkdownEdit v-model="problemData.output" min-height="120"></MarkdownEdit>
+            <div>
+                样例
+            </div>
+            <div>
+                <div ref="example" v-for="(example, index) in problemData.example" :key="example.hash" class="test-data">
+                    <div style="display: grid; grid-template-columns: auto 1fr">
+                        <h4>第 {{ index + 1 }} 组</h4>
+                        <InputButton @click="deleteExample(index)" type="warning">删除本组</InputButton>
+                    </div>
+                    <div class="form-box" style="grid-template-columns: minmax(50px, auto) 1fr; grid-column-gap: 0;">
+                        <div style="display: grid; place-items: center right">
+                            输入
+                        </div>
+                        <InputTextarea v-model="example.in"></InputTextarea>
+                    </div>
+                    <div class="form-box" style="grid-template-columns: minmax(50px, auto) 1fr; grid-column-gap: 0;">
+                        <div style="display: grid; place-items: center right">
+                            输出
+                        </div>
+                        <InputTextarea v-model="example.out"></InputTextarea>
+                    </div>
                 </div>
-                输入
-                <InputTextarea v-model="example.in"></InputTextarea>
-                输出
-                <InputTextarea v-model="example.out"></InputTextarea>
+                <InputButton type="success" @click="problemData.example.push({in: '', out: '', hash: hashCode++})">
+                    新增一组
+                </InputButton>
             </div>
         </div>
         <div style="display: grid; place-items: center">
@@ -98,10 +107,12 @@ export default {
 <style scoped>
 .test-data {
     margin-top: 10px;
-    margin-left: 30px;
     padding: 5px 10px;
     border-radius: 15px;
-    border: 1px solid var(--brand-color);
+    border: 1px solid var(--border-color-level-1);
 }
 
+.test-data:hover {
+    border: 1px solid var(--brand-color);
+}
 </style>
