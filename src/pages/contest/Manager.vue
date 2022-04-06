@@ -7,7 +7,7 @@
             </div>
             <div>时间</div>
             <div style="display: flex; place-items: center">
-                <InputDateTime style="width: 150px"
+                <InputDateTime style="width: 200px"
                                :read-only="notOwner"
                                v-model="contestData.startTime">
                 </InputDateTime>
