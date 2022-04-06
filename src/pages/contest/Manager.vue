@@ -3,7 +3,7 @@
         <div v-if="contestData" class="form-box">
             <div>标题</div>
             <div>
-                <InputText :read-only="contestId !== 0" style="width: 500px" v-model="contestData.title"></InputText>
+                <InputText style="width: 500px" v-model="contestData.title"></InputText>
             </div>
             <div>时间</div>
             <div style="display: flex; place-items: center">
