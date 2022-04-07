@@ -14,14 +14,19 @@
                 <template v-slot:body-title="scope">
                     <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
                 </template>
-                <template v-slot:body-status="scope">
-                    <template v-if="problemStatusType[scope.data.status]">
-                        {{ problemStatusType[scope.data.status].text }}
-                    </template>
-                </template>
-                <template v-slot:body-accessType="scope">
-                    <template v-if="problemAccessType[scope.data.accessType]">
-                        {{ problemAccessType[scope.data.accessType].text }}
+                <template v-slot:body-tag="scope">
+                    <template>
+                        <!--suppress JSUnresolvedVariable -->
+                        <Tag :type="scope.data.status === 'NORMAL' ? 'success' :
+                                    problemStatusType[scope.data.status].onTreatedOrCheck ? 'warning' : 'error'"
+                             v-if="problemStatusType[scope.data.status]">
+                            {{ problemStatusType[scope.data.status].text }}
+                        </Tag>
+                        <Tag :type="scope.data.accessType === 'PUBLIC' ? 'success' :
+                                    scope.data.accessType === 'HIDDEN' ? 'warning' : 'error'"
+                             v-if="problemAccessType[scope.data.accessType]">
+                            {{ problemAccessType[scope.data.accessType].text }}
+                        </Tag>
                     </template>
                 </template>
                 <template v-slot:body-radio="scope">
@@ -68,25 +73,17 @@ export default {
                     value: 'icon',
                     width: '20'
                 }, {
-                    label: '编号',
+                    label: '题号',
                     value: 'id',
-                    width: '30',
                 }, {
                     label: '标题',
                     value: 'title',
-                    width: '250',
                 }, {
-                    label: '当前状态',
-                    value: 'status',
-                    width: '50',
-                }, {
-                    label: '访问权限',
-                    value: 'accessType',
-                    width: '50',
+                    label: '状态',
+                    value: 'tag',
                 }, {
                     label: '通过/提交率',
                     value: 'radio',
-                    width: '100',
                 }
             ],
             tableData: [],

@@ -52,10 +52,12 @@
                     </template>
                     <!--suppress JSUnresolvedVariable -->
                     <template v-slot:body-submitTime="scope">
+                        <span style="word-break: keep-all">
                         {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
+                        </span>
                     </template>
                     <template v-slot:body-status="scope">
-                        {{ solutionStatusType[scope.data.status].text }}
+                        <SolutionStatus :value="scope.data.status"></SolutionStatus>
                     </template>
                 </Table>
             </div>
@@ -66,10 +68,12 @@
 <script>
 import UserCard from "@/card/UserCard";
 import ProblemShow from "@/components/ProblemShow";
+import SolutionStatus from "@/components/SolutionStatus";
 
 export default {
     name: "Problem",
     components: {
+        SolutionStatus,
         ProblemShow,
         UserCard
     },
@@ -81,7 +85,7 @@ export default {
             isLogin: this.$user.isLogin(),
             tableHead: [
                 {
-                    label: '编号',
+                    label: '',
                     value: 'id',
                 }, {
                     label: '提交时间',

@@ -47,7 +47,7 @@
                              :min="0">
                 </InputSlider>
             </div>
-            <div class="card" v-if="step === 'rank' && isOwner">
+            <div class="card" v-if="step === 'rank' && isManager">
                 <span class="card-title">榜单属性</span>
                 <InputCheckbox v-model="freeze">显示封榜后的榜单</InputCheckbox>
             </div>
@@ -85,6 +85,8 @@ export default {
             },
             step: null,
             // 是否是比赛的管理员
+            isManager: false,
+            // 是否是比赛的拥有者
             isOwner: false,
             // 使用封榜后的榜单
             freeze: true,
@@ -107,14 +109,15 @@ export default {
                 } else if (usedTime > this.contestInfo.duration * 60) {
                     this.slider = 100
                 } else {
-                    this.slider = (usedTime / this.contestInfo.duration) / 6 * 10;
+                    this.slider = (usedTime / this.contestInfo.duration) / 6 * 10
                     this.leftTime = this.contestInfo.duration * 60 - usedTime
                     this.leftTime = this.leftTime.toFixed(0)
                 }
             }, 10)
         })
         this.$contest.auth(this.contestId, null, res => {
-            this.isOwner = res === 'ADMIN' || res === 'CO_AUTHOR';
+            this.isOwner = res = 'ADMIN'
+            this.isManager = this.isOwner || res === 'CO_AUTHOR'
             this.selectOption = [
                 {
                     label: '公告',
@@ -128,14 +131,14 @@ export default {
                 }, {
                     label: '测试',
                     value: 'test_status',
-                    hidden: !this.isOwner
+                    hidden: !this.isManager
                 }, {
                     label: '榜单',
                     value: 'rank',
                 }, {
                     label: '管理',
                     value: 'manager',
-                    hidden: !this.isOwner
+                    hidden: !this.isManager
                 }
             ]
         })
@@ -149,7 +152,7 @@ export default {
         },
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
-        },
+        }
     },
     watch: {
         $route(to) {

@@ -3,11 +3,11 @@
         <div v-if="contestData" class="form-box">
             <div>标题</div>
             <div>
-                <InputText :read-only="contestId !== 0" style="width: 500px" v-model="contestData.title"></InputText>
+                <InputText style="width: 500px" v-model="contestData.title"></InputText>
             </div>
             <div>时间</div>
             <div style="display: flex; place-items: center">
-                <InputDateTime style="width: 150px"
+                <InputDateTime style="width: 200px"
                                :read-only="notOwner"
                                v-model="contestData.startTime">
                 </InputDateTime>
@@ -99,11 +99,20 @@
                     <template v-slot:body-title="scope">
                         <Link @click="openProblem(scope.data.id)">{{ scope.data.title }}</Link>
                     </template>
-                    <template v-slot:body-status="scope">
-                        {{ problemStatusType[scope.data.status].text }}
-                    </template>
-                    <template v-slot:body-accessType="scope">
-                        {{ problemAccessType[scope.data.accessType].text }}
+                    <template v-slot:body-tag="scope">
+                        <template>
+                            <!--suppress JSUnresolvedVariable -->
+                            <Tag :type="scope.data.status === 'NORMAL' ? 'success' :
+                                    problemStatusType[scope.data.status].onTreatedOrCheck ? 'warning' : 'error'"
+                                 v-if="problemStatusType[scope.data.status]">
+                                {{ problemStatusType[scope.data.status].text }}
+                            </Tag>
+                            <Tag :type="scope.data.accessType === 'PUBLIC' ? 'success' :
+                                    scope.data.accessType === 'HIDDEN' ? 'warning' : 'error'"
+                                 v-if="problemAccessType[scope.data.accessType]">
+                                {{ problemAccessType[scope.data.accessType].text }}
+                            </Tag>
+                        </template>
                     </template>
                     <template v-slot:body-lock="scope">
                         <i v-show="scope.data.lock !== null"
@@ -180,15 +189,11 @@ export default {
                     value: 'title',
                     width: '200',
                 }, {
-                    label: '当前状态',
-                    value: 'status',
+                    label: '状态',
+                    value: 'tag',
                     width: '50',
                 }, {
-                    label: '访问权限',
-                    value: 'accessType',
-                    width: '50',
-                }, {
-                    label: '锁定状态',
+                    label: '锁定',
                     value: 'lock',
                     width: '30',
                 }, {
