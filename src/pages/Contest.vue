@@ -116,7 +116,7 @@ export default {
             }, 10)
         })
         this.$contest.auth(this.contestId, null, res => {
-            this.isOwner = res = 'ADMIN'
+            this.isOwner = res === 'ADMIN'
             this.isManager = this.isOwner || res === 'CO_AUTHOR'
             this.selectOption = [
                 {
