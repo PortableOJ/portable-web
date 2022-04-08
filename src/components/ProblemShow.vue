@@ -85,6 +85,7 @@
             <div>
                 <InputCode v-model="submitCode" mode="text/x-c++src" placeholder="请输入需要提交的代码"></InputCode>
             </div>
+            <InputButton @click="submit">提交</InputButton>
             <Dialog v-model="showHint" :title="`样例 # ${showHintId + 1}`">
                 <div class="example" style="width: 800px; max-height: 500px">
                     <div>
@@ -103,7 +104,6 @@
                     <div class="text-area" v-html="markedHint(problemData.example[showHintId].hint)"></div>
                 </div>
             </Dialog>
-            <InputButton @click="submit">提交</InputButton>
         </div>
     </div>
 </template>
@@ -203,6 +203,7 @@ export default {
         this.description = this.$markdown(this.problemData.description)
         this.input = this.$markdown(this.problemData.input)
         this.output = this.$markdown(this.problemData.output)
+        this.curLanguage = this.$common.getCache('lastLanguage')
         this.initLimit()
     },
     methods: {
@@ -239,6 +240,7 @@ export default {
                     this.$router.push({name: 'solution', params: {solutionId: res}})
                 })
             }
+            this.$common.setCache('lastLanguage', this.curLanguage, 60 * 24 * 30)
         },
         openSTDJudge() {
             window.open(`https://github.com/PortableOJ/portable-testlib/blob/master/standard/${this.problemData.judgeCodeType}.cpp`, '_blank')
