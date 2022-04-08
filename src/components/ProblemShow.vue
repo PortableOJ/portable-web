@@ -47,18 +47,28 @@
             <h3>
                 样例
             </h3>
-            <div v-for="(example, index) in problemData.example" :key="example.in">
-                <h4>第 {{ index + 1 }} 组</h4>
-                输入
-                <MarkdownBlockCode :show-line="false" class="text-area" :value="example.in"></MarkdownBlockCode>
-                输出
-                <MarkdownBlockCode :show-line="false" class="text-area" :value="example.out"></MarkdownBlockCode>
+            <div class="example" v-for="(example, index) in problemData.example" :key="example.in">
+                <div>
+                    <div class="example-title">
+                        输入 # {{ index + 1 }}
+                        <Link @click="showHintId = index; showHint = true">展开</Link>
+                    </div>
+                    <MarkdownBlockCode class="example-copy" :show-line="false" :value="example.in"></MarkdownBlockCode>
+                </div>
+                <div>
+                    <div class="example-title">
+                        输出 # {{ index + 1 }}
+                        <Link @click="showHintId = index; showHint = true">展开</Link>
+                    </div>
+                    <MarkdownBlockCode class="example-copy" :show-line="false" :value="example.out"></MarkdownBlockCode>
+                </div>
             </div>
             <h3>
                 判题系统
             </h3>
             <div class="text-area">
-                <Link v-if="judgeCodeType[problemData.judgeCodeType]" :disabled="problemData.judgeCodeType==='DIY'" @click="openSTDJudge">
+                <Link v-if="judgeCodeType[problemData.judgeCodeType]" :disabled="problemData.judgeCodeType==='DIY'"
+                      @click="openSTDJudge">
                     {{ judgeCodeType[problemData.judgeCodeType].text }}
                 </Link>
             </div>
@@ -75,6 +85,24 @@
             <div>
                 <InputCode v-model="submitCode" mode="text/x-c++src" placeholder="请输入需要提交的代码"></InputCode>
             </div>
+            <Dialog v-model="showHint" :title="`样例 # ${showHintId + 1}`">
+                <div class="example" style="width: 800px; max-height: 500px">
+                    <div>
+                        <div class="example-title">输入</div>
+                        <MarkdownBlockCode class="example-copy" :show-line="false"
+                                           :value="problemData.example[showHintId].in"></MarkdownBlockCode>
+                    </div>
+                    <div>
+                        <div class="example-title">输出</div>
+                        <MarkdownBlockCode class="example-copy" :show-line="false"
+                                           :value="problemData.example[showHintId].out"></MarkdownBlockCode>
+                    </div>
+                </div>
+                <div v-if="problemData.example[showHintId].hint">
+                    <div class="example-title">提示</div>
+                    <div class="text-area" v-html="markedHint(problemData.example[showHintId].hint)"></div>
+                </div>
+            </Dialog>
             <InputButton @click="submit">提交</InputButton>
         </div>
     </div>
@@ -153,6 +181,9 @@ export default {
             problemStatusType: {},
 
             submitCode: '',
+
+            showHint: false,
+            showHintId: 0,
         }
     },
     created() {
@@ -168,10 +199,10 @@ export default {
                     value: cur
                 })
             }
-            this.description = this.$markdown(this.problemData.description)
-            this.input = this.$markdown(this.problemData.input)
-            this.output = this.$markdown(this.problemData.output)
         })
+        this.description = this.$markdown(this.problemData.description)
+        this.input = this.$markdown(this.problemData.input)
+        this.output = this.$markdown(this.problemData.output)
         this.initLimit()
     },
     methods: {
@@ -188,9 +219,6 @@ export default {
             let t = this.problemData.specialMemoryLimit[this.curLanguage]
             if (t) return t
             return this.problemData.defaultMemoryLimit
-        },
-        updateCode(v) {
-            this.submitCode = v
         },
         submit() {
             if (this.languageSupport.findIndex(value => value.value === this.curLanguage) === -1) {
@@ -214,6 +242,9 @@ export default {
         },
         openSTDJudge() {
             window.open(`https://github.com/PortableOJ/portable-testlib/blob/master/standard/${this.problemData.judgeCodeType}.cpp`, '_blank')
+        },
+        markedHint(hint) {
+            return this.$markdown(hint)
         }
     }
 }
@@ -228,6 +259,18 @@ export default {
     display: grid;
     grid-gap: 3px;
     grid-template-columns: repeat(4, 1fr);
+}
+
+.example {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.example-title {
+    text-align: center;
+    font-weight: bolder;
 }
 
 </style>

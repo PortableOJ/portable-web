@@ -52,6 +52,7 @@
                     </template>
                     <!--suppress JSUnresolvedVariable -->
                     <template v-slot:body-submitTime="scope">
+                        <!--suppress JSUnresolvedVariable -->
                         <span style="word-break: keep-all">
                         {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
                         </span>

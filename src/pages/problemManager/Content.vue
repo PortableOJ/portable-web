@@ -21,22 +21,29 @@
                 样例
             </div>
             <div>
-                <div ref="example" v-for="(example, index) in problemData.example" :key="example.hash" class="test-data">
+                <div ref="example" v-for="(example, index) in problemData.example" :key="example.hash"
+                     class="test-data">
                     <div style="display: grid; grid-template-columns: auto 1fr">
                         <h4>第 {{ index + 1 }} 组</h4>
                         <InputButton @click="deleteExample(index)" type="warning">删除本组</InputButton>
                     </div>
-                    <div class="form-box" style="grid-template-columns: minmax(50px, auto) 1fr; grid-column-gap: 0;">
+                    <div class="example">
                         <div style="display: grid; place-items: center right">
                             输入
                         </div>
-                        <InputTextarea v-model="example.in"></InputTextarea>
+                        <InputTextarea style="overflow: auto" v-model="example.in"></InputTextarea>
                     </div>
-                    <div class="form-box" style="grid-template-columns: minmax(50px, auto) 1fr; grid-column-gap: 0;">
+                    <div class="example">
                         <div style="display: grid; place-items: center right">
                             输出
                         </div>
-                        <InputTextarea v-model="example.out"></InputTextarea>
+                        <InputTextarea style="overflow: auto" v-model="example.out"></InputTextarea>
+                    </div>
+                    <div class="example">
+                        <div style="display: grid; place-items: center right">
+                            提示
+                        </div>
+                        <MarkdownEdit v-model="example.hint" min-height="60"></MarkdownEdit>
                     </div>
                 </div>
                 <InputButton type="success" @click="problemData.example.push({in: '', out: '', hash: hashCode++})">
@@ -114,5 +121,11 @@ export default {
 
 .test-data:hover {
     border: 1px solid var(--brand-color);
+}
+
+.example {
+    display: grid;
+    grid-template-columns: minmax(50px, auto) 1fr;
+    grid-column-gap: 20px;
 }
 </style>
