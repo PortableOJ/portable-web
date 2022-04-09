@@ -10,7 +10,7 @@
                 <img ref="captcha" :src="captchaUrl" alt="验证码"/>
             </Link>
         </div>
-        <InputButton @click="register">注册</InputButton>
+        <InputButton :loading="onRegister" @click="register">注册</InputButton>
     </div>
 </template>
 
@@ -24,7 +24,9 @@ export default {
             rePassword: '',
             captcha: '',
             captchaUrl: process.env.VUE_APP_CAPTCHA_URL,
-            backUrl: this.$common.getQueryString(this, 'back', '/')
+            backUrl: this.$common.getQueryString(this, 'back', '/'),
+
+            onRegister: false
         }
     },
     created() {
@@ -40,6 +42,7 @@ export default {
                 })
                 return
             }
+            this.onRegister = true
             this.$user.signUp(this.handle, this.password, this.captcha, () => {
                 this.$toast({
                     title: '欢迎',
@@ -48,6 +51,11 @@ export default {
                     type: 'success'
                 })
                 this.$router.push(this.backUrl)
+            }, res => {
+                this.onRegister = false
+                if (!res) {
+                    this.flushCaptcha()
+                }
             })
         },
         flushCaptcha() {
