@@ -2,14 +2,14 @@ import Request from "@/common/request";
 
 let baseUrl = '/api/solution'
 
-function getPublicSolutionList(pageNum, pageSize, userHandle, problemId, statusType, success) {
+function getPublicSolutionList(pageNum, pageSize, userHandle, problemId, statusType, success, callback) {
     Request.get(baseUrl + '/getPublicStatus', {
         pageNum: pageNum,
         pageSize: pageSize,
         userHandle: userHandle,
         problemId: problemId,
         statusType: statusType
-    }, success, null)
+    }, success, callback)
 }
 
 function getSolution(id, success) {
