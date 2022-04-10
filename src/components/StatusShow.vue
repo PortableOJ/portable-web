@@ -15,34 +15,38 @@
                          :data="solutionStatusTypeList"></InputSelect>
             <InputButton style="width: 80px" @click="changeUrl">刷新</InputButton>
         </div>
-        <Table style="width: 100%;" v-if="languageType" :head="tableHead" :data="tableData">
-            <template v-slot:body-id="scope">
-                <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userHandle)">
-                    {{ scope.data.id }}
-                </Link>
-            </template>
-            <template v-slot:body-userHandle="scope">
-                <Link @click="openUser(scope.data.userHandle)">
-                    {{ scope.data.userHandle }}
-                </Link>
-            </template>
-            <template v-slot:body-problemTitle="scope">
+        <div style="position: relative; min-height: 400px; width: 100%;">
+            <!--suppress JSValidateTypes -->
+            <Table style="width: 100%;" v-if="languageType" :head="tableHead" :data="tableData">
+                <template v-slot:body-id="scope">
+                    <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userHandle)">
+                        {{ scope.data.id }}
+                    </Link>
+                </template>
+                <template v-slot:body-userHandle="scope">
+                    <Link @click="openUser(scope.data.userHandle)">
+                        {{ scope.data.userHandle }}
+                    </Link>
+                </template>
+                <template v-slot:body-problemTitle="scope">
+                    <!--suppress JSUnresolvedVariable -->
+                    <Link @click="openProblem(scope.data.problemId)">
+                        {{ scope.data.problemTitle }}
+                    </Link>
+                </template>
                 <!--suppress JSUnresolvedVariable -->
-                <Link @click="openProblem(scope.data.problemId)">
-                    {{ scope.data.problemTitle }}
-                </Link>
-            </template>
-            <!--suppress JSUnresolvedVariable -->
-            <template v-slot:body-submitTime="scope">
-                {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
-            </template>
-            <template v-slot:body-languageType="scope">
-                {{ languageType[scope.data.languageType].text }}
-            </template>
-            <template v-slot:body-status="scope">
-                <SolutionStatus :value="scope.data.status"></SolutionStatus>
-            </template>
-        </Table>
+                <template v-slot:body-submitTime="scope">
+                    {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
+                </template>
+                <template v-slot:body-languageType="scope">
+                    {{ languageType[scope.data.languageType].text }}
+                </template>
+                <template v-slot:body-status="scope">
+                    <SolutionStatus :value="scope.data.status"></SolutionStatus>
+                </template>
+            </Table>
+            <GlobalLoading v-show="onRefresh"></GlobalLoading>
+        </div>
         <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
     </div>
 </template>
@@ -115,7 +119,9 @@ export default {
 
             languageType: {},
             solutionStatusType: {},
-            solutionStatusTypeList: []
+            solutionStatusTypeList: [],
+
+            onRefresh: false
         }
     },
     created() {
@@ -140,6 +146,13 @@ export default {
             }
         })
         this.myUserHandle = this.$user.getCurUserHandle()
+        if (this.contestId) {
+            this.$contest.getContestInfo(this.contestId, res => {
+                // noinspection JSUnresolvedVariable
+                this.ownerAndCoAuthor = res.coAuthor
+                this.ownerAndCoAuthor.push(res.ownerHandle)
+            })
+        }
         this.changeUrl()
     },
     methods: {
@@ -151,19 +164,19 @@ export default {
                 this.totalPage = res.totalPage
                 this.tableData = res.data
             }
+            let callback = () => {
+                this.onRefresh = false
+            }
+            this.tableData = []
+            this.onRefresh = true
             if (this.contestId) {
                 if (this.testContest) {
-                    this.$contest.getContestTestStatus(this.contestId, this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus)
+                    this.$contest.getContestTestStatus(this.contestId, this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus, callback)
                 } else {
-                    this.$contest.getContestStatus(this.contestId, this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus)
+                    this.$contest.getContestStatus(this.contestId, this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus, callback)
                 }
-                this.$contest.getContestInfo(this.contestId, res => {
-                    // noinspection JSUnresolvedVariable
-                    this.ownerAndCoAuthor = res.coAuthor
-                    this.ownerAndCoAuthor.push(res.ownerHandle)
-                })
             } else {
-                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus)
+                this.$solution.getPublicSolutionList(this.pageNum, this.pageSize, this.userHandle, this.problemId, this.statusType, getStatus, callback)
             }
         },
         openSolution(id) {
