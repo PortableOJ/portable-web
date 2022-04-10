@@ -6,12 +6,14 @@ function init(toast) {
     Toast = toast
 }
 
-function dealResponse(response, success) {
+function dealResponse(response, success, callback) {
     if (response.success) {
         if (success) {
             success(response.data)
         }
-        return true
+        if (callback) {
+            callback(true, null)
+        }
     } else {
         Toast({
             title: `失败(${response.code})`,
@@ -19,16 +21,15 @@ function dealResponse(response, success) {
             duration: 'auto',
             type: 'error'
         })
-        return false
+        if (callback) {
+            callback(false, response.code)
+        }
     }
 }
 
 function axiosSend(data, success, callback) {
     axios(data).then(res => {
-        const flag = dealResponse(res.data, success)
-        if (callback) {
-            callback(flag)
-        }
+        dealResponse(res.data, success, callback)
     }).catch(e => {
         Toast({
             title: '出错啦',
@@ -37,7 +38,7 @@ function axiosSend(data, success, callback) {
             type: 'error'
         })
         if (callback) {
-            callback(false)
+            callback(false, null)
         }
     })
 }
