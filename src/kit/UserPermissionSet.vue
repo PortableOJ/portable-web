@@ -54,6 +54,7 @@ export default {
                         duration: 'auto',
                         type: 'success'
                     })
+                    this.status = !this.status
                 })
             } else {
                 this.$user.addPermission(this.userHandle, target, () => {
@@ -63,6 +64,7 @@ export default {
                         duration: 'auto',
                         type: 'success'
                     })
+                    this.status = !this.status
                 })
             }
         }
