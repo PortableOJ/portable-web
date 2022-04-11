@@ -197,7 +197,7 @@ export default {
     grid-template-columns: 150px 150px 1fr;
     column-gap: 10px;
     place-items: center;
-    border-top: 1px solid var(--border-color-level-1);
+    border-bottom: 1px solid var(--border-color-level-1);
     text-align: center;
 }
 </style>
