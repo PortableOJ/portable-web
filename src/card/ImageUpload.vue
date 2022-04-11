@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card" v-show="show">
         <span class="card-title">上传图片</span>
         <InputFile class="card-input" @change="loadImage" :accept="'image/*'"></InputFile>
         <InputButton :disabled="!cacheImage" @click="upload">上传并复制图片链接</InputButton>
@@ -14,7 +14,11 @@ export default {
         return {
             cacheImage: null,
             imageUrl: null,
+            show: false
         }
+    },
+    created() {
+        this.show = this.$user.hasPermission(this.$user.permissionTypeList.UPLOAD_FILE)
     },
     methods: {
         loadImage(files) {

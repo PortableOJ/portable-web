@@ -157,6 +157,10 @@ const routes = [
         path: '/batch',
         name: 'batch',
         component: () => import('@/pages/BatchManager')
+    }, {
+        path: '/faq',
+        name: 'faq',
+        component: () => import('@/pages/FAQ')
     },
 
     // 404 页面要放在最后

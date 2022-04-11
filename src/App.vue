@@ -36,6 +36,9 @@ export default {
                     label: '<i class="iconfont icon-dashboard" />服务',
                     value: 'judge',
                     hidden: !this.$user.hasPermission(this.$user.permissionTypeList.MANAGER_JUDGE)
+                }, {
+                    label: '<i class="iconfont icon-work-order" />FAQ',
+                    value: 'faq',
                 }
             ],
             hiddenOption: {

@@ -37,13 +37,14 @@
             <InputButton @click="showAddFileDialog = true">添加测试数据</InputButton>
         </div>
         <Dialog v-model="showTestDialog" title="预览部分数据">
-            <div style="width: 800px">
+            <div style="width: 800px; max-height: 600px; overflow: auto">
                 <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
             </div>
         </Dialog>
         <Dialog v-model="showAddFileDialog" title="新增数据">
             <div style="width: 800px; display: grid; place-items: center">
-                <InputFile v-if="showAddFileDialog" placeholder="选择文件加入暂存" :multiple="true" v-model="templateFileList"></InputFile>
+                <InputFile v-if="showAddFileDialog" placeholder="选择文件加入暂存" :multiple="true"
+                           v-model="templateFileList"></InputFile>
                 <InputButton @click="save">添加至暂存区域</InputButton>
             </div>
         </Dialog>
