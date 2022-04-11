@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import SolutionStatus from "@/components/SolutionStatus";
+import SolutionStatus from "@/kit/SolutionStatus";
 
 export default {
     name: "StatusShow",

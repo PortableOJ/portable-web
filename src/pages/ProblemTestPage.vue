@@ -14,7 +14,7 @@
                 </template>
             </Table>
             <Dialog v-model="showTestDialog" title="预览部分数据">
-                <div style="width: 800px">
+                <div style="width: 800px; max-height: 600px; overflow: auto">
                     <MarkdownBlockCode :key='keyNum' :value="showValue"></MarkdownBlockCode>
                 </div>
             </Dialog>

@@ -69,7 +69,7 @@
 <script>
 import UserCard from "@/card/UserCard";
 import ProblemShow from "@/components/ProblemShow";
-import SolutionStatus from "@/components/SolutionStatus";
+import SolutionStatus from "@/kit/SolutionStatus";
 
 export default {
     name: "Problem",
