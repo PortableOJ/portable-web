@@ -88,23 +88,26 @@ export default {
             this.problemData.example.splice(index, 1)
         },
         saveContent() {
-            let callback = () => {
-                this.$toast({
-                    title: '成功',
-                    text: '更新题目内容成功',
-                    duration: 'auto',
-                    type: 'success'
-                })
-            }
             if (this.problemId === 0) {
                 this.$problem.newProblem(this.problemData, res => {
                     this.problemId = res
-                    this.$router.push({name: 'problemManager', params: {problemId: res.toString()}})
-                    location.reload()
-                    callback()
+                    this.$router.push({name: 'problemManager-setting', params: {problemId: res.toString()}})
+                    this.$toast({
+                        title: '成功',
+                        text: '成功创建题目',
+                        duration: 'auto',
+                        type: 'success'
+                    })
                 })
             } else {
-                this.$problem.updateContent(this.problemData, callback)
+                this.$problem.updateContent(this.problemData, () => {
+                    this.$toast({
+                        title: '成功',
+                        text: '更新题目内容成功',
+                        duration: 'auto',
+                        type: 'success'
+                    })
+                })
             }
         }
     }

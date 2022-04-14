@@ -3,12 +3,12 @@
         <div v-if="contestData" class="form-box">
             <div>标题</div>
             <div>
-                <InputText style="width: 500px" v-model="contestData.title"></InputText>
+                <InputText :read-only="notOwner" style="width: 500px" v-model="contestData.title"></InputText>
             </div>
             <div>时间</div>
             <div style="display: flex; place-items: center">
                 <InputDateTime style="width: 200px"
-                               :read-only="notOwner"
+                               :read-only="notOwner || isStarted"
                                v-model="contestData.startTime">
                 </InputDateTime>
                 <div>至</div>
@@ -18,7 +18,7 @@
                 </InputText>
                 <div>，持续</div>
                 <InputText style="width: 150px"
-                           :read-only="notOwner"
+                           :read-only="notOwner || isEnded"
                            :type="'number'"
                            v-model="contestData.duration">
                 </InputText>
@@ -39,7 +39,7 @@
                 <div v-if="contestData.accessType === 'BATCH'">
                     <div style="display: grid; grid-template-columns: 250px 50px; place-items: center ">
                         <!--suppress JSUnresolvedVariable -->
-                        <InputText style="width: 250px" :read-only="notOwner" v-model="contestData.batchId"></InputText>
+                        <InputText style="width: 250px" :read-only="notOwner || isStarted" v-model="contestData.batchId"></InputText>
                         <Link @click="checkBatch">校验</Link>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                     密码
                 </div>
                 <div v-if="contestData.accessType === 'PASSWORD'">
-                    <InputText :read-only="notOwner" v-model="contestData.password"></InputText>
+                    <InputText :read-only="notOwner || isStarted" v-model="contestData.password"></InputText>
                 </div>
                 <div v-if="contestData.accessType === 'PRIVATE'">
                     已邀请：
@@ -55,13 +55,13 @@
                 <div style="max-width: 300px; display: flex; overflow: auto; place-items: center"
                      v-if="contestData.accessType === 'PRIVATE'">
                     <template v-for="handle in contestData.inviteUserSet">
-                        <InputCheckbox :read-only="notOwner" @change="deleteInvite(handle)" :value="true" :key="handle">
+                        <InputCheckbox :read-only="notOwner || isStarted" @change="deleteInvite(handle)" :value="true" :key="handle">
                             {{ handle }}
                         </InputCheckbox>
                     </template>
                 </div>
                 <div v-if="contestData.accessType === 'PRIVATE'">
-                    <Link @click="showPrivateUserDialog = true">邀请更多</Link>
+                    <Link :disabled="notOwner || isStarted" @click="showPrivateUserDialog = true">邀请更多</Link>
                 </div>
             </div>
             <div>
@@ -82,13 +82,13 @@
             <div style="display: flex; place-items: center">
                 <div style="display: flex; max-width: 500px; overflow: auto">
                     <template v-for="handle in contestData.coAuthor">
-                        <InputCheckbox :read-only="notOwner" @change="deleteCoAuthor(handle)" :value="true"
+                        <InputCheckbox :read-only="notOwner || isStarted" @change="deleteCoAuthor(handle)" :value="true"
                                        :key="handle">
                             {{ handle }}
                         </InputCheckbox>
                     </template>
                 </div>
-                <Link @click="showCoAuthorDialog = true">邀请更多</Link>
+                <Link :disabled="notOwner || isStarted" @click="showCoAuthorDialog = true">邀请更多</Link>
             </div>
         </div>
         <div v-if="contestData" style="width: 100%">
@@ -127,12 +127,12 @@
                                      style="width: 30px; height: 30px" @click="down(scope.data.id)">
                             <i class="iconfont icon-down"></i>
                         </InputButton>
-                        <InputButton :disabled="notOwner" :type="'warning'" @click="deleteProblem(scope.data.id)">
+                        <InputButton :disabled="notOwner || isStarted" :type="'warning'" @click="deleteProblem(scope.data.id)">
                             删除
                         </InputButton>
                     </template>
                 </Table>
-                <InputButton @click="showAddProblemDialog = true">添加题目</InputButton>
+                <InputButton :disabled="isEnded" @click="showAddProblemDialog = true">添加题目</InputButton>
             </div>
             <h1>公告</h1>
             <div style="display: block; text-align: left">
@@ -140,7 +140,7 @@
                               v-model="contestData.announcement"></MarkdownEdit>
             </div>
         </div>
-        <InputButton @click="save">保存</InputButton>
+        <InputButton :disabled="notOwner" @click="save">保存</InputButton>
         <Dialog title="邀请列表" v-model="showPrivateUserDialog">
             <div style="display: grid; grid-template-columns: 1fr auto">
                 <InputText :read-only="notOwner" v-model="templateInvite"
@@ -157,7 +157,7 @@
         </Dialog>
         <Dialog title="添加题目" v-model="showAddProblemDialog">
             <div style="display: grid; grid-template-columns: auto 1fr auto">
-                <InputCheckbox @change="clearSearchKey" :disabled="notOwner" v-model="usePublic">启用公开题库
+                <InputCheckbox @change="clearSearchKey" :read-only="notOwner" v-model="usePublic">启用公开题库
                 </InputCheckbox>
                 <InputSelect @search="changeSearchKey"
                              :data="searchProblemList"
@@ -204,6 +204,8 @@ export default {
             ],
             problemList: [],
             notOwner: true,
+            isStarted: false,
+            isEnded: false,
 
             // 添加问题
             usePublic: false,
@@ -228,8 +230,11 @@ export default {
             this.$contest.getContestDataAdmin(this.contestId, res => {
                 this.contestData = res
                 let startTime = new Date(this.contestData.startTime)
+                let endTime = new Date(this.contestData.startTime).add(this.contestData.duration)
                 this.contestData.startTime = startTime.format("yyyy-MM-ddThh:mm")
                 this.problemList = res.problemList
+                this.isStarted = startTime.getTime() < new Date().getTime()
+                this.isEnded = endTime.getTime() < new Date().getTime()
                 for (let i = 0; i < res.problemList.length; i++) {
                     // noinspection JSUnresolvedVariable
                     this.problemList[i].lock = res.problemLock[i]
@@ -438,20 +443,19 @@ export default {
             this.contestData.startTime = new Date(this.contestData.startTime)
             if (this.contestId === 0) {
                 this.$contest.newContest(this.contestData, id => {
+                    this.$router.replace({name: 'contest-info', params: {contestId: id}})
                     this.$toast({
                         title: '成功',
                         text: '创建成功',
                         duration: 'auto',
                         type: 'success'
                     })
-                    this.$router.replace({name: 'contest-manager', params: {contestId: id}})
-                    location.reload()
                 })
             } else {
                 this.$contest.updateContest(this.contestData, () => {
                     this.$toast({
                         title: '成功',
-                        text: '更新成功，部分不允许更新项已经回滚至修改前',
+                        text: '更新成功',
                         duration: 'auto',
                         type: 'success'
                     })
