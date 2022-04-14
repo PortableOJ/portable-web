@@ -1,27 +1,31 @@
 <template>
     <div style="display: grid; place-items: center">
         <!--suppress JSValidateTypes -->
-        <div style="width: 100%; display: grid; grid-template-columns: repeat(6, auto); place-items: center;">
+        <div style="width: 100%; display: grid; grid-template-columns: repeat(6, auto); place-items: center">
             <div>过滤条件：</div>
-            <InputText style="width: 250px" placeholder="用户昵称" v-model="userHandle"></InputText>
-            <InputButton style="width: 50px"
-                         :disabled="myUserHandle === null"
-                         type="info"
-                         @click="userHandle = myUserHandle">
-                填入我
-            </InputButton>
-            <InputText style="width: 200px" placeholder="题号" v-model="problemId"></InputText>
+            <InputText style="width: 200px" placeholder="用户昵称" v-model="userHandle"></InputText>
+            <InputCheckbox :disabled="myUserHandle === null"
+                           :value="userHandle === myUserHandle"
+                         @change="flag => flag ? userHandle = myUserHandle : userHandle = ''">
+                仅我
+            </InputCheckbox>
+            <InputSelect v-if="problemSelect" style="width: 250px" placeholder="题目" v-model="problemId" :data="problemSelect"></InputSelect>
+            <InputText v-else style="width: 250px" placeholder="题号" v-model="problemId"></InputText>
             <InputSelect style="width: 250px" placeholder="状态" v-model="statusType"
                          :data="solutionStatusTypeList"></InputSelect>
             <InputButton style="width: 80px" @click="changeUrl">刷新</InputButton>
         </div>
         <div style="position: relative; min-height: 400px; width: 100%;">
             <!--suppress JSValidateTypes -->
-            <Table style="width: 100%;" v-if="languageType" :head="tableHead" :data="tableData">
+            <Table style="width: 100%; font-size: 0.8rem" v-if="languageType" :head="tableHead" :data="tableData">
                 <template v-slot:body-id="scope">
                     <Link @click="openSolution(scope.data.id)" :disabled="disableSolution(scope.data.userHandle)">
                         {{ scope.data.id }}
                     </Link>
+                </template>
+                <!--suppress JSUnresolvedVariable -->
+                <template v-slot:body-submitTime="scope">
+                    {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
                 </template>
                 <template v-slot:body-userHandle="scope">
                     <Link @click="openUser(scope.data.userHandle)">
@@ -30,19 +34,24 @@
                 </template>
                 <template v-slot:body-problemTitle="scope">
                     <!--suppress JSUnresolvedVariable -->
-                    <Link @click="openProblem(scope.data.problemId)">
-                        {{ scope.data.problemTitle }}
+                    <Link @click="openProblem(scope.data.problemId)" style="overflow: hidden;
+                    text-overflow:ellipsis; max-width: 200px; white-space: nowrap;">
+                        {{ scope.data.problemId }} - {{ scope.data.problemTitle }}
                     </Link>
-                </template>
-                <!--suppress JSUnresolvedVariable -->
-                <template v-slot:body-submitTime="scope">
-                    {{ new Date(scope.data.submitTime).format("yyyy-MM-dd hh:mm:ss") }}
                 </template>
                 <template v-slot:body-languageType="scope">
                     {{ languageType[scope.data.languageType].text }}
                 </template>
                 <template v-slot:body-status="scope">
                     <SolutionStatus :value="scope.data.status"></SolutionStatus>
+                </template>
+                <!--suppress JSUnresolvedVariable -->
+                <template v-slot:body-timeCost="scope">
+                    {{ scope.data.timeCost }} ms
+                </template>
+                <!--suppress JSUnresolvedVariable -->
+                <template v-slot:body-memoryCost="scope">
+                    {{ scope.data.memoryCost }} KiB
                 </template>
             </Table>
             <GlobalLoading v-show="onRefresh"></GlobalLoading>
@@ -95,11 +104,11 @@ export default {
                     value: 'status',
                     width: '50',
                 }, {
-                    label: '耗时(ms)',
+                    label: '耗时',
                     value: 'timeCost',
                     width: '50'
                 }, {
-                    label: '最大内存占用(KB)',
+                    label: '内存',
                     value: 'memoryCost',
                     width: '80'
                 }
@@ -116,6 +125,7 @@ export default {
             ownerAndCoAuthor: [],
 
             myUserHandle: null,
+            problemSelect: null,
 
             languageType: {},
             solutionStatusType: {},
@@ -147,10 +157,20 @@ export default {
         })
         this.myUserHandle = this.$user.getCurUserHandle()
         if (this.contestId) {
-            this.$contest.getContestInfo(this.contestId, res => {
+            this.$contest.getContestData(this.contestId, res => {
                 // noinspection JSUnresolvedVariable
                 this.ownerAndCoAuthor = res.coAuthor
                 this.ownerAndCoAuthor.push(res.ownerHandle)
+                this.problemSelect = [{
+                    value: null,
+                    label: '不过滤'
+                }]
+                for (let i = 0; i < res.problemList.length; i++) {
+                    this.problemSelect.push({
+                        value: res.problemList[i].id,
+                        label: `${res.problemList[i].id} - ${res.problemList[i].title}`,
+                    })
+                }
             })
         }
         this.changeUrl()
@@ -257,6 +277,13 @@ export default {
                 })
             }
             this.initData()
+        },
+        checkOnlyMe(flag) {
+            if (flag) {
+                this.userHandle = this.myUserHandle
+            } else {
+                this.userHandle = ''
+            }
         }
     },
 }
