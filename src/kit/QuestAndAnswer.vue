@@ -11,7 +11,7 @@
                 {{ title }}
             </span>
         </div>
-        <div style="margin: 10px 15px;" v-show="openAnswer">
+        <div :class="{'faq-answer': true, 'faq-answer-open': openAnswer}">
             <slot></slot>
         </div>
     </div>
@@ -74,5 +74,18 @@ export default {
 
 .answer-open-button-open:hover {
     transform: scale(1.5) rotate(90deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.5s ease all;
+    margin: 0;
+}
+
+.faq-answer-open {
+    overflow: auto;
+    max-height: 10000px;
+    margin: 10px 15px;
 }
 </style>

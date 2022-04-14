@@ -18,7 +18,10 @@
                 )
             </InputCheckbox>
         </div>
-        <div v-show="openDesc">
+        <div :class="{
+            'desc-box': true,
+            'desc-box-open': openDesc
+        }">
             <slot name="desc">
                 暂时没有对此权限的描述内容
             </slot>
@@ -96,6 +99,16 @@ export default {
 
 .desc-open-button-open:hover {
     transform: scale(1.5) rotate(90deg);
+}
+
+.desc-box {
+    max-height: 0;
+    transition: 0.5s ease all;
+    overflow: hidden;
+}
+
+.desc-box-open {
+    max-height: 1000px;
 }
 
 </style>
