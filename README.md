@@ -4,7 +4,7 @@
    <h1>Portable Online Judge</h1>
    <p>一个高性能、分布式、易部署的开源 Online Judge 系统</p>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="https://github.com/PortableOJ/portable-web/blob/master/README.md"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg" alt="Contributors"></a>
+<a href='https://github.com/PortableOJ/portable-web/blob/master/README.md'><img src='https://img.shields.io/badge/all_contributors-1-orange.svg' alt='Contributors'></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="/LICENSE"><img src="https://img.shields.io/badge/license-GPL%203.0-blue.svg" alt="GPL 3.0 LICENSE"></a>
   <a href="https://github.com/PortableOJ/portable-web/actions/"><img src="https://github.com/PortableOJ/portable-web/actions/workflows/node-docker.yml/badge.svg" alt="Build status"></a>
