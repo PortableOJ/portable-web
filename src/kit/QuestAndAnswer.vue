@@ -79,13 +79,13 @@ export default {
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: 0.5s ease all;
+    transition: 0.5s ease-in-out all;
     margin: 0;
 }
 
 .faq-answer-open {
+    max-height: 1000px;
     overflow: auto;
-    max-height: 10000px;
     margin: 10px 15px;
 }
 </style>
