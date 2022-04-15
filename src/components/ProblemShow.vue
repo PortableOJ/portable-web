@@ -86,7 +86,7 @@
                 <InputCode v-model="submitCode" mode="text/x-c++src" placeholder="请输入需要提交的代码"></InputCode>
             </div>
             <InputButton @click="submit">提交</InputButton>
-            <Dialog v-model="showHint" :title="`样例 # ${showHintId + 1}`">
+            <Dialog v-model="showHint" :title="`样例 # ${showHintId + 1}`" v-if="showHintId != null">
                 <div class="example" style="width: 800px; max-height: 500px">
                     <div>
                         <div class="example-title">输入</div>
@@ -183,7 +183,7 @@ export default {
             submitCode: '',
 
             showHint: false,
-            showHintId: 0,
+            showHintId: null,
         }
     },
     created() {
