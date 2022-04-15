@@ -5,7 +5,7 @@
   "imageSize": 100,
   "commit": false,
   "contributors": [],
-  "badgeTemplate": "<a href="https://github.com/PortableOJ/portable-web/blob/master/README.md"><img src="https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg" alt="Contributors"></a>",
+  "badgeTemplate": "<a href='https://github.com/PortableOJ/portable-web/blob/master/README.md'><img src='https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg' alt='Contributors'></a>",
   "contributorsPerLine": 7,
   "projectName": "portable-web",
   "projectOwner": "PortableOJ",
