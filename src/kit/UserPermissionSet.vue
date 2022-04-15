@@ -82,7 +82,7 @@ export default {
 
 .desc-open-button {
     transform: rotate(0deg);
-    transition: 0.2s ease all;
+    transition: 0.5s ease all;
     display: inline-block;
     cursor: pointer;
     color: var(--brand-color);
@@ -103,12 +103,12 @@ export default {
 
 .desc-box {
     max-height: 0;
-    transition: 0.5s ease all;
+    transition: 0.5s ease-in-out all;
     overflow: hidden;
 }
 
 .desc-box-open {
-    max-height: 1000px;
+    max-height: 200px;
 }
 
 </style>
