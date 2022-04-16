@@ -100,6 +100,13 @@ function copy(str) {
     }
 }
 
+function dateFormat(timestamp) {
+    const h = Math.floor(timestamp / 3600000).toString().padStart(2, '0')
+    const m = Math.floor((timestamp % 3600000) / 60000).toString().padStart(2, '0')
+    const s = Math.floor((timestamp % 60000) / 1000).toString().padStart(2, '0')
+    return `${h}:${m}:${s}`
+}
+
 export default {
     version,
     maxRequestFileSize,
@@ -115,4 +122,5 @@ export default {
     getQueryString,
 
     copy,
+    dateFormat,
 }

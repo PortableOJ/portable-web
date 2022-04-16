@@ -13,9 +13,7 @@
                     {{ new Date(scope.data.startTime).format("yyyy-MM-dd hh:mm:ss") }}
                 </template>
                 <template v-slot:body-duration="scope">
-                    {{
-                        `${(scope.data.duration / 60).toFixed(0).padStart(2, '0')}:${(scope.data.duration % 60).toString().padStart(2, '0')}:00`
-                    }}
+                    {{ dateFormat(scope.data.duration) }}
                 </template>
                 <template v-slot:body-accessType="scope">
                     {{ contestAccessType[scope.data.accessType].text }}
@@ -166,7 +164,11 @@ export default {
             } else {
                 return 1
             }
+        },
+        dateFormat(duration) {
+            return this.$common.dateFormat(duration * 60000 )
         }
+
     }
 }
 </script>

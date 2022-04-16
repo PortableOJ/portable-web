@@ -19,7 +19,6 @@
                 </div>
                 <div>
                     合作出题人：
-                    <!--suppress JSUnresolvedVariable -->
                     <Link style="margin-right: 10px" @click="openUser(handle)" :key="handle"
                           v-for="handle in contestInfo.coAuthor">
                         {{ handle }}
@@ -29,14 +28,10 @@
                     开始时间：{{ new Date(contestInfo.startTime).format("yyyy-MM-dd hh:mm:ss") }}
                 </div>
                 <div>
-                    持续时间：{{
-                        `${(contestInfo.duration / 60).toFixed(0).padStart(2, '0')}:${(contestInfo.duration % 60).toString().padStart(2, '0')}:00`
-                    }}
+                    持续时间：{{ dateFormat(contestInfo.duration * 60) }}
                 </div>
                 <div v-if="leftTime > 0">
-                    剩余时间：{{
-                        `${(leftTime / 3600).toFixed(0).padStart(2, '0')}:${((leftTime % 3600) / 60).toFixed(0).padStart(2, '0')}:${(leftTime % 60).toString().padStart(2, '0')}`
-                    }}
+                    剩余时间：{{ dateFormat(leftTime) }}
                 </div>
                 <InputSlider v-if="leftTime > 0"
                              :read-only="true"
@@ -110,8 +105,7 @@ export default {
                     this.slider = 100
                 } else {
                     this.slider = (usedTime / this.contestInfo.duration) / 6 * 10
-                    this.leftTime = this.contestInfo.duration * 60 - usedTime
-                    this.leftTime = this.leftTime.toFixed(0)
+                    this.leftTime = (this.contestInfo.duration * 60 - usedTime).toFixed(0)
                 }
             }, 10)
         })
@@ -152,7 +146,10 @@ export default {
         },
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
-        }
+        },
+        dateFormat(timestamp) {
+            return this.$common.dateFormat(timestamp * 1000)
+        },
     },
     watch: {
         $route(to) {

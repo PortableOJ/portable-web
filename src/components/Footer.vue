@@ -9,7 +9,7 @@
         </div>
         <div>
             <span> Give us an </span>
-            <Link @click="open('https://github.com/PortableOJ/portable-oj/issues')">issue</Link>
+            <Link @click="open('https://github.com/PortableOJ/portable-server/issues')">issue</Link>
             <span> to make us do better </span>
         </div>
         <div>

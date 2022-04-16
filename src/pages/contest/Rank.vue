@@ -7,9 +7,7 @@
                     <Link @click="openUser(scope.data.handle)">{{ scope.data.handle }}</Link>
                 </template>
                 <template v-slot:body-totalCost="scope">
-                    {{
-                        `${(scope.data.totalCost / 3600).toFixed(0).padStart(2, '0')}:${((scope.data.totalCost % 3600) / 60).toFixed(0).padStart(2, '0')}:${(scope.data.totalCost % 60).toFixed(0).padStart(2, '0')}`
-                    }}
+                    {{ dateFormat(scope.data.totalCost) }}
                 </template>
                 <template v-for="id in problemLen" v-slot:[bodyRound(id)]="scope">
                 <span :key="id" v-if="scope.data[id]" :class="scope.data[id].solved">
@@ -24,9 +22,7 @@
                 <Link @click="openUser(scope.data.handle)">{{ scope.data.handle }}</Link>
             </template>
             <template v-slot:body-totalCost="scope">
-                {{
-                    `${(scope.data.totalCost / 3600).toFixed(0).padStart(2, '0')}:${((scope.data.totalCost % 3600) / 60).toFixed(0).padStart(2, '0')}:${(scope.data.totalCost % 60).toFixed(0).padStart(2, '0')}`
-                }}
+                {{ dateFormat(scope.data.totalCost) }}
             </template>
             <template v-for="id in problemLen" v-slot:[bodyRound(id)]="scope">
                 <span :key="id" v-if="scope.data[id]" :class="scope.data[id].solved">
@@ -137,11 +133,7 @@ export default {
                 // noinspection JSUnresolvedVariable
                 if (tmp.firstSolveId) {
                     // noinspection JSUnresolvedVariable
-                    value += `${(tmp.solveTime / 3600).toFixed(0).padStart(2, '0')}:`
-                    // noinspection JSUnresolvedVariable
-                    value += `${((tmp.solveTime % 3600) / 60).toFixed(0).padStart(2, '0')}:`
-                    // noinspection JSUnresolvedVariable
-                    value += `${(tmp.solveTime % 60).toFixed(0).padStart(2, '0')}`
+                    value += this.dateFormat(tmp.solveTime)
                 }
                 // noinspection JSUnresolvedVariable
                 if (tmp.penaltyTimes && tmp.penaltyTimes !== 0) {
@@ -169,6 +161,9 @@ export default {
         },
         openUser(handle) {
             this.$router.push({name: 'user', params: {handle: handle}})
+        },
+        dateFormat(timestamp) {
+            return this.$common.dateFormat(timestamp * 1000)
         },
     },
     watch: {
