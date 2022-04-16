@@ -1,42 +1,24 @@
 <template>
-    <div style="width: 100%; overflow: auto">
+    <div style="width: 100%; overflow: auto; position: relative">
+        <GlobalLoading v-show="onLoading"></GlobalLoading>
         <div v-if="metaData">
             <h3>我</h3>
-            <Table :head="tableHead" :data="metaData">
-                <template v-slot:body-handle="scope">
-                    <Link @click="openUser(scope.data.handle)">{{ scope.data.handle }}</Link>
-                </template>
-                <template v-slot:body-totalCost="scope">
-                    {{ dateFormat(scope.data.totalCost) }}
-                </template>
-                <template v-for="id in problemLen" v-slot:[bodyRound(id)]="scope">
-                <span :key="id" v-if="scope.data[id]" :class="scope.data[id].solved">
-                    {{ scope.data[id].value }}
-                </span>
-                </template>
-            </Table>
+            <RankShow :table-head="tableHead" :table-data="metaData" :problem-len="problemLen"
+                      :contest-data="contestData"></RankShow>
         </div>
         <h3>总榜单</h3>
-        <Table :head="tableHead" :data="tableData">
-            <template v-slot:body-handle="scope">
-                <Link @click="openUser(scope.data.handle)">{{ scope.data.handle }}</Link>
-            </template>
-            <template v-slot:body-totalCost="scope">
-                {{ dateFormat(scope.data.totalCost) }}
-            </template>
-            <template v-for="id in problemLen" v-slot:[bodyRound(id)]="scope">
-                <span :key="id" v-if="scope.data[id]" :class="scope.data[id].solved">
-                    {{ scope.data[id].value }}
-                </span>
-            </template>
-        </Table>
+        <RankShow :table-head="tableHead" :table-data="tableData" :problem-len="problemLen"
+                  :contest-data="contestData"></RankShow>
         <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
     </div>
 </template>
 
 <script>
+import RankShow from "@/components/RankShow";
+
 export default {
     name: "Rank",
+    components: {RankShow},
     props: {
         freeze: Boolean,
     },
@@ -55,9 +37,12 @@ export default {
             tableData: [],
             metaData: [],
             problemLen: [],
+
+            onLoading: false
         }
     },
     created() {
+        this.onLoading = true
         this.pageNum = this.$common.getQueryInt(this, 'pageNum', 1)
         this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
         this.$contest.getContestData(this.contestId, res => {
@@ -69,7 +54,7 @@ export default {
             }, {
                 label: '昵称',
                 value: 'handle',
-                width: '50',
+                width: '80',
             }, {
                 label: '解决',
                 value: 'totalSolve',
@@ -92,6 +77,7 @@ export default {
     },
     methods: {
         initData() {
+            this.onLoading = true
             let query = {
                 pageNum: this.pageNum.toString(),
                 pageSize: this.pageSize.toString()
@@ -116,7 +102,7 @@ export default {
                 } else {
                     this.metaData = null
                 }
-            })
+            }, () => this.onLoading = false)
         },
         reduceData(data) {
             let res = {
@@ -146,21 +132,16 @@ export default {
                 // noinspection JSUnresolvedVariable
                 res[`p${submitStatusKey}`] = {
                     value: value,
-                    solved: tmp.firstSolveId != null ? 'accept'
-                        : (tmp.runningSubmit && tmp.runningSubmit !== 0)
-                            ? 'pending' : 'fail'
+                    solved: 'rank-item ' + (tmp.firstBlood ? 'first-blood' :
+                        tmp.firstSolveId ? 'pass'
+                            : (tmp.runningSubmit && tmp.runningSubmit !== 0)
+                                ? 'trying' : 'noPass')
                 };
             }
             return res
         },
         changePageNum() {
             this.initData()
-        },
-        bodyRound(id) {
-            return `body-${id}`
-        },
-        openUser(handle) {
-            this.$router.push({name: 'user', params: {handle: handle}})
         },
         dateFormat(timestamp) {
             return this.$common.dateFormat(timestamp * 1000)
@@ -174,17 +155,6 @@ export default {
 }
 </script>
 
-<style>
-.accept {
-    font-weight: 900;
-    color: var(--success-color);
-}
+<style scoped>
 
-.fail {
-    color: var(--error-color);
-}
-
-.pending {
-    color: var(--info-color);
-}
 </style>

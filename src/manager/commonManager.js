@@ -76,13 +76,12 @@ function getEnum(name, callback) {
 }
 
 function getQueryInt(that, name, defaultValue) {
-    let tmp = that.$route.query[name] ? parseInt(that.$route.query[name].toString()) : null
-    return tmp ? tmp : defaultValue
+    let retVal = that.$route.query[name] !== undefined ? parseInt(String(that.$route.query[name])) : NaN
+    return isNaN(retVal) ? defaultValue : retVal
 }
 
 function getQueryString(that, name, defaultValue) {
-    let tmp = that.$route.query[name] ? that.$route.query[name].toString() : null
-    return tmp ? tmp : defaultValue
+    return that.$route.query[name] !== undefined ? that.$route.query[name] : defaultValue
 }
 
 function copy(str) {

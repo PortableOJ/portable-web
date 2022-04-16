@@ -264,7 +264,7 @@ export default {
             if (this.userHandle) {
                 query.userHandle = this.userHandle
             }
-            if (this.problemId) {
+            if (this.problemId != null) {
                 query.problemId = this.problemId.toString()
             }
             if (this.statusType) {

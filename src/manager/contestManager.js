@@ -34,13 +34,13 @@ function getContestProblem(contestId, problemIndex, success) {
     }, success, null)
 }
 
-function rank(contestId, pageNum, pageSize, freeze, success) {
+function rank(contestId, pageNum, pageSize, freeze, success, callback) {
     Request.get(baseUrl + '/rank', {
         contestId: contestId,
         pageNum: pageNum,
         pageSize: pageSize,
         freeze: freeze
-    }, success, null)
+    }, success, callback)
 }
 
 function getContestStatus(contestId, pageNum, pageSize, userHandle, problemId, statusType, success, callback) {
