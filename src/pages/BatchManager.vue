@@ -26,20 +26,25 @@
                 </template>
             </Table>
             <Pagination @change="changePageNum" v-model="pageNum" :total="totalNum" :pageSize="pageSize"></Pagination>
+            <Dialog v-model="showNewDialog" title="新增批量用户">
+                <div class="center" style="width: 700px">
+                    <span>用户将会以 「&lt; 昵称前缀 &gt; @ &lt; 序号 &gt;」 的昵称形式生成</span>
+                    <InputText style="margin-top: 30px" v-model="batch.prefix" placeholder="昵称前缀">
+                    </InputText>
+                    <InputText v-model="batch.count" type="number" placeholder="需要生成的数量"></InputText>
+                    <InputCheckbox v-model="batch.ipLock">是否锁定 IP</InputCheckbox>
+                    <Link v-if="userHandleAndPassword">
+                        <a :href="userHandleAndPassword" :download="`${batch.prefix}.csv`">下载账号密码</a>
+                    </Link>
+                    <InputButton v-else @click="newBatch" :loading="onNew">新增</InputButton>
+                </div>
+            </Dialog>
         </div>
         <div>
             <UserCard></UserCard>
             <div class="card">
-                <span class="card-title">新增批量用户</span>
-                <InputText class="card-input" v-model="batch.prefix" placeholder="用户的前缀"></InputText>
-                <InputText class="card-input" v-model="batch.count" type="number" placeholder="需要生成的数量"></InputText>
-                <InputCheckbox v-model="batch.ipLock">是否锁定 IP</InputCheckbox>
-                <div class="button-box">
-                    <InputButton @click="newBatch" :loading="onNew">新增</InputButton>
-                    <Link v-if="userHandleAndPassword">
-                        <a :href="userHandleAndPassword" :download="`${batch.prefix}.csv`">下载账号密码</a>
-                    </Link>
-                </div>
+                <span class="card-title">管理</span>
+                <InputButton @click="openNewBatchDialog">新增</InputButton>
             </div>
         </div>
     </div>
@@ -89,11 +94,8 @@ export default {
             totalNum: 0,
             totalPage: 0,
 
-            batch: {
-                prefix: '',
-                count: null,
-                ipLock: false
-            },
+            batch: {},
+            showNewDialog: false,
             onNew: false,
             userHandleAndPassword: null,
 
@@ -122,9 +124,20 @@ export default {
         changePageNum() {
             this.initData()
         },
+        openNewBatchDialog() {
+            this.batch = {
+                prefix: '',
+                count: null,
+                ipLock: false,
+            }
+            this.userHandleAndPassword = null
+            this.showNewDialog = true
+        },
         newBatch() {
             this.$message({
-                text: `你正在生成 ${this.batch.count} 个批量用户，且他们的开头为 ${this.batch.prefix}，这需要花一点时间，请耐心等待完成，无论如何请不要刷新页面或前往其他页面，若长时间未能完成，请先联系管理员`,
+                text: `你正在生成 ${this.batch.count} 个批量用户，且前缀为 ${this.batch.prefix}，这需要花一点时间，请耐心等待完成，
+                完成后将会提供下载所有账号密码的链接，并且仅可在当前弹窗处下载，关闭弹窗将自动销毁密码记录。
+                无论如何请不要关闭弹窗、刷新页面或前往其他页面，若长时间未能完成，请先联系管理员`,
                 type: 'warning',
                 input: false,
                 ok: '确定',
@@ -147,7 +160,7 @@ export default {
                         this.userHandleAndPassword = encodeURI(csv);
                         this.$toast({
                             title: '创建完成',
-                            text: '批量账号创建完成，请点击右侧按钮来打开批量用户的账号密码信息，并尽快保存此内容',
+                            text: '批量账号创建完成，请点击下载按钮来打开批量用户的账号密码信息，并尽快保存此内容',
                             duration: 'auto',
                             type: 'success'
                         })
@@ -200,10 +213,8 @@ export default {
 </script>
 
 <style scoped>
-.button-box {
+.center {
     display: grid;
-    grid-template-columns: auto auto;
     place-items: center;
-    grid-gap: 10px;
 }
 </style>
