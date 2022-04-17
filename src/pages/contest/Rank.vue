@@ -47,23 +47,7 @@ export default {
         this.pageSize = this.$common.getQueryInt(this, 'pageSize', 30)
         this.$contest.getContestData(this.contestId, res => {
             this.contestData = res
-            this.tableHead = [{
-                label: '排名',
-                value: 'rank',
-                width: '30',
-            }, {
-                label: '昵称',
-                value: 'handle',
-                width: '80',
-            }, {
-                label: '解决',
-                value: 'totalSolve',
-                width: '20',
-            }, {
-                label: '罚时',
-                value: 'totalCost',
-                width: '50',
-            }]
+            this.tableHead = []
             this.problemLen = []
             for (let i = 0; i < res.problemList.length; i++) {
                 this.tableHead.push({

@@ -4,6 +4,7 @@
         <div style="width: 100%; display: grid; grid-template-columns: repeat(6, auto); place-items: center">
             <div>过滤条件：</div>
             <InputText style="width: 200px" placeholder="用户昵称" v-model="userHandle"></InputText>
+            <!--suppress JSUndeclaredVariable -->
             <InputCheckbox :disabled="myUserHandle === null"
                            :value="userHandle === myUserHandle"
                          @change="flag => flag ? userHandle = myUserHandle : userHandle = ''">
