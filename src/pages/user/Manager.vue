@@ -22,11 +22,16 @@
                     </p>
                 </div>
             </template>
+            <template v-if="isDominate && RESET_PASSWORD">
+                <div class="input-desc-layout">
+                    <h3>重置用户的密码</h3>
+                    <InputText type="password" v-model="newPassword"></InputText>
+                    <InputButton type="error" @click="resetPassword">重置</InputButton>
+                </div>
+            </template>
             <template v-if="GRANT && isDominate">
                 <div>
-                    <h3>
-                        管理其他用户
-                    </h3>
+                    <h3>管理其他用户</h3>
                     <div class="desc">
                         <p>
                             管理其他用户时，必须要保证自己所在的组织可以管理到对方的组织，否则，即使拥有了权限，也不可以对目标进行管理操作
@@ -70,6 +75,22 @@
                                 <p>
                                     调整组织时，首先对方现在所在的组织应该被当前用户所在的组织管理，
                                     其次修改后的组织也应该被当前用户所在的组织管理
+                                </p>
+                            </div>
+                        </template>
+                    </UserPermissionSet>
+                    <!--RESET_PASSWORD 修改组织-->
+                    <UserPermissionSet :user-handle="userData.handle"
+                                       :permission-type="permissionType"
+                                       :permission-state="permissionState"
+                                       :permission="permissionTypeList.RESET_PASSWORD">
+                        <template v-slot:title>
+                            重置其他用户的密码
+                        </template>
+                        <template v-slot:desc>
+                            <div class="desc">
+                                <p>
+                                    当用户拥有此权限时，用户可以修改其他被自己管理的组织的用户的密码
                                 </p>
                             </div>
                         </template>
@@ -139,12 +160,18 @@
                                 </p>
                                 <p class="desc-important">
                                     注意！此权限必须与
-                                    <Tag type="info">{{ permissionType[permissionTypeList.CREATE_AND_EDIT_PROBLEM].text }}</Tag>
+                                    <Tag type="info">{{
+                                            permissionType[permissionTypeList.CREATE_AND_EDIT_PROBLEM].text
+                                        }}
+                                    </Tag>
                                     配合，因为此权限仅用于扩展编辑题目的范围，并非直接可以用于编辑题目
                                 </p>
                                 <p class="desc-important">
                                     请注意，此权限会和
-                                    <Tag type="info">{{ permissionType[permissionTypeList.VIEW_HIDDEN_PROBLEM].text }}</Tag>
+                                    <Tag type="info">{{
+                                            permissionType[permissionTypeList.VIEW_HIDDEN_PROBLEM].text
+                                        }}
+                                    </Tag>
                                     权限配合，使得用户可以编辑到隐藏的题目
                                 </p>
                             </div>
@@ -191,7 +218,10 @@
                                 </p>
                                 <p class="desc-important">
                                     注意！此权限可以与
-                                    <Tag type="info">{{ permissionType[permissionTypeList.VIEW_PUBLIC_SOLUTION].text }}</Tag>
+                                    <Tag type="info">{{
+                                            permissionType[permissionTypeList.VIEW_PUBLIC_SOLUTION].text
+                                        }}
+                                    </Tag>
                                     配合，来查看其他人提交的 Judge 信息
                                 </p>
                             </div>
@@ -354,10 +384,12 @@ export default {
                 email: null
             },
             avatarUrl: '',
+            newPassword: '',
 
             isDominate: false,
 
             CHANGE_ORGANIZATION: false,
+            RESET_PASSWORD: false,
             GRANT: false,
 
             accountType: {},
@@ -401,7 +433,9 @@ export default {
             })
         })
         this.CHANGE_ORGANIZATION = this.$user.hasPermission(this.permissionTypeList.CHANGE_ORGANIZATION)
+        this.RESET_PASSWORD = this.$user.hasPermission(this.permissionTypeList.RESET_PASSWORD)
         this.GRANT = this.$user.hasPermission(this.permissionTypeList.GRANT)
+        console.log(this.$user.hasPermission(this.permissionTypeList.RESET_PASSWORD))
     },
     methods: {
         changeOrganization(target) {
@@ -412,6 +446,17 @@ export default {
                     duration: 'auto',
                     type: 'success'
                 })
+            })
+        },
+        resetPassword() {
+            this.$user.resetPassword(this.handle, this.newPassword, () => {
+                this.$toast({
+                    title: '成功',
+                    text: '成功重置对方密码',
+                    duration: 'auto',
+                    type: 'success'
+                })
+                this.newPassword = ''
             })
         }
     },
@@ -434,12 +479,8 @@ export default {
 }
 
 .input-desc-layout {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    display: flex;
     place-items: start left;
 }
 
-.input-desc-layout:nth-child(1n + 2) {
-    margin-top: 10px;
-}
 </style>

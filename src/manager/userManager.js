@@ -19,6 +19,7 @@ let onLogin = false
 let permissionTypeList = {
     GRANT: 'GRANT',
     CHANGE_ORGANIZATION: 'CHANGE_ORGANIZATION',
+    RESET_PASSWORD: 'RESET_PASSWORD',
     VIEW_HIDDEN_PROBLEM: 'VIEW_HIDDEN_PROBLEM',
     CREATE_AND_EDIT_PROBLEM: 'CREATE_AND_EDIT_PROBLEM',
     EDIT_NOT_OWNER_PROBLEM: 'EDIT_NOT_OWNER_PROBLEM',
@@ -201,6 +202,13 @@ function changePassword(oldPassword, newPassword, success) {
     }, success, null, null)
 }
 
+function resetPassword(handle, newPassword, success) {
+    Request.post(baseUrl + '/resetPassword', {
+        handle: handle,
+        newPassword: newPassword
+    }, success, null, null)
+}
+
 export default {
     permissionTypeList,
 
@@ -226,4 +234,5 @@ export default {
 
     changeAvatar,
     changePassword,
+    resetPassword,
 }
