@@ -39,7 +39,8 @@
                 <div v-if="contestData.accessType === 'BATCH'">
                     <div style="display: grid; grid-template-columns: 250px 50px; place-items: center ">
                         <!--suppress JSUnresolvedVariable -->
-                        <InputText style="width: 250px" :read-only="notOwner || isStarted" v-model="contestData.batchId"></InputText>
+                        <InputText style="width: 250px" :read-only="notOwner || isStarted"
+                                   v-model="contestData.batchId"></InputText>
                         <Link @click="checkBatch">校验</Link>
                     </div>
                 </div>
@@ -52,16 +53,15 @@
                 <div v-if="contestData.accessType === 'PRIVATE'">
                     已邀请：
                 </div>
-                <div style="max-width: 300px; display: flex; overflow: auto; place-items: center"
-                     v-if="contestData.accessType === 'PRIVATE'">
+                <div v-if="contestData.accessType === 'PRIVATE'"
+                     style="max-width: 300px; display: flex; overflow: auto; place-items: center">
                     <template v-for="handle in contestData.inviteUserSet">
-                        <InputCheckbox :read-only="notOwner || isStarted" @change="deleteInvite(handle)" :value="true" :key="handle">
-                            {{ handle }}
-                        </InputCheckbox>
+                        <Tag type="info" :key="handle"> {{ handle }}</Tag>
                     </template>
                 </div>
                 <div v-if="contestData.accessType === 'PRIVATE'">
-                    <Link :disabled="notOwner || isStarted" @click="showPrivateUserDialog = true">邀请更多</Link>
+                    <Link :disabled="notOwner || isStarted" @click="showPrivateUserDialog = true">管理</Link>
+                    <Link @click="copyList(contestData.inviteUserSet)">复制</Link>
                 </div>
             </div>
             <div>
@@ -82,13 +82,13 @@
             <div style="display: flex; place-items: center">
                 <div style="display: flex; max-width: 500px; overflow: auto">
                     <template v-for="handle in contestData.coAuthor">
-                        <InputCheckbox :read-only="notOwner || isStarted" @change="deleteCoAuthor(handle)" :value="true"
-                                       :key="handle">
+                        <Tag type="info" :key="handle">
                             {{ handle }}
-                        </InputCheckbox>
+                        </Tag>
                     </template>
                 </div>
-                <Link :disabled="notOwner || isStarted" @click="showCoAuthorDialog = true">邀请更多</Link>
+                <Link :disabled="notOwner || isStarted" @click="showCoAuthorDialog = true">管理</Link>
+                <Link @click="copyList(contestData.coAuthor)">复制</Link>
             </div>
         </div>
         <div v-if="contestData" style="width: 100%">
@@ -127,7 +127,8 @@
                                      style="width: 30px; height: 30px" @click="down(scope.data.id)">
                             <i class="iconfont icon-down"></i>
                         </InputButton>
-                        <InputButton :disabled="notOwner || isStarted" :type="'warning'" @click="deleteProblem(scope.data.id)">
+                        <InputButton :disabled="notOwner || isStarted" :type="'warning'"
+                                     @click="deleteProblem(scope.data.id)">
                             删除
                         </InputButton>
                     </template>
@@ -141,18 +142,38 @@
             </div>
         </div>
         <InputButton :disabled="notOwner" @click="save">保存</InputButton>
-        <Dialog title="邀请列表" v-model="showPrivateUserDialog">
-            <div style="display: grid; grid-template-columns: 1fr auto">
-                <InputText :read-only="notOwner" v-model="templateInvite"
-                           :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
-                <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
+        <Dialog v-if="contestData" title="邀请参赛列表" v-model="showPrivateUserDialog">
+            <div style="display: grid; place-items: center">
+                <div>已经邀请的用户</div>
+                <div v-if="contestData.accessType === 'PRIVATE'" style="max-width: 800px">
+                    <template v-for="handle in contestData.inviteUserSet">
+                        <InputCheckbox :read-only="notOwner || isStarted" @change="deleteInvite(handle)" :value="true"
+                                       :key="handle">
+                            {{ handle }}
+                        </InputCheckbox>
+                    </template>
+                </div>
+                <div style="display: flex;">
+                    <InputText :read-only="notOwner" v-model="templateInvite"
+                               :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
+                    <InputButton :disabled="notOwner" @click="addInvite">添加</InputButton>
+                </div>
             </div>
         </Dialog>
-        <Dialog title="邀请合作出题人" v-model="showCoAuthorDialog">
-            <div style="display: grid; grid-template-columns: 1fr auto">
-                <InputText :read-only="notOwner" v-model="templateCoAuthor"
-                           :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
-                <InputButton :disabled="notOwner" @click="addCoAuthor">添加</InputButton>
+        <Dialog v-if="contestData" title="合作出题人管理" v-model="showCoAuthorDialog">
+            <div style="display: grid; place-items: center">
+                <div>已经邀请的用户</div>
+                <template v-for="handle in contestData.coAuthor">
+                    <InputCheckbox :read-only="notOwner || isStarted" @change="deleteCoAuthor(handle)" :value="true"
+                                   :key="handle">
+                        {{ handle }}
+                    </InputCheckbox>
+                </template>
+                <div style="display: grid; grid-template-columns: 1fr auto">
+                    <InputText :read-only="notOwner" v-model="templateCoAuthor"
+                               :placeholder="'用户的昵称，使用空格分割多个昵称'"></InputText>
+                    <InputButton :disabled="notOwner" @click="addCoAuthor">添加</InputButton>
+                </div>
             </div>
         </Dialog>
         <Dialog title="添加题目" v-model="showAddProblemDialog">
@@ -307,7 +328,6 @@ export default {
                     type: 'error'
                 })
             }
-            this.showCoAuthorDialog = false
         },
         deleteInvite(handle) {
             // noinspection JSUnresolvedVariable
@@ -344,7 +364,6 @@ export default {
                     type: 'error'
                 })
             }
-            this.showPrivateUserDialog = false
         },
         openProblem(id) {
             this.$router.push({
@@ -484,6 +503,15 @@ export default {
                         type: 'warning'
                     })
                 }
+            })
+        },
+        copyList(data) {
+            this.$common.copy(data.join(' '))
+            this.$toast({
+                title: '成功',
+                text: '复制成功',
+                duration: 'auto',
+                type: 'success'
             })
         }
     }
