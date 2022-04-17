@@ -21,8 +21,8 @@
         </template>
         <template v-else>
             <span class="card-title">登录</span>
-            <InputText class="card-input" placeholder="用户名" v-model="handle"></InputText>
-            <InputText class="card-input" type="password" placeholder="密码" v-model="password"></InputText>
+            <InputText @keyup.enter.native="login" class="card-input" placeholder="用户名" v-model="handle"></InputText>
+            <InputText @keyup.enter.native="login" class="card-input" type="password" placeholder="密码" v-model="password"></InputText>
             <div class="button-box">
                 <InputButton @click="login" :loading="onLogin">登录</InputButton>
                 <Link @click="register">
