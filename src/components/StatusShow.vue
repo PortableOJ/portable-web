@@ -247,6 +247,9 @@ export default {
         },
         disableSolution(userHandle) {
             if (this.contestId) {
+                if (this.$user.hasPermission(this.$user.permissionTypeList.EDIT_NOT_OWNER_CONTEST)) {
+                    return false
+                }
                 if (this.ownerAndCoAuthor.indexOf(this.$user.getCurUserData().handle) !== -1) {
                     return false
                 }
