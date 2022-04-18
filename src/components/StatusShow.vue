@@ -124,6 +124,7 @@ export default {
             statusType: null,
             // 管理员和出题人的 handle 集合
             ownerAndCoAuthor: [],
+            isEnd: false,
 
             myUserHandle: null,
             problemSelect: null,
@@ -172,6 +173,7 @@ export default {
                         label: `${res.problemList[i].id} - ${res.problemList[i].title}`,
                     })
                 }
+                this.isEnd = new Date(res.startTime).add(res.duration) < new Date()
             })
         }
         this.changeUrl()
@@ -247,6 +249,9 @@ export default {
         },
         disableSolution(userHandle) {
             if (this.contestId) {
+                if (this.isEnd) {
+                    return false
+                }
                 if (this.$user.hasPermission(this.$user.permissionTypeList.EDIT_NOT_OWNER_CONTEST)) {
                     return false
                 }
