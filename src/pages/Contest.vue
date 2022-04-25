@@ -88,56 +88,59 @@ export default {
         }
     },
     created() {
-        this.step = this.$route.name.split('-')[1]
-        this.contestId = parseInt(this.$route.params.contestId)
-        if (this.contestId === 0) {
-            return;
-        }
-        this.$contest.getContestInfo(this.contestId, res => {
-            this.contestInfo = res
-            this.sliderInterval = setInterval(() => {
-                let usedTime = new Date().getTime() - new Date(this.contestInfo.startTime).getTime()
-                usedTime /= 1000
-                this.leftTime = -1
-                if (usedTime < 0) {
-                    this.slider = 0
-                } else if (usedTime > this.contestInfo.duration * 60) {
-                    this.slider = 100
-                } else {
-                    this.slider = (usedTime / this.contestInfo.duration) / 6 * 10
-                    this.leftTime = (this.contestInfo.duration * 60 - usedTime).toFixed(0)
-                }
-            }, 10)
-        })
-        this.$contest.auth(this.contestId, null, res => {
-            this.isOwner = res === 'ADMIN'
-            this.isManager = this.isOwner || res === 'CO_AUTHOR'
-            this.selectOption = [
-                {
-                    label: '公告',
-                    value: 'info',
-                }, {
-                    label: '题目',
-                    value: 'content',
-                }, {
-                    label: '判题',
-                    value: 'status',
-                }, {
-                    label: '测试',
-                    value: 'test_status',
-                    hidden: !this.isManager
-                }, {
-                    label: '榜单',
-                    value: 'rank',
-                }, {
-                    label: '管理',
-                    value: 'manager',
-                    hidden: !this.isManager
-                }
-            ]
-        })
+        this.init()
     },
     methods: {
+        init() {
+            this.step = this.$route.name.split('-')[1]
+            this.contestId = parseInt(this.$route.params.contestId)
+            if (this.contestId === 0) {
+                return;
+            }
+            this.$contest.auth(this.contestId, null, res => {
+                this.isOwner = res === 'ADMIN'
+                this.isManager = this.isOwner || res === 'CO_AUTHOR'
+                this.selectOption = [
+                    {
+                        label: '公告',
+                        value: 'info',
+                    }, {
+                        label: '题目',
+                        value: 'content',
+                    }, {
+                        label: '判题',
+                        value: 'status',
+                    }, {
+                        label: '测试',
+                        value: 'test_status',
+                        hidden: !this.isManager
+                    }, {
+                        label: '榜单',
+                        value: 'rank',
+                    }, {
+                        label: '管理',
+                        value: 'manager',
+                        hidden: !this.isManager
+                    }
+                ]
+            })
+            this.$contest.getContestInfo(this.contestId, res => {
+                this.contestInfo = res
+                this.sliderInterval = setInterval(() => {
+                    let usedTime = new Date().getTime() - new Date(this.contestInfo.startTime).getTime()
+                    usedTime /= 1000
+                    this.leftTime = -1
+                    if (usedTime < 0) {
+                        this.slider = 0
+                    } else if (usedTime > this.contestInfo.duration * 60) {
+                        this.slider = 100
+                    } else {
+                        this.slider = (usedTime / this.contestInfo.duration) / 6 * 10
+                        this.leftTime = (this.contestInfo.duration * 60 - usedTime).toFixed(0)
+                    }
+                }, 10)
+            })
+        },
         toSelect(value) {
             if (`contest-${value}` === this.$route.name) {
                 return
@@ -152,8 +155,8 @@ export default {
         },
     },
     watch: {
-        $route(to) {
-            this.step = to.name.split('-')[1]
+        $route() {
+            this.init()
         }
     },
     beforeDestroy() {

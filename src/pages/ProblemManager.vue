@@ -64,7 +64,13 @@ export default {
         back() {
             this.$router.push({name: 'problem', params: {problemId: this.problemId.toString()}})
         },
-    }
+    },
+    watch: {
+        $route(to) {
+            this.step = to.name.split('-')[1]
+            this.problemId = parseInt(this.$route.params.problemId)
+        }
+    },
 }
 </script>
 

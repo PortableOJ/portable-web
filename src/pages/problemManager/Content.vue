@@ -91,7 +91,7 @@ export default {
             if (this.problemId === 0) {
                 this.$problem.newProblem(this.problemData, res => {
                     this.problemId = res
-                    this.$router.push({name: 'problemManager-setting', params: {problemId: res.toString()}})
+                    this.$router.replace({name: 'problemManager-content', params: {problemId: res.toString()}})
                     this.$toast({
                         title: '成功',
                         text: '成功创建题目',
