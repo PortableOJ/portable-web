@@ -1,9 +1,33 @@
 import axios from "axios";
 
-let Toast = null;
+let Toast = null
+let NeedCaptcha = null
+let NextCaptcha = null
 
-function init(toast) {
+function init(toast, needCaptcha) {
     Toast = toast
+    NeedCaptcha = needCaptcha
+}
+
+function setCaptcha(value) {
+    NextCaptcha = value
+}
+function captcha() {
+    NeedCaptcha()
+}
+
+function reduceCode(code, msg) {
+    let dic = {'W-00-001': captcha}
+    if (dic[code]) {
+        dic[code](msg)
+    } else {
+        Toast({
+            title: `失败(${code})`,
+            text: `${msg}`,
+            duration: 'auto',
+            type: 'error'
+        })
+    }
 }
 
 function dealResponse(response, success, callback) {
@@ -15,12 +39,7 @@ function dealResponse(response, success, callback) {
             callback(true, null)
         }
     } else {
-        Toast({
-            title: `失败(${response.code})`,
-            text: `${response.msg}`,
-            duration: 'auto',
-            type: 'error'
-        })
+        reduceCode(response.code, response.msg)
         if (callback) {
             callback(false, response.code)
         }
@@ -61,13 +80,8 @@ function get(url, data, success, callback) {
 }
 
 function post(url, data, success, callback) {
-    axiosSend({
-        url: url,
-        method: 'POST',
-        data: data,
-        responseType: 'json',
-
-    }, success, callback)
+    postWithCaptcha(url, data, NextCaptcha, success, callback)
+    NextCaptcha = null
 }
 
 function postWithCaptcha(url, data, captcha, success, callback) {
@@ -102,6 +116,7 @@ function postFile(url, data, success, process, callback) {
 
 export default {
     init,
+    setCaptcha,
     get,
     post,
     postWithCaptcha,

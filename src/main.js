@@ -21,8 +21,7 @@ import BatchManager from "@/manager/batchManager";
 Vue.use(Mevcl)
 Vue.config.productionTip = false
 
-Request.init(Vue.prototype.$toast)
-
+Vue.prototype.$request = Request
 Vue.prototype.$common = CommonManager
 
 Vue.prototype.$user = UserManager

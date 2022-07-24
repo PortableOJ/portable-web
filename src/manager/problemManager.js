@@ -157,12 +157,12 @@ function searchPrivateProblem(keyword, callback) {
     }, callback, null)
 }
 
-function submit(id, code, languageType, callback) {
+function submit(id, code, languageType, success, callback) {
     Request.post(baseUrl + '/submit', {
         problemId: id,
         code: code,
         languageType: languageType
-    }, callback, null)
+    }, success, callback)
 }
 
 export default {
