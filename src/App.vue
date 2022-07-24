@@ -1,14 +1,28 @@
 <template>
     <div id="app" class="main-layout">
+        <!--suppress JSValidateTypes -->
         <NavMenu @change="toSelect" :options="selectOption" v-model="select"
                  :not-found="v => v ? hiddenOption[v.split('-')[0]] : ''"></NavMenu>
         <router-view></router-view>
         <Footer></Footer>
+        <Dialog v-model="captchaDialogShow" title="你是机器人吗">
+            <div style="text-align: center; margin: 30px">
+                请输入下面的验证码后<span style="color: var(--error-color)">再重复刚才的操作</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr auto; place-items: center; width: 350px; margin: 30px">
+                <InputText style="width: 100%" placeholder="请输入验证码" v-model="captchaValue"></InputText>
+                <Link @click="flushCaptcha">
+                    <img :src="captchaUrl" alt="验证码"/>
+                </Link>
+            </div>
+            <InputButton style="width: 100%" @click="addCaptcha">提交</InputButton>
+        </Dialog>
     </div>
 </template>
 
 <script>
 import Footer from "@/components/Footer";
+import Vue from "vue";
 
 export default {
     name: 'App',
@@ -51,10 +65,14 @@ export default {
                 notFound: '未知',
                 contest: '比赛',
             },
-            select: this.$route.name
+            select: this.$route.name,
+            captchaDialogShow: false,
+            captchaValue: '',
+            captchaUrl: process.env.VUE_APP_CAPTCHA_URL
         }
     },
     created() {
+        this.$request.init(Vue.prototype.$toast, this.needCaptcha)
     },
     methods: {
         toSelect(value) {
@@ -62,6 +80,18 @@ export default {
                 return
             }
             this.$router.push({name: value})
+        },
+        needCaptcha() {
+            this.flushCaptcha()
+            this.captchaValue = ''
+            this.captchaDialogShow = true
+        },
+        flushCaptcha() {
+            this.captchaUrl = process.env.VUE_APP_CAPTCHA_URL + '?t=' + new Date().getTime()
+        },
+        addCaptcha() {
+            this.$request.setCaptcha(this.captchaValue)
+            this.captchaDialogShow = false
         }
     },
     watch: {
